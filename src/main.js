@@ -1,20 +1,11 @@
 
-var tiledMapBuilder;
-
 /**
  * Main entry point to game. Called in html.
  */
-function startGame() {
-	// Create the entity that will hold the tile map.
-	tiledMapBuilder = Crafty.e("2D, DOM, TiledMapBuilder");
+Crafty.scene("testMap", function() {
+	var map = Crafty.e("2D, DOM, TiledMap")
+		.loadMap("test");
 
-	// Load the test map
-	$.getJSON("assets/maps/test.json", onTiledMapLoaded);
-}
+	Crafty.background("url(http://www.mlahanas.de/Greeks/images/Parallax.jpg)");
+});
 
-function onTiledMapLoaded(json) {
-	tiledMapBuilder.setMapDataSource(json); 
-	tiledMapBuilder.createWorld( function( map ) {
-		console.log("Done creating world.");
-	}); 
-}
