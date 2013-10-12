@@ -8,7 +8,6 @@ Crafty.c("Parallax", {
 	init:
 	function() {
 		this.bind("EnterFrame", function() {
-			Crafty.viewport.x -= 1; // Debug code.
 			// Oppose the viewport movement.
 			this.x = -Crafty.viewport.x * this.factor;
 			this.y = -Crafty.viewport.y * this.factor;

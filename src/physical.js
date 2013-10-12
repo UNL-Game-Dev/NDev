@@ -10,6 +10,7 @@ Crafty.c("PhysicsTicker", {
 			Crafty.trigger("EvaluateAccel");
 			Crafty.trigger("ResolveConstraint");
 			Crafty.trigger("EvaluateInertia");
+			Crafty.trigger("UpdateDraw");
 		});
 	}
 
@@ -22,13 +23,46 @@ Crafty.c("Physical", {
 
 	init: 
 	function() {
-		// Note: only use _x for getting, or else screen pos not updated.
-		this._px = this._x;
-		this._py = this._y;
+		this._phX = this._x;
+		this._phY = this._y;
+		this._phPX = this._phX;
+		this._phPY = this._phY;
+		this._phAX = 0.0;
+		this._phAY = 0.0;
 
 		this.bind("EvaluateAccel", function() {
+			// Debug gravity.
+			// TODO: Move this into its own component.
+			this._phAY += 9.8;
+			this._phAX +=
+				(2.0 * Math.random() - 0.5)
+				* 500.0;
+			// Seconds per frame.
+			var sPerF = 1.0 / Crafty.timer.getFPS();
+			// Apply acceleration to velocity. Since velocity is stored as the
+			// difference between the prev frame and the next, apply as
+			// p += a * t^2
+			this._phX += this._phAX * sPerF * sPerF;
+			this._phY += this._phAY * sPerF * sPerF;
+			this._phAX = 0.0;
+			this._phAY = 0.0;
 		}).bind("ResolveConstraint", function() {
+			var map = Crafty("TiledMap");
+			var colResponse = map.resolvePos(this._phX, this._phY);
+			if(colResponse != null) {
+				this._phX += colResponse[0];
+				this._phY += colResponse[1];
+			}
 		}).bind("EvaluateInertia", function() {
+			var px = this._phPX;
+			var py = this._phPY;
+			this._phPX = this._phX;
+			this._phPY = this._phY;
+			this._phX += this._phX - px;
+			this._phY += this._phY - py;
+		}).bind("UpdateDraw", function() {
+			this.x = this._phX;
+			this.y = this._phY;
 		});
 	}
 

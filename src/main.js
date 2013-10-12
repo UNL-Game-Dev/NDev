@@ -10,7 +10,8 @@ Crafty.scene("testMap", function() {
 		.image("http://www.mlahanas.de/Greeks/images/Parallax.jpg")
 		.scrollFactor(0.2);
 
-	var player = Crafty.e("2D, DOM, Physical");
+	var player = Crafty.e("2D, DOM, Image, Physical")
+		.image("https://cdn4.iconfinder.com/data/icons/soda_pop_caps/PNG/Sprite_128.png");
 
 	var ticker = Crafty.e("PhysicsTicker");
 });
