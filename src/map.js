@@ -37,20 +37,7 @@ Crafty.c("TiledMap", {
 			dp.push([10 - x, 0]);
 		if(y > 10)
 			dp.push([0, 10 - y]);
-		// Look for the smallest push to escape, return it.
-		var smallestPushLen2 = Number.MAX_VALUE;
-		var smallestPush = null;
-		for(var i = 0; i < dp.length; i++) {
-			var push = dp[i];
-			var x = push[0];
-			var y = push[1];
-			var len2 = x*x + y*y;
-			if(len2 < smallestPushLen2) {
-				smallestPushLen2 = len2;
-				smallestPush = push;
-			}
-		}
-		return smallestPush;
+		return dp;
 	},
 
 });

@@ -35,7 +35,7 @@ Crafty.c("Physical", {
 			// TODO: Move this into its own component.
 			this._phAY += 9.8;
 			this._phAX +=
-				(2.0 * Math.random() - 0.5)
+				(2.0 * Math.random() - 1.0)
 				* 500.0;
 			// Seconds per frame.
 			var sPerF = 1.0 / Crafty.timer.getFPS();
@@ -49,9 +49,10 @@ Crafty.c("Physical", {
 		}).bind("ResolveConstraint", function() {
 			var map = Crafty("TiledMap");
 			var colResponse = map.resolvePos(this._phX, this._phY);
-			if(colResponse != null) {
-				this._phX += colResponse[0];
-				this._phY += colResponse[1];
+			for(var i = colResponse.length - 1; i >= 0; --i) {
+				var response = colResponse[i];
+				this._phX += response[0];
+				this._phY += response[1];
 			}
 		}).bind("EvaluateInertia", function() {
 			var px = this._phPX;
@@ -61,8 +62,8 @@ Crafty.c("Physical", {
 			this._phX += this._phX - px;
 			this._phY += this._phY - py;
 		}).bind("UpdateDraw", function() {
-			this.x = this._phX;
-			this.y = this._phY;
+			this.x = this._phX * 32;
+			this.y = this._phY * 32;
 		});
 	}
 
