@@ -58,10 +58,23 @@ Crafty.c("TiledMap", {
 });
 
 function getGlobalTileBounds(tileset) {
+	// Returns a dictionary of the bounds for tiles.
+	// Key: tile global id (number)
+	// Value: list of vectors. Vectors are lists that contain x,y,dx,dy.
 	var boundAssoc = {};
-	for(var i in tileset.tileproperties) {
-		boundAssoc[parseInt(i) + parseInt(tileset.firstgid)] =
-			$.parseJSON(tileset.tileproperties[i].bounds);
+	for(var tilei in tileset.tileproperties) {
+		var gid = parseInt(tilei) + parseInt(tileset.firstgid);
+		boundAssoc[gid] = [];
+		var pts = $.parseJSON(tileset.tileproperties[tilei].bounds);
+		var pprev = pts[pts.length-1];
+		for(var i = 0; i < pts.length; ++i) {
+			var p = pts[i];
+			boundAssoc[gid].push([
+				pprev[0], pprev[1],
+				p[0]-pprev[0], p[1]-pprev[1]
+			]);
+			pprev = p;
+		}
 	}
 	return boundAssoc;
 }
