@@ -59,8 +59,8 @@ Crafty.c("Physical", {
 			this._phX += this._phX - px;
 			this._phY += this._phY - py;
 		}).bind("UpdateDraw", function() {
-			this.x = this._phX * 32;
-			this.y = this._phY * 32;
+			this.x = this._phPX * 32;
+			this.y = this._phPY * 32;
 		});
 	},
 
