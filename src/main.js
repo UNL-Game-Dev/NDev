@@ -10,8 +10,14 @@ Crafty.scene("testMap", function() {
 		.image("http://www.mlahanas.de/Greeks/images/Parallax.jpg")
 		.scrollFactor(0.2);
 
-	var player = Crafty.e("2D, DOM, Image, Physical")
-		.image("https://cdn4.iconfinder.com/data/icons/soda_pop_caps/PNG/Sprite_128.png");
+	Crafty.sprite("assets/sprites/player.png",
+		{ player: [0,0,32,32] }
+	);
+
+	for(var i = 0; i < 30; ++i) {
+		var player = Crafty.e("2D, DOM, Physical, player");
+		player.setPhysPos(i, 0);
+	}
 
 	var ticker = Crafty.e("PhysicsTicker");
 });

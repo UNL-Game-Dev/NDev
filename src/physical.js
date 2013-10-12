@@ -62,6 +62,14 @@ Crafty.c("Physical", {
 			this.x = this._phX * 32;
 			this.y = this._phY * 32;
 		});
+	},
+
+	setPhysPos:
+	function(x, y) {
+		this._phX = x;
+		this._phY = y;
+		this._phPX = x;
+		this._phPY = y;
 	}
 
 });

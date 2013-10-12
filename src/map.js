@@ -33,8 +33,8 @@ Crafty.c("TiledMap", {
 			dp.push([0 - x, 0]);
 		if(y < 0)
 			dp.push([0, 0 - y]);
-		if(x > 10)
-			dp.push([10 - x, 0]);
+		if(x > 30)
+			dp.push([30 - x, 0]);
 		if(y > 10)
 			dp.push([0, 10 - y]);
 		return dp;

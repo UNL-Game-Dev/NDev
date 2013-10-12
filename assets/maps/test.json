@@ -39,7 +39,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"assets\/ark.png",
+         "image":"assets\/tiles\/ark.png",
          "imageheight":128,
          "imagewidth":128,
          "margin":0,
