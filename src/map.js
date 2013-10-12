@@ -13,6 +13,11 @@ Crafty.c("TiledMap", {
 	function(mapName) {
 		var that = this;
 		$.getJSON("assets/maps/"+mapName+".json", function(json) {
+			// Modify the tile image paths to match existing paths.
+			for(var i = 0; i < json.tilesets.length; i++) {
+				json.tilesets[i].image =
+					"assets/maps/" + json.tilesets[i].image;
+			}
 			that.setMapDataSource(json); 
 			that.createWorld( function( map ) {
 				console.log("Done creating world.");
