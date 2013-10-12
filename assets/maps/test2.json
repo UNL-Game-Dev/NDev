@@ -31,6 +31,13 @@
             },
          "spacing":0,
          "tileheight":32,
+         "tileproperties":
+            {
+             "0":
+                {
+                 "bounds":"[[0,0],[1,0],[1,1],[0,1]]"
+                }
+            },
          "tilewidth":32
         }],
  "tilewidth":32,

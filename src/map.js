@@ -18,6 +18,11 @@ Crafty.c("TiledMap", {
 				json.tilesets[i].image =
 					"assets/maps/" + json.tilesets[i].image;
 			}
+			// Extract tile bounds information.
+			// TODO: Support multiple tilesets.
+			that._tilebounds = getGlobalTileBounds(json.tilesets[0]);
+			console.log(that._tilebounds);
+			// Load it in.
 			that.setMapDataSource(json); 
 			that.createWorld( function( map ) {
 				console.log("Done creating world.");
@@ -46,4 +51,13 @@ Crafty.c("TiledMap", {
 	},
 
 });
+
+function getGlobalTileBounds(tileset) {
+	var boundAssoc = {};
+	for(var i in tileset.tileproperties) {
+		boundAssoc[i + tileset.firstgid] =
+			$.parseJSON(tileset.tileproperties[i].bounds);
+	}
+	return boundAssoc;
+}
 
