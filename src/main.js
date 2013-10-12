@@ -9,5 +9,9 @@ Crafty.scene("testMap", function() {
 	var bg = Crafty.e("2D, DOM, Image, Parallax")
 		.image("http://www.mlahanas.de/Greeks/images/Parallax.jpg")
 		.scrollFactor(0.2);
+
+	var player = Crafty.e("2D, DOM, Physical");
+
+	var ticker = Crafty.e("PhysicsTicker");
 });
 
