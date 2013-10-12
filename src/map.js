@@ -30,14 +30,19 @@ Crafty.c("TiledMap", {
 		});
 	},
 
-	pointCollides:
-	function(x, y) {
-	},
-
 	resolvePos:
 	function(x, y) {
-		// TODO: Make actual collision.
 		var dp = [];
+		var tx = Math.floor(x);
+		var ty = Math.floor(y);
+		// TODO: Search all layers for collideable tiles.
+		if(this.getLayers() != null) {
+			var tile = this.getTile(ty, tx, "test");
+			if(tile.gid != undefined) {
+				var tbounds = this._tilebounds[tile.gid];
+			}
+		}
+
 		// Test against boundaries.
 		if(x < 0)
 			dp.push([0 - x, 0]);
@@ -55,7 +60,7 @@ Crafty.c("TiledMap", {
 function getGlobalTileBounds(tileset) {
 	var boundAssoc = {};
 	for(var i in tileset.tileproperties) {
-		boundAssoc[i + tileset.firstgid] =
+		boundAssoc[parseInt(i) + parseInt(tileset.firstgid)] =
 			$.parseJSON(tileset.tileproperties[i].bounds);
 	}
 	return boundAssoc;

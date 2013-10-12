@@ -8,7 +8,7 @@
    </properties>
   </tile>
  </tileset>
- <layer name="Tile Layer 1" width="100" height="100">
+ <layer name="test" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt1IEKgyAQBmALst7/ibdWgbhjtaAk+D74IVFC7jhTAgAAjupbX4CP4Z2cln7kxnd5sm5NZKi+ozp3VfoinDPXMVfrveTi7Bj805ycF9X7n/ORbUb05D7RXJR7U/rui7esvbIvc371EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK7wAn1XAKQ=
   </data>
