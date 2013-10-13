@@ -30,8 +30,7 @@ Crafty.c("Physical", {
 		this._phAX = 0.0;
 		this._phAY = 0.0;
 
-		this.shapeBox(0.4, 0.4);
-		console.log(this, this.shape);
+		this.shapeBox(0.875/2.0, 0.875/2.0);
 
 		this.bind("EvaluateAccel", function() {
 			// Debug gravity.
@@ -49,7 +48,9 @@ Crafty.c("Physical", {
 			this._phAY = 0.0;
 		}).bind("ResolveConstraint", function() {
 			var map = Crafty("TiledMap");
-			var colResponse = map.resolvePos(this._phX+0.5, this._phY+1.0);
+			var colResponse = map.resolvePos(
+				this._phX+0.5, this._phY+1.0, this.shape
+			);
 			for(var i = colResponse.length - 1; i >= 0; --i) {
 				var response = colResponse[i];
 				this._phX += response[0];
@@ -63,8 +64,8 @@ Crafty.c("Physical", {
 			this._phX += this._phX - px;
 			this._phY += this._phY - py;
 		}).bind("UpdateDraw", function() {
-			this.x = this._phPX * 32;
-			this.y = this._phPY * 32;
+			this.x = (this._phPX + 0.875/2.0) * 32;
+			this.y = (this._phPY + 0.875/2.0) * 32;
 		});
 	},
 
@@ -108,9 +109,22 @@ function Poly(pts) {
 }
 
 // Returns [min,max] scalar offsets on the normal n.
-Poly.prototype.minMaxOnNormal(n) {
-	var minVal = Number.MIN_VALUE;
-	var maxVal = Number.MAX_VALUE;
+// Centers around p! Will need to add/subtract p distance along n for these
+// values to be meaningful, probably.
+// Assumes normal is normalized.
+Poly.prototype.minMaxOnNormal = function(n, addin) {
+	if(addin == undefined)
+		addin = 0;
+	var minVal = Number.MAX_VALUE;
+	var maxVal = Number.MIN_VALUE;
+	for(var i = this.pts.length - 1; i >= 0; --i) {
+		var ndotp = dot(n, this.pts[i]);
+		if(ndotp < minVal)
+			minVal = ndotp;
+		if(ndotp > maxVal)
+			maxVal = ndotp;
+	}
+	return [minVal + addin, maxVal + addin];
 }
 
 

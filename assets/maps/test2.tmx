@@ -30,7 +30,7 @@
  </tileset>
  <layer name="test" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1YEKgyAQBuAryPb+T7y1FYybNBuUDL4PDhRF5H7ECAAAoNXY+wI8TY8q8cqjdL7LPxvWqpnSuNbnYaf4zdK7kubfqrztnSvn5TNp19L/o+9AJtfL7yKv3eIzlzH8+b1tuWxZ7OUIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZ7gD8PwAow==
+   eJzt00kKgDAMAMD20Or/X6yCgoRSl4MLzEAgpSGHhKQEAADwL2WOuua1V0hXXqOlhLw159wJ7llmV8P7KOqudmj0iz0578z8r96BnTwv3kX8G5O9fNG2FwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHjLBLjiAJA=
   </data>
  </layer>
 </map>

@@ -26,53 +26,77 @@ Crafty.c("TiledMap", {
 			that.setMapDataSource(json); 
 			that.createWorld( function( map ) {
 				console.log("Done creating world.");
+				that._loaded = true;
 			});
 		});
 	},
 
 	resolvePos:
-	function(x, y) {
+	function(x, y, poly) {
 		var dp = [];
-		var tx = Math.floor(x);
-		var ty = Math.floor(y);
-		// TODO: Search all layers for collideable tiles.
-		if(this.getLayers() != null) {
-			var tile = this.getTile(ty, tx, "test");
-			if(tile.gid != undefined &&
-					this._tilebounds[tile.gid] != undefined) {
-				var tbounds = this._tilebounds[tile.gid];
-				var p = [x, y];
-				var pdiff = sub(p, [Math.floor(tx), Math.floor(ty)]);
-				var leastdplen = Number.MAX_VALUE;
-				var leastdp = null;
-				for(var i = tbounds.length - 1; i >= 0; --i) {
-					var bound = tbounds[i];
-					// See if this bound really applies to this point.
-					// comp on a of b < |a|
-					// => (a dot b) / |a| < |a|
-					// => a dot b < |a|^2
-					// Where a is the bound, b is the pos offset.
-					var a = [bound[2], bound[3]];
-					var b = sub(pdiff, bound);
-					// Normal to the bound.
-					var n = norm(rNormal(a));
-					// The distance in terms of n b is within the bound.
-					// If negative, within the bound!
-					// comp on n of b = n dot b
-					var d = dot(n, b);
-					//console.log(a, n, "dot", b, d);
-					if(d < leastdplen) {
-						// Scale n by -d to get the way to escape.
-						leastdp = scale(n, -d);
-						leastdplen = d;
-					}
-				}
-				if(leastdplen > 0) {
-					dp.push(leastdp);
-				}
-				//console.log("DONE", leastdplen, leastdp);
-			}
+		var tx0 = Math.floor(x);
+		var ty0 = Math.floor(y);
+		if(!this._loaded) {
+			return dp;
 		}
+
+		for(var tx = tx0 - 1; tx <= tx0 + 1; tx++)
+		for(var ty = ty0 - 1; ty <= ty0 + 1; ty++) {
+			// TODO: Search all layers for collideable tiles.
+			var tile = this.getTile(ty, tx, "test");
+			if(tile == undefined || tile.gid == undefined ||
+					this._tilebounds[tile.gid] == undefined) {
+				continue;
+			}
+			var tbounds = this._tilebounds[tile.gid];
+			var p = [x, y];
+			var pdiff = sub(p, [tx, ty]);
+			var leastdplen = Number.MAX_VALUE;
+			var leastdp = null;
+
+			for(var i = tbounds.segs.length - 1; i >= 0; --i) {
+				var bound = tbounds.segs[i];
+
+				// Where a is along the bound.
+				var a = [bound[2], bound[3]];
+				// Normal vector to the bound.
+				var n = norm(rNormal(a));
+
+				// From p to the start of the segment.
+				var b = sub(pdiff, bound);
+
+				// Get the comp on n from segment to p.
+				var ndotb = dot(n, b);
+
+				// Get min and max distances for tile and physical polys.
+				var minMaxPhys = poly.minMaxOnNormal(n, ndotb);
+				var minMaxTile = tbounds.minMaxOnNormal(n);
+
+				//console.log("minMaxes: ", minMaxPhys, minMaxTile);
+
+				// Get penetration values for both sides.
+				var penPhysPlus  = minMaxPhys[1] - minMaxTile[0];
+				var penPhysMinus = minMaxPhys[1] - minMaxTile[0];
+
+				// Lowest magnitude in the wrong dir = pushback.
+				var pen = penPhysPlus;
+				if(-penPhysMinus < pen)
+					pen = penPhysMinus;
+
+				//console.log(penPhysPlus, penPhysMinus, pen, n);
+
+				if(pen < leastdplen) {
+					// Scale n by -d to get the way to escape.
+					leastdp = scale(n, -pen);
+					leastdplen = pen;
+				}
+			}
+			if(leastdplen > 0) {
+				dp.push(leastdp);
+			}
+			//console.log("DONE", leastdplen, leastdp);
+		}
+		//console.log(dp);
 		return dp;
 	},
 
