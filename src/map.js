@@ -51,7 +51,6 @@ Crafty.c("TiledMap", {
 				ent.addComponent("Collision");
 
 				var poly = new Crafty.polygon(boundsdup);
-				console.log(ent.x, ent.y, poly, bounds);
 				ent.collision(poly);
 				// Mark for collision.
 				ent.addComponent("Tile");
@@ -69,7 +68,6 @@ function getGlobalTileBounds(tileset) {
 	for(var tilei in tileset.tileproperties) {
 		var gid = parseInt(tilei) + parseInt(tileset.firstgid);
 		var pts = $.parseJSON(tileset.tileproperties[tilei].bounds);
-		console.log("pts", pts);
 		boundAssoc[gid] = pts;
 	}
 	return boundAssoc;

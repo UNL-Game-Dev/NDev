@@ -62,6 +62,9 @@ Crafty.c("Physical", {
 				this._phX += norm.x;
 				this._phY += norm.y;
 			}
+			if(tries == 0) {
+				console.log("Warning! Ran out of physics resolve attempts!");
+			}
 		}).bind("EvaluateInertia", function() {
 			var px = this._phPX;
 			var py = this._phPY;
