@@ -30,6 +30,8 @@ Crafty.c("Physical", {
 		this._phAX = 0.0;
 		this._phAY = 0.0;
 
+		this.currentNormals = [];
+
 		this.bind("EvaluateAccel", function() {
 			// Seconds per frame.
 			var sPerF = 1.0 / Crafty.timer.getFPS();
@@ -41,6 +43,7 @@ Crafty.c("Physical", {
 			this._phAX = 0.0;
 			this._phAY = 0.0;
 		}).bind("ResolveConstraint", function() {
+			this.currentNormals = [];
 			// Protect against infinite loop.
 			// How to fix: only evaluate each pair a single time!
 			var tries = 100;
@@ -57,6 +60,7 @@ Crafty.c("Physical", {
 				norm.y *= -hit.overlap;
 				this._phX += norm.x;
 				this._phY += norm.y;
+				this.currentNormals.push([norm.x, norm.y]);
 			}
 			if(tries == 0) {
 				console.log("Warning! Ran out of physics resolve attempts!");
@@ -90,7 +94,7 @@ Crafty.c("PhysicsGravity", {
 	function() {
 		var that = this;
 		this.bind("EvaluateAccel", function() {
-			that._phAY += 100;
+			that._phAY += 280;
 		});
 	}
 
