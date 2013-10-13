@@ -67,18 +67,19 @@ Crafty.c("TiledMap", {
 
 				// Get the comp on n from segment to p.
 				var ndotb = dot(n, b);
+				var ndottileorigin = dot(n, bound);
 
 				// Get min and max distances for tile and physical polys.
 				var minMaxPhys = poly.minMaxOnNormal(n, ndotb);
-				var minMaxTile = tbounds.minMaxOnNormal(n);
+				var minMaxTile = tbounds.minMaxOnNormal(n, ndottileorigin);
 
 				//console.log("minMaxes: ", minMaxPhys, minMaxTile);
 
 				// Get penetration values for both sides.
-				var penPhysPlus  = minMaxPhys[1] - minMaxTile[0];
+				var penPhysPlus  = minMaxTile[1] - minMaxPhys[0];
 				var penPhysMinus = minMaxPhys[1] - minMaxTile[0];
 
-				// Lowest magnitude in the wrong dir = pushback.
+				// Lowest nonpositive penetration = pushback.
 				var pen = penPhysPlus;
 				if(-penPhysMinus < pen)
 					pen = penPhysMinus;
