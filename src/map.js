@@ -40,6 +40,38 @@ Crafty.c("TiledMap", {
 			var tile = this.getTile(ty, tx, "test");
 			if(tile.gid != undefined) {
 				var tbounds = this._tilebounds[tile.gid];
+				var p = [x, y];
+				var pdiff = sub(p, [Math.floor(tx), Math.floor(ty)]);
+				var leastdplen = Number.MAX_VALUE;
+				var leastdp = null;
+				for(var i = tbounds.length - 1; i >= 0; --i) {
+					var bound = tbounds[i];
+					// See if this bound really applies to this point.
+					// comp on a of b < |a|
+					// => (a dot b) / |a| < |a|
+					// => a dot b < |a|^2
+					// Where a is the bound, b is the pos offset.
+					var a = [bound[2], bound[3]];
+					var b = sub(pdiff, bound);
+					if(dot(a, b) < dist2(a)) {
+						// Normal to the bound.
+						var n = norm(rNormal(a));
+						// The distance in terms of n b is within the bound.
+						// If negative, within the bound!
+						// comp on n of b = n dot b
+						var d = dot(n, b);
+						//console.log(a, n, "dot", b, d);
+						if(d < leastdplen) {
+							// Scale n by -d to get the way to escape.
+							leastdp = scale(n, -d);
+							leastdplen = d;
+						}
+					}
+				}
+				if(leastdplen > 0) {
+					dp.push(leastdp);
+				}
+				//console.log("DONE", leastdplen, leastdp);
 			}
 		}
 

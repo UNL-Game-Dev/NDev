@@ -34,6 +34,7 @@ Crafty.c("Physical", {
 			// Debug gravity.
 			// TODO: Move this into its own component.
 			this._phAY += 9.8;
+			this._phAX += 0.5;
 			// Seconds per frame.
 			var sPerF = 1.0 / Crafty.timer.getFPS();
 			// Apply acceleration to velocity. Since velocity is stored as the
@@ -45,7 +46,7 @@ Crafty.c("Physical", {
 			this._phAY = 0.0;
 		}).bind("ResolveConstraint", function() {
 			var map = Crafty("TiledMap");
-			var colResponse = map.resolvePos(this._phX, this._phY);
+			var colResponse = map.resolvePos(this._phX+0.5, this._phY+1.0);
 			for(var i = colResponse.length - 1; i >= 0; --i) {
 				var response = colResponse[i];
 				this._phX += response[0];
@@ -73,4 +74,47 @@ Crafty.c("Physical", {
 	}
 
 });
+
+//---------------------------
+// Common physics vector math.
+// Assumes vectors in form [x,y]
+
+// Returns the dot product of v1 and v2.
+function dot(v1, v2) {
+	return v1[0]*v2[0] + v1[1]*v2[1];
+}
+
+// Returns the "right" (+rotation in this orientation) normal.
+function rNormal(v) {
+	return [-v[1], v[0]];
+}
+
+// Returns the normalized version of the given vector.
+function norm(v) {
+	var x = v[0];
+	var y = v[1];
+	var d = Math.sqrt(x*x + y*y);
+	return [x/d, y/d];
+}
+
+function dist2(v) {
+	var x = v[0];
+	var y = v[1];
+	return x*x + y*y;
+}
+
+// Returns v1 + v2
+function add(v1, v2) {
+	return [v1[0] + v2[0], v1[1] + v2[1]];
+}
+
+// Returns v1 - v2
+function sub(v1, v2) {
+	return [v1[0] - v2[0], v1[1] - v2[1]];
+}
+
+// Returns v * scalar
+function scale(v, scalar) {
+	return [v[0]*scalar, v[1]*scalar];
+}
 
