@@ -34,7 +34,7 @@ Crafty.c("Physical", {
 			// Debug gravity.
 			// TODO: Move this into its own component.
 			this._phAY += 9.8;
-			this._phAX += 0.5;
+			this._phAX += 0.1;
 			// Seconds per frame.
 			var sPerF = 1.0 / Crafty.timer.getFPS();
 			// Apply acceleration to velocity. Since velocity is stored as the

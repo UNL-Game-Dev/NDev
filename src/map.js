@@ -38,7 +38,8 @@ Crafty.c("TiledMap", {
 		// TODO: Search all layers for collideable tiles.
 		if(this.getLayers() != null) {
 			var tile = this.getTile(ty, tx, "test");
-			if(tile.gid != undefined) {
+			if(tile.gid != undefined &&
+					this._tilebounds[tile.gid] != undefined) {
 				var tbounds = this._tilebounds[tile.gid];
 				var p = [x, y];
 				var pdiff = sub(p, [Math.floor(tx), Math.floor(ty)]);
@@ -74,16 +75,6 @@ Crafty.c("TiledMap", {
 				//console.log("DONE", leastdplen, leastdp);
 			}
 		}
-
-		// Test against boundaries.
-		if(x < 0)
-			dp.push([0 - x, 0]);
-		if(y < 0)
-			dp.push([0, 0 - y]);
-		if(x > 30)
-			dp.push([30 - x, 0]);
-		if(y > 10)
-			dp.push([0, 10 - y]);
 		return dp;
 	},
 
