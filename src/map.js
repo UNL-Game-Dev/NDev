@@ -84,18 +84,27 @@ Crafty.c("TiledMap", {
 				if(penPhysMinus < pen)
 					pen = penPhysMinus;
 
-				//console.log(penPhysPlus, penPhysMinus, pen, n);
+				console.log(
+						"p ->", penPhysPlus.toFixed(2),
+						"p <-", penPhysMinus.toFixed(2),
+						"smallest", pen.toFixed(2),
+						n);
 
-				if(pen >= 0 && pen < leastdplen) {
+				if(pen < leastdplen) {
 					// Scale n by -d to get the way to escape.
 					leastdp = scale(n, -pen);
 					leastdplen = pen;
+					console.log("SETTING", scale(n, -pen));
 				}
 			}
 			if(leastdplen > 0 && leastdp) {
+				console.log("PUSHING");
 				dp.push(leastdp);
 			}
-			//console.log("DONE", leastdplen, leastdp);
+			console.log("DONETILE", tx, ty, leastdplen, leastdp);
+		}
+		if(dp.length > 0) {
+			console.log("dp", dp);
 		}
 		return dp;
 	},
