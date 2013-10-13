@@ -14,10 +14,11 @@ Crafty.scene("testMap", function() {
 		{ player: [0,0,32,32] }
 	);
 
-	for(var i = 0; i < 11; ++i) {
-		var player = Crafty.e("2D, DOM, player, Physical, Collision");
-		player.setPhysPos(i*40 + 15 , 0);
-	}
+	var player = Crafty.e("2D, DOM, player, Physical, Collision, PlatformControls, PhysicsGravity");
+	player.setPhysPos(40, 20);
+
+	var scroller = Crafty.e("Scroller");
+	scroller.target = player;
 
 	var ticker = Crafty.e("PhysicsTicker");
 });

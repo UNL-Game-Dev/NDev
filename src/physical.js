@@ -30,11 +30,9 @@ Crafty.c("Physical", {
 		this._phAX = 0.0;
 		this._phAY = 0.0;
 
+		this.currentNormals = [];
+
 		this.bind("EvaluateAccel", function() {
-			// Debug gravity.
-			// TODO: Move this into its own component.
-			this._phAY += 98;
-			this._phX += 0.01;
 			// Seconds per frame.
 			var sPerF = 1.0 / Crafty.timer.getFPS();
 			// Apply acceleration to velocity. Since velocity is stored as the
@@ -45,6 +43,7 @@ Crafty.c("Physical", {
 			this._phAX = 0.0;
 			this._phAY = 0.0;
 		}).bind("ResolveConstraint", function() {
+			this.currentNormals = [];
 			// Protect against infinite loop.
 			// How to fix: only evaluate each pair a single time!
 			var tries = 100;
@@ -61,6 +60,7 @@ Crafty.c("Physical", {
 				norm.y *= -hit.overlap;
 				this._phX += norm.x;
 				this._phY += norm.y;
+				this.currentNormals.push([norm.x, norm.y]);
 			}
 			if(tries == 0) {
 				console.log("Warning! Ran out of physics resolve attempts!");
@@ -84,6 +84,18 @@ Crafty.c("Physical", {
 		this._phY = y;
 		this._phPX = x;
 		this._phPY = y;
+	}
+
+});
+
+Crafty.c("PhysicsGravity", {
+
+	init:
+	function() {
+		var that = this;
+		this.bind("EvaluateAccel", function() {
+			that._phAY += 280;
+		});
 	}
 
 });
