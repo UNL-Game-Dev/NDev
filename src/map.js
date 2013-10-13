@@ -42,7 +42,6 @@ Crafty.c("TiledMap", {
 				// TODO: Make collision actually based on bounds.
 				ent.addComponent("Collision");
 				ent.addComponent("Tile");
-				console.log(ent.components);
 			}
 		}
 	}

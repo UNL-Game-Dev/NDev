@@ -34,7 +34,7 @@ Crafty.c("Physical", {
 			// Debug gravity.
 			// TODO: Move this into its own component.
 			this._phAY += 98;
-			this._phAX += 0.1;
+			this._phAX += 5;
 			// Seconds per frame.
 			var sPerF = 1.0 / Crafty.timer.getFPS();
 			// Apply acceleration to velocity. Since velocity is stored as the
@@ -45,18 +45,20 @@ Crafty.c("Physical", {
 			this._phAX = 0.0;
 			this._phAY = 0.0;
 		}).bind("ResolveConstraint", function() {
-			var hits = this.hit("Tile");
-			for(var i = hits.length - 1; i >= 0; --i) {
-				var hit = hits[i];
+			while(true) {
+				// TODO: Fix this crap.
+				this.x = this._phX;
+				this.y = this._phY;
+				var hits = this.hit("Tile");
+				if(!hits)
+					break;
+				var hit = hits[0];
 				var norm = hit.normal;
 				norm.x *= -hit.overlap;
 				norm.y *= -hit.overlap;
-				console.log(norm);
 				this._phX += norm.x;
 				this._phY += norm.y;
 			}
-			if(hits.length > 0)
-				console.log("OVER");
 		}).bind("EvaluateInertia", function() {
 			var px = this._phPX;
 			var py = this._phPY;
