@@ -17,7 +17,8 @@ Crafty.scene("testMap", function() {
 	var player = Crafty.e("2D, DOM, player, Physical, Collision, PlatformControls, PhysicsGravity");
 	player.setPhysPos(40, 20);
 
-	Crafty.viewport.follow(player);
+	var scroller = Crafty.e("Scroller");
+	scroller.target = player;
 
 	var ticker = Crafty.e("PhysicsTicker");
 });
