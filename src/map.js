@@ -26,91 +26,26 @@ Crafty.c("TiledMap", {
 			that.setMapDataSource(json); 
 			that.createWorld( function( map ) {
 				console.log("Done creating world.");
+				that.collisionize();
 				that._loaded = true;
 			});
 		});
 	},
 
-	resolvePos:
-	function(x, y, poly) {
-		var dp = [];
-		var tx0 = Math.floor(x);
-		var ty0 = Math.floor(y);
-		if(!this._loaded) {
-			return dp;
-		}
-
-		for(var tx = tx0 - 1; tx <= tx0 + 1; tx++)
-		for(var ty = ty0 - 1; ty <= ty0 + 1; ty++) {
-			// TODO: Search all layers for collideable tiles.
-			var tile = this.getTile(ty, tx, "test");
-			if(tile == undefined || tile.gid == undefined ||
-					this._tilebounds[tile.gid] == undefined) {
-				continue;
+	collisionize:
+	function() {
+		// Add tile bounds information.
+		for(var layerName in this.getLayers()) {
+			var entities = this.getEntitiesInLayer(layerName);
+			for(var i = entities.length - 1; i >= 0; --i) {
+				var ent = entities[i];
+				// TODO: Make collision actually based on bounds.
+				ent.addComponent("Collision");
+				ent.addComponent("Tile");
+				console.log(ent.components);
 			}
-			var tbounds = this._tilebounds[tile.gid];
-			var p = [x, y];
-			var pdiff = sub(p, [tx, ty]);
-			var leastdplen = Number.MAX_VALUE;
-			var leastdp = null;
-
-			for(var i = tbounds.segs.length - 1; i >= 0; --i) {
-				var bound = tbounds.segs[i];
-				// Move the bound to the actual position.
-				bound[0] += tx;
-				bound[1] += ty;
-
-				// Where a is along the bound.
-				var a = [bound[2], bound[3]];
-				// Normal vector to the bound.
-				var n = norm(rNormal(a));
-
-				// From p to the start of the segment.
-				var b = sub(pdiff, bound);
-
-				// Get the comp on n from segment to p.
-				var ndotb = dot(n, b);
-				var ndottileorigin = dot(n, bound);
-
-				// Get min and max distances for tile and physical polys.
-				var minMaxPhys = poly.minMaxOnNormal(n, ndotb);
-				var minMaxTile = tbounds.minMaxOnNormal(n, ndottileorigin);
-
-				//console.log("minMaxes: ", minMaxPhys, minMaxTile);
-
-				// Get penetration values for both sides.
-				var penPhysPlus  = minMaxTile[1] - minMaxPhys[0];
-				var penPhysMinus = minMaxPhys[1] - minMaxTile[0];
-
-				// Lowest nonpositive penetration = pushback.
-				var pen = penPhysPlus;
-				if(penPhysMinus < pen)
-					pen = penPhysMinus;
-
-				console.log(
-						"p ->", penPhysPlus.toFixed(2),
-						"p <-", penPhysMinus.toFixed(2),
-						"smallest", pen.toFixed(2),
-						n);
-
-				if(pen < leastdplen) {
-					// Scale n by -d to get the way to escape.
-					leastdp = scale(n, -pen);
-					leastdplen = pen;
-					console.log("SETTING", scale(n, -pen));
-				}
-			}
-			if(leastdplen > 0 && leastdp) {
-				console.log("PUSHING");
-				dp.push(leastdp);
-			}
-			console.log("DONETILE", tx, ty, leastdplen, leastdp);
 		}
-		if(dp.length > 0) {
-			console.log("dp", dp);
-		}
-		return dp;
-	},
+	}
 
 });
 
@@ -122,7 +57,7 @@ function getGlobalTileBounds(tileset) {
 	for(var tilei in tileset.tileproperties) {
 		var gid = parseInt(tilei) + parseInt(tileset.firstgid);
 		var pts = $.parseJSON(tileset.tileproperties[tilei].bounds);
-		boundAssoc[gid] = new Poly(pts);
+		//boundAssoc[gid] = new Poly(pts);
 	}
 	return boundAssoc;
 }

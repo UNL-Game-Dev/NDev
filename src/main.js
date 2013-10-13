@@ -14,9 +14,9 @@ Crafty.scene("testMap", function() {
 		{ player: [0,0,32,32] }
 	);
 
-	for(var i = 0; i < 1; ++i) {
-		var player = Crafty.e("2D, DOM, Physical, player");
-		player.setPhysPos(i + 0.25, 0);
+	for(var i = 0; i < 21; ++i) {
+		var player = Crafty.e("2D, DOM, player, Physical, Collision");
+		player.setPhysPos(i*40 + 0.5 , 0);
 	}
 
 	var ticker = Crafty.e("PhysicsTicker");
