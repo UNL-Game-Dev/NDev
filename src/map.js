@@ -39,8 +39,21 @@ Crafty.c("TiledMap", {
 			var entities = this.getEntitiesInLayer(layerName);
 			for(var i = entities.length - 1; i >= 0; --i) {
 				var ent = entities[i];
+				var gid = ent.gid;
+				var bounds = this._tilebounds[gid];
+				var boundsdup = [];
+				for(var j = 0; j < bounds.length; ++j) {
+					boundsdup[j] = [];
+					boundsdup[j].push(bounds[j][0] * 32);
+					boundsdup[j].push(bounds[j][1] * 32);
+				}
 				// TODO: Make collision actually based on bounds.
 				ent.addComponent("Collision");
+
+				var poly = new Crafty.polygon(boundsdup);
+				console.log(ent.x, ent.y, poly, bounds);
+				ent.collision(poly);
+				// Mark for collision.
 				ent.addComponent("Tile");
 			}
 		}
@@ -56,7 +69,8 @@ function getGlobalTileBounds(tileset) {
 	for(var tilei in tileset.tileproperties) {
 		var gid = parseInt(tilei) + parseInt(tileset.firstgid);
 		var pts = $.parseJSON(tileset.tileproperties[tilei].bounds);
-		//boundAssoc[gid] = new Poly(pts);
+		console.log("pts", pts);
+		boundAssoc[gid] = pts;
 	}
 	return boundAssoc;
 }
