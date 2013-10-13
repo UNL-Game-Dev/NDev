@@ -56,6 +56,9 @@ Crafty.c("TiledMap", {
 
 			for(var i = tbounds.segs.length - 1; i >= 0; --i) {
 				var bound = tbounds.segs[i];
+				// Move the bound to the actual position.
+				bound[0] += tx;
+				bound[1] += ty;
 
 				// Where a is along the bound.
 				var a = [bound[2], bound[3]];
