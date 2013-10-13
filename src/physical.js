@@ -30,6 +30,9 @@ Crafty.c("Physical", {
 		this._phAX = 0.0;
 		this._phAY = 0.0;
 
+		this.shapeBox(0.4, 0.4);
+		console.log(this, this.shape);
+
 		this.bind("EvaluateAccel", function() {
 			// Debug gravity.
 			// TODO: Move this into its own component.
@@ -65,6 +68,16 @@ Crafty.c("Physical", {
 		});
 	},
 
+	shapeBox:
+	function(xRadius, yRadius) {
+		this.shape = new Poly([
+			[-xRadius, -yRadius],
+			[xRadius, -yRadius],
+			[xRadius, yRadius],
+			[-xRadius, yRadius],
+		]);
+	},
+
 	setPhysPos:
 	function(x, y) {
 		this._phX = x;
@@ -74,6 +87,32 @@ Crafty.c("Physical", {
 	}
 
 });
+
+//---------------------------
+// Polygon class.
+// Can give you useful information about its sides and normals wrt SAT.
+
+// Constructed with a right-handed list of points. (Clockwise here.)
+function Poly(pts) {
+	this.segs = [];
+	var pprev = pts[pts.length-1];
+	for(var i = 0; i < pts.length; ++i) {
+		var p = pts[i];
+		this.segs.push([
+			pprev[0], pprev[1],
+			p[0]-pprev[0], p[1]-pprev[1]
+		]);
+		pprev = p;
+	}
+	this.pts = pts;
+}
+
+// Returns [min,max] scalar offsets on the normal n.
+Poly.prototype.minMaxOnNormal(n) {
+	var minVal = Number.MIN_VALUE;
+	var maxVal = Number.MAX_VALUE;
+}
+
 
 //---------------------------
 // Common physics vector math.

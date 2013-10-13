@@ -54,19 +54,17 @@ Crafty.c("TiledMap", {
 					// Where a is the bound, b is the pos offset.
 					var a = [bound[2], bound[3]];
 					var b = sub(pdiff, bound);
-					if(dot(a, b) < dist2(a)) {
-						// Normal to the bound.
-						var n = norm(rNormal(a));
-						// The distance in terms of n b is within the bound.
-						// If negative, within the bound!
-						// comp on n of b = n dot b
-						var d = dot(n, b);
-						//console.log(a, n, "dot", b, d);
-						if(d < leastdplen) {
-							// Scale n by -d to get the way to escape.
-							leastdp = scale(n, -d);
-							leastdplen = d;
-						}
+					// Normal to the bound.
+					var n = norm(rNormal(a));
+					// The distance in terms of n b is within the bound.
+					// If negative, within the bound!
+					// comp on n of b = n dot b
+					var d = dot(n, b);
+					//console.log(a, n, "dot", b, d);
+					if(d < leastdplen) {
+						// Scale n by -d to get the way to escape.
+						leastdp = scale(n, -d);
+						leastdplen = d;
 					}
 				}
 				if(leastdplen > 0) {
@@ -87,17 +85,8 @@ function getGlobalTileBounds(tileset) {
 	var boundAssoc = {};
 	for(var tilei in tileset.tileproperties) {
 		var gid = parseInt(tilei) + parseInt(tileset.firstgid);
-		boundAssoc[gid] = [];
 		var pts = $.parseJSON(tileset.tileproperties[tilei].bounds);
-		var pprev = pts[pts.length-1];
-		for(var i = 0; i < pts.length; ++i) {
-			var p = pts[i];
-			boundAssoc[gid].push([
-				pprev[0], pprev[1],
-				p[0]-pprev[0], p[1]-pprev[1]
-			]);
-			pprev = p;
-		}
+		boundAssoc[gid] = new Poly(pts);
 	}
 	return boundAssoc;
 }
