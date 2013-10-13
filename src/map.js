@@ -81,23 +81,22 @@ Crafty.c("TiledMap", {
 
 				// Lowest nonpositive penetration = pushback.
 				var pen = penPhysPlus;
-				if(-penPhysMinus < pen)
+				if(penPhysMinus < pen)
 					pen = penPhysMinus;
 
 				//console.log(penPhysPlus, penPhysMinus, pen, n);
 
-				if(pen < leastdplen) {
+				if(pen >= 0 && pen < leastdplen) {
 					// Scale n by -d to get the way to escape.
 					leastdp = scale(n, -pen);
 					leastdplen = pen;
 				}
 			}
-			if(leastdplen > 0) {
+			if(leastdplen > 0 && leastdp) {
 				dp.push(leastdp);
 			}
 			//console.log("DONE", leastdplen, leastdp);
 		}
-		//console.log(dp);
 		return dp;
 	},
 

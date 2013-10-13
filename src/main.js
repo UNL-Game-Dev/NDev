@@ -14,7 +14,7 @@ Crafty.scene("testMap", function() {
 		{ player: [0,0,32,32] }
 	);
 
-	for(var i = 0; i < 10; ++i) {
+	for(var i = 0; i < 1; ++i) {
 		var player = Crafty.e("2D, DOM, Physical, player");
 		player.setPhysPos(i + 0.25, 0);
 	}
