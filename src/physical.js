@@ -1,6 +1,9 @@
 
 /**
  * Crafty component that carries out physics ticks in order.
+ *
+ * This is so that we can have a more controlled sequence that can be relied
+ * upon to execute in a specific order.
  */
 Crafty.c("PhysicsTicker", {
 
@@ -18,6 +21,17 @@ Crafty.c("PhysicsTicker", {
 
 /**
  * Crafty component for being affected by basic tile collision response.
+ *
+ * _phX/Y is the next position of the physical object. This can be set to a
+ *        offset from previous position to set velocity or increased from its
+ *        current value to accelerate.
+ *
+ * _phPX/PY is the previous position of the physical object. This can be used
+ *          as a basis for setting a new velocity.
+ *
+ * _phAX/AY can be used to set an acceleration that will be applied upon the
+ *          next call to EvaluateAccel. Since this is a platformer, realistic
+ *          accelerations probably won't be much use.
  */
 Crafty.c("Physical", {
 
