@@ -14,7 +14,7 @@ Crafty.scene("testMap", function() {
 		{ player: [0,0,32,32] }
 	);
 
-	var player = Crafty.e("2D, DOM, player, Collision, Physical, Inertia, PlatformControls, TileConstraint, DefaultPhysicsDraw, PhysicsGravity");
+	var player = Crafty.e("2D, DOM, player, Collision, Physical, PlatformControls, TileConstraint, DefaultPhysicsDraw, PhysicsGravity");
 	player.setPhysPos(40, 20);
 
 	var scroller = Crafty.e("Scroller");
