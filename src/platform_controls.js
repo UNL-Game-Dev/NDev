@@ -7,7 +7,7 @@ Crafty.c("PlatformControls", {
 
 	init:
 	function() {
-		this.bind("EvaluateAccel", function() {
+		this.bind("PrePhysicsTick", function() {
 			// The key "x" target difference.
 			var kx =
 				(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +

@@ -10,6 +10,7 @@ Crafty.c("PhysicsTicker", {
 	init:
 	function() {
 		this.bind("EnterFrame", function() {
+			Crafty.trigger("PrePhysicsTick");
 			Crafty.trigger("EvaluateAccel");
 			Crafty.trigger("ResolveConstraint");
 			Crafty.trigger("EvaluateInertia");
@@ -56,39 +57,6 @@ Crafty.c("Physical", {
 			this._phY += this._phAY * sPerF * sPerF;
 			this._phAX = 0.0;
 			this._phAY = 0.0;
-		}).bind("ResolveConstraint", function() {
-			this.currentNormals = [];
-			// Protect against infinite loop.
-			// How to fix: only evaluate each pair a single time!
-			var tries = 100;
-			while(tries--) {
-				// TODO: Fix this crap.
-				this.x = this._phX;
-				this.y = this._phY;
-				var hits = this.hit("Tile");
-				if(!hits)
-					break;
-				var hit = hits[0];
-				var norm = hit.normal;
-				norm.x *= -hit.overlap;
-				norm.y *= -hit.overlap;
-				this._phX += norm.x;
-				this._phY += norm.y;
-				this.currentNormals.push([norm.x, norm.y]);
-			}
-			if(tries == 0) {
-				console.log("Warning! Ran out of physics resolve attempts!");
-			}
-		}).bind("EvaluateInertia", function() {
-			var px = this._phPX;
-			var py = this._phPY;
-			this._phPX = this._phX;
-			this._phPY = this._phY;
-			this._phX += this._phX - px;
-			this._phY += this._phY - py;
-		}).bind("UpdateDraw", function() {
-			this.x = (this._phPX);
-			this.y = (this._phPY);
 		});
 	},
 
@@ -102,16 +70,65 @@ Crafty.c("Physical", {
 
 });
 
-Crafty.c("PhysicsGravity", {
+Crafty.c("DefaultPhysicsDraw", {
+	init:
+	function() {
+		this.bind("UpdateDraw", function() {
+			this.x = (this._phPX);
+			this.y = (this._phPY);
+		});
+	}
+});
 
+Crafty.c("TileConstraint", {
+	init:
+	function() {
+		this.bind("ResolveConstraint", function() {
+			this.currentNormals = [];
+			// Tiles to collide against.
+			var tiles = Crafty("Tile");
+			// Try 20 times, since there could only possibly be 20 tiles next
+			// to you at once, right?
+			for(var i = 20; i >= 0; --i) {
+				this.x = this._phX;
+				this.y = this._phY;
+				var hits = this.hit("Tile");
+				if(!hits)
+					break;
+				var hit = hits[0];
+				var norm = hit.normal;
+				norm.x *= -hit.overlap;
+				norm.y *= -hit.overlap;
+				this._phX += norm.x;
+				this._phY += norm.y;
+				this.currentNormals.push([norm.x, norm.y]);
+			}
+		});
+	}
+})
+
+Crafty.c("PhysicsGravity", {
 	init:
 	function() {
 		var that = this;
-		this.bind("EvaluateAccel", function() {
+		this.bind("PrePhysicsTick", function() {
 			that._phAY += 280;
 		});
 	}
+});
 
+Crafty.c("Inertia", {
+	init:
+	function() {
+		this.bind("EvaluateInertia", function() {
+			var px = this._phPX;
+			var py = this._phPY;
+			this._phPX = this._phX;
+			this._phPY = this._phY;
+			this._phX += this._phX - px;
+			this._phY += this._phY - py;
+		});
+	}
 });
 
 //---------------------------
