@@ -23,6 +23,9 @@ Crafty.c("PhysicsTicker", {
 /**
  * Crafty component for being affected by basic tile collision response.
  *
+ * This component only evaluates acceleration--other components need to be added
+ * for traditional realistic collision response.
+ *
  * _phX/Y is the next position of the physical object. This can be set to a
  *        offset from previous position to set velocity or increased from its
  *        current value to accelerate.
@@ -44,8 +47,6 @@ Crafty.c("Physical", {
 		this._phPY = this._phY;
 		this._phAX = 0.0;
 		this._phAY = 0.0;
-
-		this.currentNormals = [];
 
 		this.bind("EvaluateAccel", function() {
 			// Seconds per frame.
@@ -70,6 +71,10 @@ Crafty.c("Physical", {
 
 });
 
+/**
+ * A simple physics graphic updater. Updates the entity's x and y coordinates to
+ * match the physics coordinates after each physics tick.
+ */
 Crafty.c("DefaultPhysicsDraw", {
 	init:
 	function() {
@@ -80,43 +85,67 @@ Crafty.c("DefaultPhysicsDraw", {
 	}
 });
 
+/**
+ * Applies a simple tile constraint on the attached physical entity, forcing it
+ * to remain outside of tiles.
+ */
 Crafty.c("TileConstraint", {
 	init:
 	function() {
+		this.currentNormals = [];
+
 		this.bind("ResolveConstraint", function() {
 			this.currentNormals = [];
 			// Tiles to collide against.
 			var tiles = Crafty("Tile");
-			// Try 20 times, since there could only possibly be 20 tiles next
-			// to you at once, right?
+			/*
+			 * Try 20 times, since there could only possibly be 20 tiles next
+			 * to you at once, right?
+			 * This may remain, since Crafty doesn't provide a way to test
+			 * against a single entity. (And this collision lookup IS optimized
+			 * with a spatial map.)
+			 * Collisions can't simply be looped through, since when the player
+			 * overlaps two tiles, both emit a collision! This results in double
+			 * the force required being applied, making things bounce. No good.
+			 */
 			for(var i = 20; i >= 0; --i) {
 				this.x = this._phX;
 				this.y = this._phY;
+				// Find the first hit, process that.
 				var hits = this.hit("Tile");
 				if(!hits)
 					break;
 				var hit = hits[0];
+				// Just resolve it lazily, yay verlet integration.
 				var norm = hit.normal;
 				norm.x *= -hit.overlap;
 				norm.y *= -hit.overlap;
 				this._phX += norm.x;
 				this._phY += norm.y;
+				// Maintain a "current normals" list in case other components
+				// (such as platforming physics) are interested.
 				this.currentNormals.push([norm.x, norm.y]);
 			}
 		});
 	}
 })
 
+/**
+ * Apply a simple, constant acceleration downwards on the physical entity.
+ */
 Crafty.c("PhysicsGravity", {
 	init:
 	function() {
-		var that = this;
 		this.bind("PrePhysicsTick", function() {
-			that._phAY += 280;
+			this._phAY += 280;
 		});
 	}
 });
 
+/**
+ * Intertia application, as per verlet integration. Kept separate in case
+ * "special" objects need to be simulated. (Like player physics.)
+ */
 Crafty.c("Inertia", {
 	init:
 	function() {
