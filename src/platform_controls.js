@@ -45,6 +45,8 @@ Crafty.c("PlatformControls", {
 				this._phPY = this._phY;
 				this._phX = this._phX;
 				this._phY = this._phY;
+
+				this._phY += 0.01;
 				
 			} else {
 				// If in the air, use normal intertial physics.
