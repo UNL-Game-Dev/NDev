@@ -137,7 +137,7 @@ Crafty.c("PhysicsGravity", {
 	init:
 	function() {
 		this.bind("PrePhysicsTick", function() {
-			this._phAY += 280;
+				this._phAY += 280;
 		});
 	}
 });

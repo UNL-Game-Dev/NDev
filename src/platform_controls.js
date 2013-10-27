@@ -19,12 +19,10 @@ Crafty.c("PlatformControls", {
 			this._phX = this._phPX + kx * 2.8;
 
 			this.grounded = false;
-			var groundingNormals = [];
 			// Search through all normals for a ground normal.
 			for(var i = this.currentNormals.length - 1; i >= 0; --i) {
 				if(dot(this.currentNormals[i], [0,-1]) > 0) {
 					this.grounded = true;
-					groundingNormals.push(norm(this.currentNormals[i]));
 				}
 			}
 
@@ -34,30 +32,29 @@ Crafty.c("PlatformControls", {
 				this.grounded = false;
 			}
 
-			if(this.grounded) {
-				// If still grounded after the opportunity to jump, make sure
-				// the player remains grounded.
-				for(var i = groundingNormals.length - 1; i >= 0; --i) {
-					var gn = groundingNormals[i];
-					var v = [this._phX - this._phPX,
-						this._phY - this._phPY];
-					var gndotv = dot(gn, v);
-					this._phX -= gn[0] * gndotv;
-					this._phY -= gn[1] * gndotv;
-					if(Math.abs(gndotv) > 0.1) {
-						console.log(gn, gndotv);
-					}
-				}
+			// If not grounded, apply gravity.
+			if(!this.grounded) {
+				console.log("grav");
+				this._phAY += 280;
 			}
 
 		}).bind("EvaluateInertia", function() {
-			// If in the air, use normal intertial physics.
-			var px = this._phPX;
-			var py = this._phPY;
-			this._phPX = this._phX;
-			this._phPY = this._phY;
-			this._phX += this._phX - px;
-			this._phY += this._phY - py;
+			if(this.grounded) {
+				// If on the ground, use simple weird physics!
+				this._phPX = this._phX;
+				this._phPY = this._phY;
+				this._phX = this._phX;
+				this._phY = this._phY;
+				
+			} else {
+				// If in the air, use normal intertial physics.
+				var px = this._phPX;
+				var py = this._phPY;
+				this._phPX = this._phX;
+				this._phPY = this._phY;
+				this._phX += this._phX - px;
+				this._phY += this._phY - py;
+			}
 		});
 	}
 
