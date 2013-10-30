@@ -2,11 +2,6 @@
 <map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="test2" tilewidth="32" tileheight="32">
   <image source="test2.png" width="128" height="128"/>
-  <tile id="0">
-   <properties>
-    <property name="bounds" value="[[0,0],[1,0],[1,1],[0,1]]"/>
-   </properties>
-  </tile>
   <tile id="4">
    <properties>
     <property name="bounds" value="[[1,0],[1,1],[0,1]]"/>
