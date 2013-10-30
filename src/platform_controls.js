@@ -8,13 +8,6 @@ Crafty.c("PlatformControls", {
 	init:
 	function() {
 		this.grounded = false;
-
-		this._sensor = Crafty.e("2D");
-		this._sensor.w = this.w - 2;
-		// This affects how far down the platforming physics will detect a
-		// slope to stick to.
-		this._sensor.h = 18;
-		this._sensor.addComponent("Collision");
 		
 		this.bind("PrePhysicsTick", function() {
 			// The key "x" target difference.
@@ -80,32 +73,5 @@ Crafty.c("PlatformControls", {
 				this._phY += this._phY - py;
 			}
 		});
-	},
-
-	_groundStick:
-	function() {
-		// Update position of the ground detector.
-		this._sensor.x = this._phX + 1;
-		this._sensor.y = this._phY + this.h;
-		// Find ground normals beneath the player.
-		var sensorHits = this._sensor.hit("Tile");
-		// For now, apply the first found sensor hit.
-		if(sensorHits.length) {
-			var sensorHit = sensorHits[0];
-			var n = [sensorHit.normal.x, sensorHit.normal.y];
-			if(dot(n, [0,-1]) > 0) {
-				// This is a upwards-facing slope, ok!
-
-				// Find the component of current velocity in the direction
-				// of the normal.
-				var d = dot(n, [this._phX - this._phPX, 0]);
-				// Remove that component from the velocity, so that the player
-				// slides along this surface.
-				this._phX -= n[0] * d;
-				this._phY -= n[1] * d;
-
-				console.log("Pulling towards", sensorHit.normal);
-			}
-		}
 	}
 });

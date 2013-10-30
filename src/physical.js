@@ -96,8 +96,6 @@ Crafty.c("TileConstraint", {
 
 		this.bind("ResolveConstraint", function() {
 			this.currentNormals = [];
-			// Tiles to collide against.
-			var tiles = Crafty("Tile");
 			/*
 			 * Try 20 times, since there could only possibly be 20 tiles next
 			 * to you at once, right?
@@ -125,6 +123,7 @@ Crafty.c("TileConstraint", {
 				// Maintain a "current normals" list in case other components
 				// (such as platforming physics) are interested.
 				this.currentNormals.push([norm.x, norm.y]);
+				console.log(hit);
 			}
 		});
 	}
