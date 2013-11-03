@@ -10,7 +10,7 @@ Crafty.c("TiledMap", {
 	},
 
 	loadMap:
-	function(mapName) {
+	function(mapName, loaded) {
 		var that = this;
 		$.getJSON("assets/maps/"+mapName+".json", function(json) {
 			// Modify the tile image paths to match existing paths.
@@ -30,6 +30,9 @@ Crafty.c("TiledMap", {
 				console.log("Done creating world.");
 				that.collisionize();
 				that._loaded = true;
+
+				if(loaded)
+					loaded();
 			});
 		});
 	},

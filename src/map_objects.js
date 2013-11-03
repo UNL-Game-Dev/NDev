@@ -27,17 +27,14 @@ Crafty.c("PlayerSpawn", {
 		this.x = object.x;
 		this.y = object.y;
 
-		console.log("Making map obj.");
-
-		if(!Crafty("PlatformControls").length) {
-			console.log(">>>Making map obj.");
+		this.bind("SpawnPlayer", function() {
 			var player = Crafty.e(
 				"2D, DOM, player, Collision, Physical, TileConstraint," +
 				"PlatformControls, DefaultPhysicsDraw"
 			);
 			player.setPhysPos(this.x, this.y);
 			Crafty("Scroller").target = player;
-		}
+		});
 	}
 });
 
