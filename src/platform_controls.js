@@ -42,14 +42,14 @@ Crafty.c("PlatformControls", {
 				lastGrounded = false;
 			}
 
-			// If not grounded, apply gravity.
-			if(!this.grounded) {
-				this._phAY += 280;
-			}
-
 			// See if sticking makes sense now, and if it does, do so.
 			if(this.grounded || lastGrounded) {
 				this._groundStick();
+			}
+
+			// If not grounded, apply gravity.
+			if(!this.grounded) {
+				this._phAY += 280;
 			}
 
 		}).bind("EvaluateInertia", function() {
@@ -100,6 +100,7 @@ Crafty.c("PlatformControls", {
 					// Move the player to y+1, so that the player is
 					// still in the ground after sticking.
 					this._phY = this._sensor.y + 1;
+					this.grounded = true;
 					break;
 				}
 			}
@@ -113,6 +114,7 @@ Crafty.c("PlatformControls", {
 					// Move the player to y+1, so that the player is
 					// put in the ground after sticking.
 					this._phY = this._sensor.y + 1;
+					this.grounded = true;
 					break;
 				}
 			}
