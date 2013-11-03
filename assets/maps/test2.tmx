@@ -24,8 +24,17 @@
   </tile>
  </tileset>
  <layer name="test" width="100" height="100">
+  <properties>
+   <property name="collisions" value=""/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1tEKgCAMBVB9sPr/L44gCYZI+ZAF58BAEEQ2BjclgH/IZy2zPwIATFfSlQlkg3E1X7WUcG71OXeKMTHv9noc8/FxXhvvydDj7vT/6R6YyfviXsS7LZnLF9W5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwCw7dXkAmA==
+   eJzt1+0KgjAYBtD5I+3+rzgWjobMubcSg86BQVBpPI/7KCX+wbSO+eofwtM9vTrRy7iz89JLXM5pOfH65do6GTMFPltneUuxfOu5wr5IPjnTeR3luY/MrSV4v39TnvGI3Mkn65s+9n1r38i9lnXraP3Sx77Wel7yrOdOnXfr+63RuydtZY+ts+5lvD0jtc5mR+coffSN5B+dB71O9HGO3t6T36vPt9v5xzXqXtLmNdfJvfhf/ltGzl4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD7Hpk5AXI=
   </data>
  </layer>
+ <objectgroup name="entities" width="100" height="100">
+  <properties>
+   <property name="spawnMode" value="TiledComponents"/>
+  </properties>
+  <object name="SpawnPoint" type="PlayerSpawn" x="20" y="55" width="32" height="32"/>
+ </objectgroup>
 </map>

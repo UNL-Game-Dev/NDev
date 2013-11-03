@@ -19,8 +19,7 @@ Crafty.c("TiledMap", {
 					"assets/maps/" + json.tilesets[i].image;
 			}
 			// Extract tile bounds information.
-			// TODO: Support multiple tilesets.
-			that._tilebounds = getGlobalTileBounds(json.tilesets[0]);
+			that._initTileInfo(json.tilesets);
 
 			// Keep the tile map width and height.
 			that.tilewidth = json.tilesets[0].tilewidth;
@@ -48,34 +47,73 @@ Crafty.c("TiledMap", {
 				ent.addComponent("Tile");
 
 				var gid = ent.gid;
-				var bounds = this._tilebounds[gid];
+				var info = this._tileInfo[gid];
+				if(!info)
+					continue;
+				var tilesetInfo = this._tilesetInfo[info.tileseti];
+				var bounds = info.pts;
 				
-				if(bounds) {
-					var boundsdup = [];
-					for(var j = 0; j < bounds.length; ++j) {
-						boundsdup[j] = [];
-						boundsdup[j].push(bounds[j][0] * this.tilewidth);
-						boundsdup[j].push(bounds[j][1] * this.tileheight);
-					}
-					var poly = new Crafty.polygon(boundsdup);
-					ent.collision(poly);
+				var boundsdup = [];
+				for(var j = 0; j < bounds.length; ++j) {
+					boundsdup[j] = [];
+					boundsdup[j].push(bounds[j][0] * tilesetInfo.width);
+					boundsdup[j].push(bounds[j][1] * tilesetInfo.height);
 				}
+				var poly = new Crafty.polygon(boundsdup);
+				ent.collision(poly);
+			}
+		}
+	},
+
+	/**
+	 * Initializes two dictionaries: tile info and tileset info.
+	 *
+	 * _tileInfo:
+	 * { gid :
+	 *   {
+	 *     pts : <list of vectors making up the collision bounds.>,
+	 *     tileseti : <index of the tileset that this tileinfo came from.>
+	 *   }
+	 *   ...
+	 * }
+	 * (Vectors are lists that contain x,y,dx,dy.)
+	 *
+	 * _tilesetInfo:
+	 * Returns a dictionary of the info for tilesets.
+	 * { index :
+	 *   {
+	 *     width : <tile width>
+	 *     height: <tile height>
+	 *   }
+	 *   ...
+	 * }
+	 */
+	_initTileInfo:
+	function(tilesets) {
+		this._tileInfo = {};
+		this._tilesetInfo = {};
+
+		for(var tileseti in tilesets) {
+			var tileset = tilesets[tileseti];
+
+			this._tilesetInfo[tileseti] = {
+				width: tileset.tilewidth,
+				height: tileset.tileheight
+			};
+			this._tilesetInfo[tileseti].width = tileset.tilewidth;
+			this._tilesetInfo[tileseti].height = tileset.tileheight;
+
+			for(var tilei in tileset.tileproperties) {
+				var gid = parseInt(tilei) + parseInt(tileset.firstgid);
+				var pts = $.parseJSON(tileset.tileproperties[tilei].bounds);
+
+				// Store the bounds points and the tileset index of each tile.
+				this._tileInfo[gid] = {
+					"pts": pts,
+					"tileseti": tileseti
+				};
 			}
 		}
 	}
-
 });
-
-function getGlobalTileBounds(tileset) {
-	// Returns a dictionary of the bounds for tiles.
-	// Key: tile global id (number)
-	// Value: list of vectors. Vectors are lists that contain x,y,dx,dy.
-	var boundAssoc = {};
-	for(var tilei in tileset.tileproperties) {
-		var gid = parseInt(tilei) + parseInt(tileset.firstgid);
-		var pts = $.parseJSON(tileset.tileproperties[tilei].bounds);
-		boundAssoc[gid] = pts;
-	}
-	return boundAssoc;
-}
 
