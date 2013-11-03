@@ -21,9 +21,8 @@ Crafty.c("TiledMap", {
 			// Extract tile bounds information.
 			that._initTileInfo(json.tilesets);
 
-			// Keep the tile map width and height.
-			that.tilewidth = json.tilesets[0].tilewidth;
-			that.tileheight = json.tilesets[0].tileheight;
+			// Spawn Tiled-made objects.
+			that._spawnMapObjects(json.layers);
 
 			// Load it in.
 			that.setMapDataSource(json); 
@@ -112,6 +111,25 @@ Crafty.c("TiledMap", {
 					"pts": pts,
 					"tileseti": tileseti
 				};
+			}
+		}
+	},
+
+	/**
+	 * Spawns map objects. See map_objects.js for more on what it does.
+	 */
+	_spawnMapObjects:
+	function(layers) {
+		for(var layeri in layers) {
+			var layer = layers[layeri];
+			if(layer.type = "objectgroup") {
+				for(var objecti in layer.objects) {
+					var object = layer.objects[objecti];
+					// Create a crafty entity with the given map component.
+					var craftyObject = Crafty.e(object.type);
+					// Let the object initialize itself.
+					craftyObject.mapObjectInit(object);
+				}
 			}
 		}
 	}

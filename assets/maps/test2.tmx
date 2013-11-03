@@ -35,6 +35,6 @@
   <properties>
    <property name="spawnMode" value="TiledComponents"/>
   </properties>
-  <object name="SpawnPoint" type="PlayerSpawn" x="20" y="55" width="32" height="32"/>
+  <object name="SpawnPoint" type="PlayerSpawn" x="92" y="160" width="32" height="32"/>
  </objectgroup>
 </map>

@@ -89,6 +89,7 @@ Crafty.c("PlatformControls", {
 
 		// Use the sensor because changing this.x/y updates graphics.
 		this._sensor.x = this._phX;
+		this._sensor.y = this._phY;
 
 		if(this._sensor.hit("Tile")) {
 			// Player can't move sideways.
