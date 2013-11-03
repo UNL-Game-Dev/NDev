@@ -21,7 +21,11 @@ Crafty.c("TiledMap", {
 			// Extract tile bounds information.
 			// TODO: Support multiple tilesets.
 			that._tilebounds = getGlobalTileBounds(json.tilesets[0]);
-			console.log(that._tilebounds);
+
+			// Keep the tile map width and height.
+			that.tilewidth = json.tilesets[0].tilewidth;
+			that.tileheight = json.tilesets[0].tileheight;
+
 			// Load it in.
 			that.setMapDataSource(json); 
 			that.createWorld( function( map ) {
@@ -39,21 +43,23 @@ Crafty.c("TiledMap", {
 			var entities = this.getEntitiesInLayer(layerName);
 			for(var i = entities.length - 1; i >= 0; --i) {
 				var ent = entities[i];
-				var gid = ent.gid;
-				var bounds = this._tilebounds[gid];
-				var boundsdup = [];
-				for(var j = 0; j < bounds.length; ++j) {
-					boundsdup[j] = [];
-					boundsdup[j].push(bounds[j][0] * 32);
-					boundsdup[j].push(bounds[j][1] * 32);
-				}
-				// TODO: Make collision actually based on bounds.
 				ent.addComponent("Collision");
-
-				var poly = new Crafty.polygon(boundsdup);
-				ent.collision(poly);
 				// Mark for collision.
 				ent.addComponent("Tile");
+
+				var gid = ent.gid;
+				var bounds = this._tilebounds[gid];
+				
+				if(bounds) {
+					var boundsdup = [];
+					for(var j = 0; j < bounds.length; ++j) {
+						boundsdup[j] = [];
+						boundsdup[j].push(bounds[j][0] * this.tilewidth);
+						boundsdup[j].push(bounds[j][1] * this.tileheight);
+					}
+					var poly = new Crafty.polygon(boundsdup);
+					ent.collision(poly);
+				}
 			}
 		}
 	}
