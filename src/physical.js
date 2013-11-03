@@ -123,7 +123,6 @@ Crafty.c("TileConstraint", {
 				// Maintain a "current normals" list in case other components
 				// (such as platforming physics) are interested.
 				this.currentNormals.push([norm.x, norm.y]);
-				console.log(hit);
 			}
 		});
 	}

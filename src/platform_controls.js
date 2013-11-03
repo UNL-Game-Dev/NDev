@@ -8,6 +8,12 @@ Crafty.c("PlatformControls", {
 	init:
 	function() {
 		this.grounded = false;
+
+		// A sensor that is exactly the same as the platforming character.
+		this._sensor = Crafty.e("2D");
+		this._sensor.w = this.w;
+		this._sensor.h = this.h;
+		this._sensor.addComponent("Collision");
 		
 		this.bind("PrePhysicsTick", function() {
 			// The key "x" target difference.
@@ -25,13 +31,6 @@ Crafty.c("PlatformControls", {
 				var n = norm(this.currentNormals[i]);
 				if(dot(n, [0,-1]) > 0) {
 					this.grounded = true;
-					var d = dot(n,
-						[this._phX - this._phPX, this._phY - this._phPY]);
-					// Don't quite fully extract from collision.
-					// Want to keep grounded!
-					d *= 0.999;
-					this._phX -= n[0] * d;
-					this._phY -= n[1] * d;
 				}
 			}
 
@@ -48,8 +47,8 @@ Crafty.c("PlatformControls", {
 				this._phAY += 280;
 			}
 
-			// If the player has left the ground, try to stick to the ground.
-			if(!this.grounded && lastGrounded) {
+			// See if sticking makes sense now, and if it does, do so.
+			if(this.grounded || lastGrounded) {
 				this._groundStick();
 			}
 
@@ -73,5 +72,50 @@ Crafty.c("PlatformControls", {
 				this._phY += this._phY - py;
 			}
 		});
+	},
+
+	/**
+	 * Keeps the player moving along a slope, up to 45 degrees either way.
+	 */
+	_groundStick:
+	function() {
+		// Here, need a specific order to work.
+		// First check to see if the player can move sideways.
+		// If not, check to see how much up is necessary.
+		// If so, check to see how much down is necessary.
+		
+		// Find the xvel first.
+		var xvel = Math.abs(this._phX - this._phPX)*2;
+
+		// Use the sensor because changing this.x/y updates graphics.
+		this._sensor.x = this._phX;
+
+		if(this._sensor.hit("Tile")) {
+			// Player can't move sideways.
+			// Iterate upwards to see if the player can stick up.
+			for(var y = this._sensor.y; y >= this._phY - xvel; --y) {
+				this._sensor.y = y;
+				if(!this._sensor.hit("Tile")) {
+					// If the player moves up to y, they can stick!
+					// Move the player to y+1, so that the player is
+					// still in the ground after sticking.
+					this._phY = this._sensor.y + 1;
+					break;
+				}
+			}
+		} else {
+			// Player can move sideways.
+			// Iterate downwards to see if the player can stick down.
+			for(var y = this._sensor.y; y <= this._phY + xvel; ++y) {
+				this._sensor.y = y;
+				if(this._sensor.hit("Tile")) {
+					// If the player moves down to y, they can stick!
+					// Move the player to y+1, so that the player is
+					// put in the ground after sticking.
+					this._phY = this._sensor.y + 1;
+					break;
+				}
+			}
+		}
 	}
 });
