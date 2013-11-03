@@ -14,12 +14,15 @@ Crafty.scene("testMap", function() {
 		{ player: [0,0,32,32] }
 	);
 
-	var player = Crafty.e("2D, DOM, player, Physical, Collision, PlatformControls, PhysicsGravity");
+	var player = Crafty.e("2D, DOM, player, Collision, Physical, TileConstraint, PlatformControls, DefaultPhysicsDraw");
 	player.setPhysPos(40, 20);
 
 	var scroller = Crafty.e("Scroller");
 	scroller.target = player;
 
+	// Create the physics ticker.
+	// This triggers physics ticks, which are used to more precisely control
+	// when entities are updated.
 	var ticker = Crafty.e("PhysicsTicker");
 });
 
