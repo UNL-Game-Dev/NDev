@@ -12,6 +12,20 @@ Crafty.c("TiledMap", {
 	loadMap:
 	function(mapName, loaded) {
 		var that = this;
+
+		// Remove all entities that have 2D but don't have Persistent.
+		var old2D = Crafty("2D");
+		var i = old2D.length - 1;
+		while(i >= 0) {
+			var eid = old2D[i];
+			var e = Crafty(eid);
+			console.log("Checking,", e);
+			if(e && !e.has("Persistent")) {
+				e.destroy();
+			}
+			--i;
+		}
+
 		$.getJSON("assets/maps/"+mapName+".json", function(json) {
 			// Modify the tile image paths to match existing paths.
 			for(var i = 0; i < json.tilesets.length; i++) {
@@ -57,9 +71,10 @@ Crafty.c("TiledMap", {
 				
 				var boundsdup = [];
 				for(var j = 0; j < bounds.length; ++j) {
-					boundsdup[j] = [];
-					boundsdup[j].push(bounds[j][0] * tilesetInfo.width);
-					boundsdup[j].push(bounds[j][1] * tilesetInfo.height);
+					boundsdup[j] = [
+						bounds[j][0] * tilesetInfo.width,
+						bounds[j][1] * tilesetInfo.height
+					];
 				}
 				var poly = new Crafty.polygon(boundsdup);
 				ent.collision(poly);
