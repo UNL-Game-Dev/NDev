@@ -14,7 +14,9 @@ Crafty.scene("testMap", function() {
 				Crafty.trigger("SpawnPlayer");
 			}
 		})
-		.loadMap("test2");
+		.loadMap("test2", function() {
+			Crafty.trigger("SpawnPlayer");
+		});
 
 	var bg = Crafty.e("2D, DOM, Image, Parallax, Persistent")
 		.image("http://www.mlahanas.de/Greeks/images/Parallax.jpg")
