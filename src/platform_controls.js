@@ -14,6 +14,9 @@ Crafty.c("PlatformControls", {
 		this._sensor.w = this.w;
 		this._sensor.h = this.h;
 		this._sensor.addComponent("Collision");
+
+		this._upHeld = false;
+		this._forceRemaining = 0;
 		
 		this.bind("PrePhysicsTick", function() {
 			// The key "x" target difference.
@@ -34,12 +37,22 @@ Crafty.c("PlatformControls", {
 				}
 			}
 
+			if(!Crafty.keydown[Crafty.keys.UP_ARROW]) {
+				this._upHeld = false;
+			}
 			// Jump if on the ground and want to.
 			if(this.grounded && Crafty.keydown[Crafty.keys.UP_ARROW]) {
-				this._phY = this._phPY - 5;
 				this.grounded = false;
 				// Don't try to stick.
 				lastGrounded = false;
+				this._upHeld = true;
+				this._forceRemaining = 2.0;
+			}
+			if(this._upHeld &&
+					Crafty.keydown[Crafty.keys.UP_ARROW] &&
+					this._forceRemaining > 0) {
+				this._forceRemaining -= 0.08;
+				this._phY = this._phPY - this._forceRemaining - 2;
 			}
 
 			// See if sticking makes sense now, and if it does, do so.
@@ -49,7 +62,7 @@ Crafty.c("PlatformControls", {
 
 			// If not grounded, apply gravity.
 			if(!this.grounded) {
-				this._phAY += 280;
+				this._phAY += 580;
 			}
 
 		}).bind("EvaluateInertia", function() {
