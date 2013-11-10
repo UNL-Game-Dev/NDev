@@ -53,10 +53,12 @@ Crafty.c("MapDoor", {
 		this.requires("Collision");
 
 		this.onHit("PlatformControls", function(hit) {
-			// Only activate on key for now, since it's easier to start with.
-			if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
+			// Only activate if the player wasn't colliding last frame.
+			if(!this._collidingLast) {
 				this.moveToTarget();
 			}
+		}, function() {
+			this._collidingLast = false;
 		});
 	},
 
@@ -71,7 +73,7 @@ Crafty.c("MapDoor", {
 		this._targetDoor = object.properties.targetDoor;
 		// Set up the bounding box.
 		this.collision();
-		console.log("Creating door from ", object, this);
+		//console.log("Creating door from ", object, this);
 	},
 
 	/**
@@ -80,7 +82,6 @@ Crafty.c("MapDoor", {
 	moveToTarget:
 	function() {
 		var targetDoor = this._targetDoor;
-		console.log(targetDoor);
 		Crafty("TiledMap").loadMap(this._targetMap, function() {
 			// When the map loads, add the player to the target door.
 			// (The old player will have been deleted.)
@@ -91,8 +92,9 @@ Crafty.c("MapDoor", {
 			// Put the player on the target door.
 			Crafty("MapDoor").each(function(e) {
 				if(this._name == targetDoor) {
-					console.log("FOUND");
 					player.setPhysPos(this.x, this.y);
+					// Make sure the player doesn't go right back through.
+					this._collidingLast = true;
 				}
 			});
 			Crafty("Scroller").target = player;
