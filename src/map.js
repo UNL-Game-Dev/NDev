@@ -19,7 +19,6 @@ Crafty.c("TiledMap", {
 		while(i >= 0) {
 			var eid = old2D[i];
 			var e = Crafty(eid);
-			console.log("Checking,", e);
 			if(e && !e.has("Persistent")) {
 				e.destroy();
 			}

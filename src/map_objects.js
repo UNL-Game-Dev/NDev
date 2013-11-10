@@ -66,6 +66,7 @@ Crafty.c("MapDoor", {
 		this.y = object.y;
 		this.w = object.width;
 		this.h = object.height;
+		this._name = object.name;
 		this._targetMap = object.properties.targetMap;
 		this._targetDoor = object.properties.targetDoor;
 		// Set up the bounding box.
@@ -78,6 +79,8 @@ Crafty.c("MapDoor", {
 	 */
 	moveToTarget:
 	function() {
+		var targetDoor = this._targetDoor;
+		console.log(targetDoor);
 		Crafty("TiledMap").loadMap(this._targetMap, function() {
 			// When the map loads, add the player to the target door.
 			// (The old player will have been deleted.)
@@ -85,7 +88,13 @@ Crafty.c("MapDoor", {
 				"2D, DOM, player, Collision, Physical, TileConstraint," +
 				"PlatformControls, DefaultPhysicsDraw"
 			);
-			player.setPhysPos(0, 0);
+			// Put the player on the target door.
+			Crafty("MapDoor").each(function(e) {
+				if(this._name == targetDoor) {
+					console.log("FOUND");
+					player.setPhysPos(this.x, this.y);
+				}
+			});
 			Crafty("Scroller").target = player;
 		});
 	}

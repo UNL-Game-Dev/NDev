@@ -36,10 +36,10 @@
    <property name="spawnMode" value="TiledComponents"/>
   </properties>
   <object name="SpawnPoint" type="PlayerSpawn" x="92" y="160" width="32" height="32"/>
-  <object name="DoorToElsewhere" type="MapDoor" x="899" y="383" width="23" height="26">
+  <object name="DoorToElsewhere" type="MapDoor" x="193" y="290" width="23" height="26">
    <properties>
-    <property name="targetDoor" value="DoorFromMap2"/>
-    <property name="targetMap" value="test"/>
+    <property name="targetDoor" value="DoorFromElsewhere"/>
+    <property name="targetMap" value="test3"/>
    </properties>
   </object>
  </objectgroup>

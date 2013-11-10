@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
+  <image source="test2.png" width="128" height="128"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1DEKACAMA0A76P+frKsiuFmRO8geCKQUAOAHdSQOaWnt2InsAkzs8Zb1vwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4KYOAeUAGg==
+  </data>
+ </layer>
+ <objectgroup name="ents" width="100" height="100">
+  <object name="DoorFromElsewhere" type="MapDoor" x="138" y="110" width="24" height="21">
+   <properties>
+    <property name="targetDoor" value="DoorToElsewhere"/>
+    <property name="targetMap" value="test2"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

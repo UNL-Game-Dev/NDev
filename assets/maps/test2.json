@@ -37,14 +37,14 @@
                  "name":"DoorToElsewhere",
                  "properties":
                     {
-                     "targetDoor":"DoorFromMap2",
-                     "targetMap":"test"
+                     "targetDoor":"DoorFromElsewhere",
+                     "targetMap":"test3"
                     },
                  "type":"MapDoor",
                  "visible":true,
                  "width":23,
-                 "x":899,
-                 "y":383
+                 "x":193,
+                 "y":290
                 }],
          "opacity":1,
          "properties":
