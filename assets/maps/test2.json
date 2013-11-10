@@ -31,6 +31,20 @@
                  "width":32,
                  "x":92,
                  "y":160
+                }, 
+                {
+                 "height":26,
+                 "name":"DoorToElsewhere",
+                 "properties":
+                    {
+                     "targetDoor":"DoorFromMap2",
+                     "targetMap":"test"
+                    },
+                 "type":"MapDoor",
+                 "visible":true,
+                 "width":23,
+                 "x":899,
+                 "y":383
                 }],
          "opacity":1,
          "properties":

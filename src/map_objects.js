@@ -15,6 +15,8 @@
  * A player spawn point. If a player doesn't already exist in the map, spawns
  * one here. (The only reason this doesn't turn itself into the player itself
  * is that the player might have come from another map!)
+ * Base usage: x,y
+ * Properties: none
  */
 Crafty.c("PlayerSpawn", {
 	init:
@@ -38,4 +40,54 @@ Crafty.c("PlayerSpawn", {
 	}
 });
 
+/**
+ * A door that can be placed on the map. Uses the x,y,w,h of the Tiled object
+ * and properties to decide where to go.
+ * Base usage: x,y,w,h, name
+ * Properties: targetMap, targetDoor
+ */
+Crafty.c("MapDoor", {
+	init:
+	function() {
+		this.requires("2D");
+		this.requires("Collision");
+
+		this.onHit("PlatformControls", function(hit) {
+			// Only activate on key for now, since it's easier to start with.
+			if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
+				this.moveToTarget();
+			}
+		});
+	},
+
+	mapObjectInit:
+	function(object) {
+		this.x = object.x;
+		this.y = object.y;
+		this.w = object.width;
+		this.h = object.height;
+		this._targetMap = object.properties.targetMap;
+		this._targetDoor = object.properties.targetDoor;
+		// Set up the bounding box.
+		this.collision();
+		console.log("Creating door from ", object, this);
+	},
+
+	/**
+	 * Execute the door transition.
+	 */
+	moveToTarget:
+	function() {
+		Crafty("TiledMap").loadMap(this._targetMap, function() {
+			// When the map loads, add the player to the target door.
+			// (The old player will have been deleted.)
+			var player = Crafty.e(
+				"2D, DOM, player, Collision, Physical, TileConstraint," +
+				"PlatformControls, DefaultPhysicsDraw"
+			);
+			player.setPhysPos(0, 0);
+			Crafty("Scroller").target = player;
+		});
+	}
+});
 
