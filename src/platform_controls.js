@@ -17,6 +17,10 @@ Crafty.c("PlatformControls", {
 
 		this._upHeld = false;
 		this._forceRemaining = 0;
+
+		// A strange, non-physical x velocity. (Does not get affected as player
+		// goes up and down slopes, like it normally would if phAX/phX used!)
+		this._vx = 0;
 		
 		this.bind("PrePhysicsTick", function() {
 			// The key "x" target difference.
@@ -24,8 +28,6 @@ Crafty.c("PlatformControls", {
 				(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
 				(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
 
-			// Set the physics velocity.
-			this._phX = this._phPX + kx * 2.8;
 
 			var lastGrounded = this.grounded;
 			this.grounded = false;
@@ -54,6 +56,43 @@ Crafty.c("PlatformControls", {
 				this._forceRemaining -= 0.08;
 				this._phY = this._phPY - this._forceRemaining - 2;
 			}
+
+			// The desired x vel.
+			var desvx = kx * 2.8;
+			// Add to the physics velocity.
+			// This depends on the player being in the ground or not.
+			if(!this.grounded) {
+				// If not, lose a lot of control.
+				desvx *= 0.6;
+			}
+
+			var avx = Math.abs(this._vx);
+			var adesvx = Math.abs(desvx);
+
+			if(iSign(this._vx) == iSign(desvx)) {
+				// Player's attempting to increase velocity.
+				if(adesvx > avx) {
+					// If their velocity's greater than the current, let them
+					// increase the velocity by a little.
+					this._vx = approach(this._vx, desvx, 0.2);
+				} else {
+					// Don't make them slow down when they're attempting to keep
+					// going!
+				}
+			} else if(desvx == 0.0) {
+				// Player might want to stop.
+				// Stop on the ground, but not in the air.
+				if(this.grounded) {
+					this._vx = approach(this._vx, desvx, 0.3);
+				}
+			} else {
+				// The player is trying to turn around.
+				// This is like "braking" in preparation to accelerate the other
+				// direction, so do it a little quicker.
+				this._vx = approach(this._vx, desvx, 0.5);
+			}
+
+			this._phX = this._phPX + this._vx;
 
 			// See if sticking makes sense now, and if it does, do so.
 			if(this.grounded || lastGrounded) {
@@ -135,3 +174,27 @@ Crafty.c("PlatformControls", {
 		}
 	}
 });
+
+/**
+ * Returns a number that's closer to desired, constrained by:
+ * old + [-1.0, 1.0] * step
+ */
+function approach(old, desired, step) {
+	if(old + step >= desired && old - step <= desired) {
+		// If within step from desired, just return desired.
+		return desired;
+	}
+	if(old < desired)
+		return old + step;
+	if(old > desired)
+		return old - step;
+}
+
+/**
+ * The integer sign of a number.
+ */
+function iSign(n) {
+	if(n > 0) return 1;
+	if(n < 0) return -1;
+	return 0;
+}
