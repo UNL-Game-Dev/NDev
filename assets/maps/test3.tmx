@@ -3,9 +3,15 @@
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
   <image source="test2.png" width="128" height="128"/>
  </tileset>
+ <tileset firstgid="17" name="test2" tilewidth="35" tileheight="35">
+  <image source="test2.png" width="128" height="128"/>
+ </tileset>
  <layer name="Tile Layer 1" width="100" height="100">
+  <properties>
+   <property name="solid" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1DEKACAMA0A76P+frKsiuFmRO8geCKQUAOAHdSQOaWnt2InsAkzs8Zb1vwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4KYOAeUAGg==
+   eJzt1MEJADAMA7H00f1XTjfIsyZIcBMYXAUAbHBfZ4gsdsliiyz+CwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAnxoavAAV
   </data>
  </layer>
  <objectgroup name="ents" width="100" height="100">
@@ -16,4 +22,9 @@
    </properties>
   </object>
  </objectgroup>
+ <layer name="Tile Layer 2" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt07EJADAIRUFXCLj/rDapUqRVkjv4OMDDCAAA+M/aYw49Zrn9iFa98rj0ytACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4EUFZycAtw==
+  </data>
+ </layer>
 </map>
