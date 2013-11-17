@@ -5,6 +5,17 @@
  */
 Crafty.c("PlatformControls", {
 
+	// What factor of normal control the player retains in the air.
+	airControlFactor: 0.6,
+
+	// The differences in velocity to apply in certain situations:
+	// Accelerating up to max speed.
+	accelerateDV: 0.2,
+	// Passively slowing down to a stop on the ground.
+	slowToStopDV: 0.3,
+	// Actively slowing down when turning around.
+	activeBrakeDV: 0.5,
+
 	init:
 	function() {
 		this.grounded = false;
@@ -63,7 +74,7 @@ Crafty.c("PlatformControls", {
 			// This depends on the player being in the ground or not.
 			if(!this.grounded) {
 				// If not, lose a lot of control.
-				desvx *= 0.6;
+				desvx *= this.airControlFactor;
 			}
 
 			var avx = Math.abs(this._vx);
@@ -74,7 +85,7 @@ Crafty.c("PlatformControls", {
 				if(adesvx > avx) {
 					// If their velocity's greater than the current, let them
 					// increase the velocity by a little.
-					this._vx = approach(this._vx, desvx, 0.2);
+					this._vx = approach(this._vx, desvx, this.accelerateDV);
 				} else {
 					// Don't make them slow down when they're attempting to keep
 					// going!
@@ -83,13 +94,13 @@ Crafty.c("PlatformControls", {
 				// Player might want to stop.
 				// Stop on the ground, but not in the air.
 				if(this.grounded) {
-					this._vx = approach(this._vx, desvx, 0.3);
+					this._vx = approach(this._vx, desvx, this.slowToStopDV);
 				}
 			} else {
 				// The player is trying to turn around.
 				// This is like "braking" in preparation to accelerate the other
 				// direction, so do it a little quicker.
-				this._vx = approach(this._vx, desvx, 0.5);
+				this._vx = approach(this._vx, desvx, this.activeBrakeDV);
 			}
 
 			this._phX = this._phPX + this._vx;
