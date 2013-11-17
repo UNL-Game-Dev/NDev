@@ -148,10 +148,8 @@ Crafty.c("TiledMap", {
 		this._layerProperties = {};
 		for(var layeri in layers) {
 			var layer = layers[layeri];
-			this._layerProperties[layer.name] = layer.properties;
-			// Make it easier to avoid property read errors later.
-			if(!this._layerProperties[layer.name])
-				this._layerProperties[layer.name] = {};
+			// Set to {} if undefined for easier access later.
+			this._layerProperties[layer.name] = layer.properties || {};
 		}
 	},
 
