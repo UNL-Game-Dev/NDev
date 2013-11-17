@@ -34,6 +34,9 @@ Crafty.c("TiledMap", {
 			// Extract tile bounds information.
 			that._initTileInfo(json.tilesets);
 
+			// Extract layer information.
+			that._initLayerInfo(json.layers);
+
 			// Spawn Tiled-made objects.
 			that._spawnMapObjects(json.layers);
 
@@ -54,6 +57,10 @@ Crafty.c("TiledMap", {
 	function() {
 		// Add tile bounds information.
 		for(var layerName in this.getLayers()) {
+			// If this layer isn't solid, don't bother.
+			if(!this._layerProperties[layerName].solid)
+				continue;
+
 			var entities = this.getEntitiesInLayer(layerName);
 			for(var i = entities.length - 1; i >= 0; --i) {
 				var ent = entities[i];
@@ -129,6 +136,20 @@ Crafty.c("TiledMap", {
 					"tileseti": tileseti
 				};
 			}
+		}
+	},
+
+	/**
+	 * Initializes _layerProperties, which lists layers' property dicts by the
+	 * layer's name.
+	 */
+	_initLayerInfo:
+	function(layers) {
+		this._layerProperties = {};
+		for(var layeri in layers) {
+			var layer = layers[layeri];
+			// Set to {} if undefined for easier access later.
+			this._layerProperties[layer.name] = layer.properties || {};
 		}
 	},
 

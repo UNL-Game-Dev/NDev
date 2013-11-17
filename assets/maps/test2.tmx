@@ -23,9 +23,22 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="17" name="Backtiles" tilewidth="32" tileheight="32">
+  <image source="ark.png" width="128" height="128"/>
+ </tileset>
+ <layer name="bg2" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1TEKAzEMBED/IYELJHD5/ytPlQuDiTlwpGIG1ItFaFsDAACA+x4xz+wl6I6YV/YSdO+YT/YSdGfMN3sJOv1Ri/6oRX/Uoj9q0R+16I//WL17/bHHmP/q3euPPcb8V+9ef+wx5j/e/Sx3/bHHr78zy11/5Jjlrj9yyB0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmLkArA8FlQ==
+  </data>
+ </layer>
+ <layer name="bg" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1ssKgzAQBVB/oe937f9/ZWfRisxGCjWJeA5cEnfDLHLtOoDle0QukevofFadCIAl20X2tYdgcIqcaw/B4Ba51x6CQR951R5ipXJX6I6y8r5zV+iOsvK+c1eMvw+RTWT7Ob/34/xjrkbef+4K3VFW3rf+qEt/tOWX/mB+U/3hvSprqq+9V23xXrXF/y4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/9Ab3iAdF
+  </data>
+ </layer>
  <layer name="test" width="100" height="100">
   <properties>
-   <property name="collisions" value=""/>
+   <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
    eJzt1+0KgjAYBtD5I+3+rzgWjobMubcSg86BQVBpPI/7KCX+wbSO+eofwtM9vTrRy7iz89JLXM5pOfH65do6GTMFPltneUuxfOu5wr5IPjnTeR3luY/MrSV4v39TnvGI3Mkn65s+9n1r38i9lnXraP3Sx77Wel7yrOdOnXfr+63RuydtZY+ts+5lvD0jtc5mR+coffSN5B+dB71O9HGO3t6T36vPt9v5xzXqXtLmNdfJvfhf/ltGzl4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD7Hpk5AXI=
