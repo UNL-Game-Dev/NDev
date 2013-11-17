@@ -38,9 +38,7 @@ Crafty.c("GameState", {
 		var slot = this._getSlotByUndefineableName(slotName);
 		if(slot) {
 			var allData = JSON.parse(localStorage["saveData"]);
-			console.log("Old was", allData);
 			allData[slot] = this.data;
-			console.log("Saving as", allData);
 			localStorage["saveData"] = JSON.stringify(allData);
 		}
 		return slot;
