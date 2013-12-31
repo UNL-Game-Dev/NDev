@@ -30,10 +30,7 @@ Crafty.c("PlayerSpawn", {
 		this.y = object.y;
 
 		this.bind("SpawnPlayer", function() {
-			var player = Crafty.e(
-				"2D, DOM, player, Collision, Physical, TileConstraint," +
-				"PlatformControls, DefaultPhysicsDraw"
-			);
+			var player = Crafty.e("Player");
 			player.setPhysPos(this.x, this.y);
 			Crafty("Scroller").target = player;
 		});
@@ -85,10 +82,7 @@ Crafty.c("MapDoor", {
 		Crafty("TiledMap").loadMap(this._targetMap, function() {
 			// When the map loads, add the player to the target door.
 			// (The old player will have been deleted.)
-			var player = Crafty.e(
-				"2D, DOM, player, Collision, Physical, TileConstraint," +
-				"PlatformControls, DefaultPhysicsDraw"
-			);
+			var player = Crafty.e("Player");
 			// Put the player on the target door.
 			Crafty("MapDoor").each(function(e) {
 				if(this._name == targetDoor) {

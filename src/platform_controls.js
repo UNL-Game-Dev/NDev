@@ -2,6 +2,8 @@
 /**
  * Component that controls a physical object in a platformer style. Uses arrow 
  * keys for movement at the moment.
+ * 
+ * Also fires events indicating standing still, walking, jumping, and landing.
  */
 Crafty.c("PlatformControls", {
 
@@ -28,7 +30,31 @@ Crafty.c("PlatformControls", {
 
 		this._upHeld = false;
 		this._forceRemaining = 0;
-
+		
+		this._direction = "right";
+			
+		// Fire walk and stand events.
+		this.bind("KeyDown", function(ev) {
+			if(ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW) {
+				// Update direction based on which key was pressed.
+				if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
+					this._direction = "left";
+				} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+					this._direction = "right";
+				}
+				
+				this.trigger("PlayerMove");
+			}
+		});
+		this.bind("KeyUp", function(ev) {
+			if((ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW)
+			&& !(Crafty.keydown[Crafty.keys.LEFT_ARROW] || Crafty.keydown[Crafty.keys.RIGHT_ARROW])) {
+				if(this.grounded) {
+					this.trigger("PlayerStand");
+				}
+			}
+		});
+		
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
@@ -39,7 +65,6 @@ Crafty.c("PlatformControls", {
 				(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
 				(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
 
-
 			var lastGrounded = this.grounded;
 			this.grounded = false;
 			// Search through all normals for a ground normal.
@@ -47,6 +72,20 @@ Crafty.c("PlatformControls", {
 				var n = norm(this.currentNormals[i]);
 				if(dot(n, [0,-1]) > 0) {
 					this.grounded = true;
+					break;
+				}
+			}
+			
+			if(!this.grounded && lastGrounded) {
+				this.trigger("PlayerFall");
+			}
+			
+			if(this.grounded && !lastGrounded) {
+				if((Crafty.keydown[Crafty.keys.LEFT_ARROW] && !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
+				|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW] && !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
+					this.trigger("PlayerMove");
+				} else {
+					this.trigger("PlayerLand");
 				}
 			}
 
@@ -55,6 +94,7 @@ Crafty.c("PlatformControls", {
 			}
 			// Jump if on the ground and want to.
 			if(this.grounded && Crafty.keydown[Crafty.keys.UP_ARROW]) {
+				this.trigger("PlayerJump");
 				this.grounded = false;
 				// Don't try to stick.
 				lastGrounded = false;
@@ -135,6 +175,14 @@ Crafty.c("PlatformControls", {
 				this._phY += this._phY - py;
 			}
 		});
+	},
+	
+	/**
+	 * Get the current direction that the player is facing. ("left" or "right")
+	 */
+	getDirection:
+	function() {
+		return this._direction;
 	},
 
 	/**
