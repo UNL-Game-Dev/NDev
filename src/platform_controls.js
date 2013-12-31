@@ -21,6 +21,7 @@ Crafty.c("PlatformControls", {
 	init:
 	function() {
 		this.grounded = false;
+		this.direction = "right";
 
 		// A sensor that is exactly the same as the platforming character.
 		this._sensor = Crafty.e("2D");
@@ -30,17 +31,15 @@ Crafty.c("PlatformControls", {
 
 		this._upHeld = false;
 		this._forceRemaining = 0;
-		
-		this._direction = "right";
 			
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
 			if(ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW) {
 				// Update direction based on which key was pressed.
 				if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
-					this._direction = "left";
+					this.direction = "left";
 				} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
-					this._direction = "right";
+					this.direction = "right";
 				}
 				
 				this.trigger("PlayerMove");
@@ -175,14 +174,6 @@ Crafty.c("PlatformControls", {
 				this._phY += this._phY - py;
 			}
 		});
-	},
-	
-	/**
-	 * Get the current direction that the player is facing. ("left" or "right")
-	 */
-	getDirection:
-	function() {
-		return this._direction;
 	},
 
 	/**
