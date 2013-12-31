@@ -3,7 +3,7 @@
  * Component that controls a physical object in a platformer style. Uses arrow 
  * keys for movement at the moment.
  * 
- * Also fires events indicating standing still, walking, jumping, and landing.
+ * Also fires events indicating standing still, walking, jumping, falling, and landing.
  */
 Crafty.c("PlatformControls", {
 
@@ -46,10 +46,17 @@ Crafty.c("PlatformControls", {
 			}
 		});
 		this.bind("KeyUp", function(ev) {
-			if((ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW)
-			&& !(Crafty.keydown[Crafty.keys.LEFT_ARROW] || Crafty.keydown[Crafty.keys.RIGHT_ARROW])) {
-				if(this.grounded) {
-					this.trigger("Stand");
+			if(ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW) {
+				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
+					this.direction = "left";
+					this.trigger("Walk");
+				} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					this.direction = "right";
+					this.trigger("Walk");
+				} else {
+					if(this.grounded) {
+						this.trigger("Stand");
+					}
 				}
 			}
 		});
