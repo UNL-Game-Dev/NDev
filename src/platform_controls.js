@@ -81,7 +81,12 @@ Crafty.c("PlatformControls", {
 			}
 			
 			if(this.grounded && !lastGrounded) {
-				this.trigger("PlayerLand");
+				if((Crafty.keydown[Crafty.keys.LEFT_ARROW] && !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
+				|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW] && !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
+					this.trigger("PlayerMove");
+				} else {
+					this.trigger("PlayerLand");
+				}
 			}
 
 			if(!Crafty.keydown[Crafty.keys.UP_ARROW]) {
