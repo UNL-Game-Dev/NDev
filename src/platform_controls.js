@@ -30,19 +30,28 @@ Crafty.c("PlatformControls", {
 
 		this._upHeld = false;
 		this._forceRemaining = 0;
+		
+		this._direction = "right";
 			
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
-			if(ev.keyCode == Crafty.keys.LEFT_ARROW) {
-				this.trigger("PlayerWalk", { direction: "left" });
-			} else if(ev.keyCode == Crafty.keys.RIGHT_ARROW) {
-				this.trigger("PlayerWalk", { direction: "right" });
+			if(ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW) {
+				// Update direction based on which key was pressed.
+				if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
+					this._direction = "left";
+				} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+					this._direction = "right";
+				}
+				
+				this.trigger("PlayerMove");
 			}
 		});
 		this.bind("KeyUp", function(ev) {
 			if((ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW)
 			&& !(Crafty.keydown[Crafty.keys.LEFT_ARROW] || Crafty.keydown[Crafty.keys.RIGHT_ARROW])) {
-				this.trigger("PlayerStand");
+				if(this.grounded) {
+					this.trigger("PlayerStand");
+				}
 			}
 		});
 		
@@ -62,12 +71,17 @@ Crafty.c("PlatformControls", {
 			for(var i = this.currentNormals.length - 1; i >= 0; --i) {
 				var n = norm(this.currentNormals[i]);
 				if(dot(n, [0,-1]) > 0) {
-					if(this._phY > this._phPY + .1) {
-						this.trigger("PlayerLand");
-					}
 					this.grounded = true;
 					break;
 				}
+			}
+			
+			if(!this.grounded && lastGrounded) {
+				this.trigger("PlayerFall");
+			}
+			
+			if(this.grounded && !lastGrounded) {
+				this.trigger("PlayerLand");
 			}
 
 			if(!Crafty.keydown[Crafty.keys.UP_ARROW]) {
@@ -156,6 +170,22 @@ Crafty.c("PlatformControls", {
 				this._phY += this._phY - py;
 			}
 		});
+	},
+	
+	/**
+	 * Get the current direction that the player is facing. ("left" or "right")
+	 */
+	getDirection:
+	function() {
+		return this._direction;
+	},
+	
+	/**
+	 * See whether the player is grounded.
+	 */
+	isGrounded:
+	function() {
+		return this.grounded;
 	},
 
 	/**
