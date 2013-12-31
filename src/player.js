@@ -28,11 +28,11 @@ Crafty.c("Player", {
 			.animate("PlayerLandLeft", 0, 5, 3)
 			.animate("PlayerLandRight", 4, 5, 7)
 		// Bind animations
-			.bind("PlayerStand", function() {
+			.bind("Stand", function() {
 				this.stop();
 				this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
 			})
-			.bind("PlayerMove", function() {
+			.bind("Walk", function(ev) {
 				this.stop();
 				if(this.grounded) {
 					this.animate(this.direction === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", 24, -1);
@@ -40,7 +40,7 @@ Crafty.c("Player", {
 					this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
 				}
 			})
-			.bind("PlayerJump", function() {
+			.bind("Jump", function() {
 				this.stop();
 				this.animate(this.direction === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 12, 0);
 				this.timeout(function() {
@@ -50,11 +50,11 @@ Crafty.c("Player", {
 					}
 				}, 500);
 			})
-			.bind("PlayerFall", function() {
+			.bind("Fall", function() {
 				this.stop();
 				this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
 			})
-			.bind("PlayerLand", function() {
+			.bind("Land", function() {
 				this.stop();
 				this.animate(this.direction === "left" ? "PlayerLandLeft" : "PlayerLandRight", 12, 0);
 				this.timeout(function() {

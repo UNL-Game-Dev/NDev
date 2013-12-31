@@ -42,14 +42,14 @@ Crafty.c("PlatformControls", {
 					this.direction = "right";
 				}
 				
-				this.trigger("PlayerMove");
+				this.trigger("Walk");
 			}
 		});
 		this.bind("KeyUp", function(ev) {
 			if((ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW)
 			&& !(Crafty.keydown[Crafty.keys.LEFT_ARROW] || Crafty.keydown[Crafty.keys.RIGHT_ARROW])) {
 				if(this.grounded) {
-					this.trigger("PlayerStand");
+					this.trigger("Stand");
 				}
 			}
 		});
@@ -76,15 +76,13 @@ Crafty.c("PlatformControls", {
 			}
 			
 			if(!this.grounded && lastGrounded) {
-				this.trigger("PlayerFall");
-			}
-			
-			if(this.grounded && !lastGrounded) {
+				this.trigger("Fall");
+			} else if(this.grounded && !lastGrounded) {
 				if((Crafty.keydown[Crafty.keys.LEFT_ARROW] && !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
 				|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW] && !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
-					this.trigger("PlayerMove");
+					this.trigger("Walk");
 				} else {
-					this.trigger("PlayerLand");
+					this.trigger("Land");
 				}
 			}
 
@@ -93,7 +91,7 @@ Crafty.c("PlatformControls", {
 			}
 			// Jump if on the ground and want to.
 			if(this.grounded && Crafty.keydown[Crafty.keys.UP_ARROW]) {
-				this.trigger("PlayerJump");
+				this.trigger("Jump");
 				this.grounded = false;
 				// Don't try to stick.
 				lastGrounded = false;
