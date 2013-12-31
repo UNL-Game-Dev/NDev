@@ -46,8 +46,6 @@ Crafty.c("PlatformControls", {
 			}
 		});
 		
-		this.bind("PlayerWalk", function(ev) { console.log(ev); });
-		
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
