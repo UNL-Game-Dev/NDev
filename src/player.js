@@ -30,37 +30,37 @@ Crafty.c("Player", {
 		// Bind animations
 			.bind("PlayerStand", function() {
 				this.stop();
-				this.animate(this.getDirection() === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
+				this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
 			})
 			.bind("PlayerMove", function() {
 				this.stop();
 				if(this.grounded) {
-					this.animate(this.getDirection() === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", 24, -1);
+					this.animate(this.direction === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", 24, -1);
 				} else {
-					this.animate(this.getDirection() === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
+					this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
 				}
 			})
 			.bind("PlayerJump", function() {
 				this.stop();
-				this.animate(this.getDirection() === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 12, 0);
+				this.animate(this.direction === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 12, 0);
 				this.timeout(function() {
 					if(!this.grounded) {
 						this.stop();
-						this.animate(this.getDirection() === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
+						this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
 					}
 				}, 500);
 			})
 			.bind("PlayerFall", function() {
 				this.stop();
-				this.animate(this.getDirection() === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
+				this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
 			})
 			.bind("PlayerLand", function() {
 				this.stop();
-				this.animate(this.getDirection() === "left" ? "PlayerLandLeft" : "PlayerLandRight", 12, 0);
+				this.animate(this.direction === "left" ? "PlayerLandLeft" : "PlayerLandRight", 12, 0);
 				this.timeout(function() {
 					if(this.grounded) {
 						this.stop();
-						this.animate(this.getDirection() === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
+						this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
 					}
 				}, 500);
 			});
