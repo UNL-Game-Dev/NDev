@@ -2,6 +2,8 @@
 /**
  * Component that controls a physical object in a platformer style. Uses arrow 
  * keys for movement at the moment.
+ * 
+ * Also fires events indicating standing still, walking, jumping, and landing.
  */
 Crafty.c("PlatformControls", {
 
@@ -28,7 +30,22 @@ Crafty.c("PlatformControls", {
 
 		this._upHeld = false;
 		this._forceRemaining = 0;
-
+			
+		// Fire walk and stand events.
+		this.bind("KeyDown", function(ev) {
+			if(ev.keyCode == Crafty.keys.LEFT_ARROW) {
+			Crafty.trigger("PlayerWalkLeft");
+			} else if(ev.keyCode == Crafty.keys.RIGHT_ARROW) {
+				Crafty.trigger("PlayerWalkRight");
+			}
+		});
+		this.bind("KeyUp", function(ev) {
+			if((ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW)
+			&& !(Crafty.keydown[Crafty.keys.LEFT_ARROW] || Crafty.keydown[Crafty.keys.RIGHT_ARROW])) {
+				Crafty.trigger("PlayerStand");
+			}
+		});
+		
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
@@ -39,14 +56,17 @@ Crafty.c("PlatformControls", {
 				(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
 				(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
 
-
 			var lastGrounded = this.grounded;
 			this.grounded = false;
 			// Search through all normals for a ground normal.
 			for(var i = this.currentNormals.length - 1; i >= 0; --i) {
 				var n = norm(this.currentNormals[i]);
 				if(dot(n, [0,-1]) > 0) {
+					if(this._phY > this._phPY + .1) {
+						Crafty.trigger("PlayerLand");
+					}
 					this.grounded = true;
+					break;
 				}
 			}
 
@@ -55,6 +75,7 @@ Crafty.c("PlatformControls", {
 			}
 			// Jump if on the ground and want to.
 			if(this.grounded && Crafty.keydown[Crafty.keys.UP_ARROW]) {
+				Crafty.trigger("PlayerJump");
 				this.grounded = false;
 				// Don't try to stick.
 				lastGrounded = false;

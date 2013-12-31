@@ -31,10 +31,13 @@ Crafty.c("PlayerSpawn", {
 
 		this.bind("SpawnPlayer", function() {
 			var player = Crafty.e(
-				"2D, DOM, player, Collision, Physical, TileConstraint," +
+				"2D, DOM, SpriteAnimation, player, Collision, Physical, TileConstraint," +
 				"PlatformControls, DefaultPhysicsDraw"
-			);
+			)
+				.animate("PlayerWalkRight", 0, 0, 7)
+				.animate("PlayerWalkLeft", 0, 1, 7);
 			player.setPhysPos(this.x, this.y);
+			player.animate("PlayerWalkRight", 32, 5);
 			Crafty("Scroller").target = player;
 		});
 	}
