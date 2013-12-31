@@ -53,6 +53,33 @@
                  "width":0,
                  "x":1234,
                  "y":771
+                }, 
+                {
+                 "height":0,
+                 "name":"EntitySpawn1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"EntitySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1670,
+                 "y":450
+                }, 
+                {
+                 "gid":48,
+                 "height":0,
+                 "name":"window",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1753,
+                 "y":477
                 }],
          "opacity":1,
          "type":"objectgroup",
