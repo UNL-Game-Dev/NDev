@@ -184,14 +184,6 @@ Crafty.c("PlatformControls", {
 	function() {
 		return this._direction;
 	},
-	
-	/**
-	 * See whether the player is grounded.
-	 */
-	isGrounded:
-	function() {
-		return this.grounded;
-	},
 
 	/**
 	 * Keeps the player moving along a slope, up to 45 degrees either way.

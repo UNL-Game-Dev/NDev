@@ -34,7 +34,7 @@ Crafty.c("Player", {
 			})
 			.bind("PlayerMove", function() {
 				this.stop();
-				if(this.isGrounded()) {
+				if(this.grounded) {
 					this.animate(this.getDirection() === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", 24, -1);
 				} else {
 					this.animate(this.getDirection() === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
@@ -44,7 +44,7 @@ Crafty.c("Player", {
 				this.stop();
 				this.animate(this.getDirection() === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 12, 0);
 				this.timeout(function() {
-					if(!this.isGrounded()) {
+					if(!this.grounded) {
 						this.stop();
 						this.animate(this.getDirection() === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
 					}
@@ -58,7 +58,7 @@ Crafty.c("Player", {
 				this.stop();
 				this.animate(this.getDirection() === "left" ? "PlayerLandLeft" : "PlayerLandRight", 12, 0);
 				this.timeout(function() {
-					if(this.isGrounded()) {
+					if(this.grounded) {
 						this.stop();
 						this.animate(this.getDirection() === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
 					}
