@@ -30,58 +30,7 @@ Crafty.c("PlayerSpawn", {
 		this.y = object.y;
 
 		this.bind("SpawnPlayer", function() {
-			var player = Crafty.e(
-				"2D, DOM, SpriteAnimation, player, Collision, Physical, TileConstraint," +
-				"PlatformControls, DefaultPhysicsDraw"
-			)
-			// Define animations
-				.animate("PlayerStandLeft", [[0, 0], [1, 0], [2, 0], [3, 0], [3, 0], [2, 0], [1, 0], [0, 0]])
-				.animate("PlayerStandRight", [[4, 0], [5, 0], [6, 0], [7, 0], [7, 0], [6, 0], [5, 0], [4, 0]])
-				.animate("PlayerWalkLeft", 0, 1, 7)
-				.animate("PlayerWalkRight", 0, 2, 7)
-				.animate("PlayerJumpLeft", 0, 3, 3)
-				.animate("PlayerJumpRight", 4, 3, 7)
-				.animate("PlayerFallLeft", [[0, 4], [1, 4], [2, 4], [3, 4], [3, 4], [2, 4], [1, 4], [0, 4]])
-				.animate("PlayerFallRight", [[4, 4], [5, 4], [6, 4], [7, 4], [7, 4], [6, 4], [5, 4], [4, 4]])
-				.animate("PlayerLandLeft", 0, 5, 3)
-				.animate("PlayerLandRight", 4, 5, 7)
-			// Bind animations
-				.bind("PlayerStand", function() {
-					this.stop();
-					this.animate(this.getDirection() === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
-				})
-				.bind("PlayerMove", function() {
-					this.stop();
-					if(this.isGrounded()) {
-						this.animate(this.getDirection() === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", 24, -1);
-					} else {
-						this.animate(this.getDirection() === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
-					}
-				})
-				.bind("PlayerJump", function() {
-					this.stop();
-					this.animate(this.getDirection() === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 12, 0);
-					this.timeout(function() {
-						if(!this.isGrounded()) {
-							this.stop();
-							this.animate(this.getDirection() === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
-						}
-					}, 500);
-				})
-				.bind("PlayerFall", function() {
-					this.stop();
-					this.animate(this.getDirection() === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
-				})
-				.bind("PlayerLand", function() {
-					this.stop();
-					this.animate(this.getDirection() === "left" ? "PlayerLandLeft" : "PlayerLandRight", 12, 0);
-					this.timeout(function() {
-						if(this.isGrounded()) {
-							this.stop();
-							this.animate(this.getDirection() === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
-						}
-					}, 500);
-				});
+			var player = Crafty.e("Player");
 			player.setPhysPos(this.x, this.y);
 			Crafty("Scroller").target = player;
 		});
@@ -133,10 +82,7 @@ Crafty.c("MapDoor", {
 		Crafty("TiledMap").loadMap(this._targetMap, function() {
 			// When the map loads, add the player to the target door.
 			// (The old player will have been deleted.)
-			var player = Crafty.e(
-				"2D, DOM, player, Collision, Physical, TileConstraint," +
-				"PlatformControls, DefaultPhysicsDraw"
-			);
+			var player = Crafty.e("Player");
 			// Put the player on the target door.
 			Crafty("MapDoor").each(function(e) {
 				if(this._name == targetDoor) {
