@@ -34,17 +34,19 @@ Crafty.c("PlatformControls", {
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
 			if(ev.keyCode == Crafty.keys.LEFT_ARROW) {
-			Crafty.trigger("PlayerWalkLeft");
+				this.trigger("PlayerWalk", { direction: "left" });
 			} else if(ev.keyCode == Crafty.keys.RIGHT_ARROW) {
-				Crafty.trigger("PlayerWalkRight");
+				this.trigger("PlayerWalk", { direction: "right" });
 			}
 		});
 		this.bind("KeyUp", function(ev) {
 			if((ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW)
 			&& !(Crafty.keydown[Crafty.keys.LEFT_ARROW] || Crafty.keydown[Crafty.keys.RIGHT_ARROW])) {
-				Crafty.trigger("PlayerStand");
+				this.trigger("PlayerStand");
 			}
 		});
+		
+		this.bind("PlayerWalk", function(ev) { console.log(ev); });
 		
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
@@ -63,7 +65,7 @@ Crafty.c("PlatformControls", {
 				var n = norm(this.currentNormals[i]);
 				if(dot(n, [0,-1]) > 0) {
 					if(this._phY > this._phPY + .1) {
-						Crafty.trigger("PlayerLand");
+						this.trigger("PlayerLand");
 					}
 					this.grounded = true;
 					break;
@@ -75,7 +77,7 @@ Crafty.c("PlatformControls", {
 			}
 			// Jump if on the ground and want to.
 			if(this.grounded && Crafty.keydown[Crafty.keys.UP_ARROW]) {
-				Crafty.trigger("PlayerJump");
+				this.trigger("PlayerJump");
 				this.grounded = false;
 				// Don't try to stick.
 				lastGrounded = false;
