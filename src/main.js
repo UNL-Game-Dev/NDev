@@ -22,9 +22,9 @@ Crafty.scene("testMap", function() {
 		.image("http://www.mlahanas.de/Greeks/images/Parallax.jpg")
 		.scrollFactor(0.2);
 
-	Crafty.sprite("assets/sprites/player.png",
-		{ player: [0,0,32,32] }
-	);
+	Crafty.sprite(32, "assets/sprites/player.png", {
+		player: [0, 0]
+	}, 0);
 
 	var scroller = Crafty.e("Scroller, Persistent");
 

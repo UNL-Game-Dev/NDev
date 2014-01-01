@@ -2,6 +2,8 @@
 /**
  * Component that controls a physical object in a platformer style. Uses arrow 
  * keys for movement at the moment.
+ * 
+ * Also fires events indicating standing still, walking, jumping, falling, and landing.
  */
 Crafty.c("PlatformControls", {
 
@@ -19,6 +21,7 @@ Crafty.c("PlatformControls", {
 	init:
 	function() {
 		this.grounded = false;
+		this.direction = "right";
 
 		// A sensor that is exactly the same as the platforming character.
 		this._sensor = Crafty.e("2D");
@@ -28,7 +31,36 @@ Crafty.c("PlatformControls", {
 
 		this._upHeld = false;
 		this._forceRemaining = 0;
-
+			
+		// Fire walk and stand events.
+		this.bind("KeyDown", function(ev) {
+			if(ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW) {
+				// Update direction based on which key was pressed.
+				if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
+					this.direction = "left";
+				} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+					this.direction = "right";
+				}
+				
+				this.trigger("Walk");
+			}
+		});
+		this.bind("KeyUp", function(ev) {
+			if(ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW) {
+				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
+					this.direction = "left";
+					this.trigger("Walk");
+				} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					this.direction = "right";
+					this.trigger("Walk");
+				} else {
+					if(this.grounded) {
+						this.trigger("Stand");
+					}
+				}
+			}
+		});
+		
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
@@ -39,7 +71,6 @@ Crafty.c("PlatformControls", {
 				(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
 				(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
 
-
 			var lastGrounded = this.grounded;
 			this.grounded = false;
 			// Search through all normals for a ground normal.
@@ -47,6 +78,18 @@ Crafty.c("PlatformControls", {
 				var n = norm(this.currentNormals[i]);
 				if(dot(n, [0,-1]) > 0) {
 					this.grounded = true;
+					break;
+				}
+			}
+			
+			if(!this.grounded && lastGrounded) {
+				this.trigger("Fall");
+			} else if(this.grounded && !lastGrounded) {
+				if((Crafty.keydown[Crafty.keys.LEFT_ARROW] && !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
+				|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW] && !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
+					this.trigger("Walk");
+				} else {
+					this.trigger("Land");
 				}
 			}
 
@@ -55,6 +98,7 @@ Crafty.c("PlatformControls", {
 			}
 			// Jump if on the ground and want to.
 			if(this.grounded && Crafty.keydown[Crafty.keys.UP_ARROW]) {
+				this.trigger("Jump");
 				this.grounded = false;
 				// Don't try to stick.
 				lastGrounded = false;
