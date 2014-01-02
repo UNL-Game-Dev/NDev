@@ -67,6 +67,34 @@
                  "width":23,
                  "x":193,
                  "y":290
+                }, 
+                {
+                 "gid":2,
+                 "height":0,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":50,
+                 "y":272
+                }, 
+                {
+                 "gid":2,
+                 "height":0,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":84,
+                 "y":262
                 }],
          "opacity":1,
          "properties":

@@ -160,12 +160,12 @@ Crafty.c("TiledMap", {
 	function(layers) {
 		for(var layeri in layers) {
 			var layer = layers[layeri];
-			if(layer.type = "objectgroup") {
+			if(layer.type === "objectgroup") {
 				for(var objecti in layer.objects) {
 					var object = layer.objects[objecti];
-					// Create a crafty entity with the given map component.
-					var craftyObject = Crafty.e(object.type);
-					// Let the object initialize itself.
+					// Create a crafty entity with the given map component,
+					// or the default if none given.
+					var craftyObject = Crafty.e(object.type || "DefaultMapObject");
 					craftyObject.mapObjectInit(object);
 				}
 			}
