@@ -14,7 +14,7 @@
 /**
  * Default map object. If a map object does not specify a type, it defaults
  * to this.
- * Base usage: x,y, name
+ * Base usage: x,y
  * Properties: none
  */
 Crafty.c("DefaultMapObject", {
@@ -27,12 +27,16 @@ Crafty.c("DefaultMapObject", {
 	function(object) {
 		this.x = object.x;
 		this.y = object.y;
+		// If the object has a gid property, then display its image
 		if(object.gid) {
 			this._sprite = "Tile" + object.gid;
 			this
 				.requires("DOM")
-				.requires(this._sprite)
-				.shift(0, -this.h);
+				.requires(this._sprite);
+			// Shift upwards to correctly display image, since origin is
+			// bottom-left in Tiled but top-left in Crafty.
+			this.x = object.x;
+			this.y = object.y - this.h;
 		}
 	}
 });
