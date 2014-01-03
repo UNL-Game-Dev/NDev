@@ -190,6 +190,8 @@ Crafty.c("TiledMap", {
 					// or the default if none given.
 					var craftyObject = Crafty.e(object.type || "DefaultMapObject");
 					craftyObject.mapObjectInit(object);
+					
+					// Set the entity's Z-index if it is 2D.
 					if(craftyObject.__c["2D"]) {
 						craftyObject.z = this._layerZ[layer.name];
 					}
