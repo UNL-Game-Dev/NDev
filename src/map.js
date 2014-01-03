@@ -172,7 +172,6 @@ Crafty.c("TiledMap", {
 		var solidLayer = 0;
 		for(var layeri in layers) {
 			var layer = layers[layeri];
-			console.log(layer);
 			if(layer.properties && layer.properties.solid) {
 				solidLayer = layeri;
 				break;
@@ -186,7 +185,6 @@ Crafty.c("TiledMap", {
 			this._layerType[layer.name] = layer.type;
 			this._layerZ[layer.name] = layeri - solidLayer;
 		}
-		console.log(this._layerProperties, this._layerType, this._layerZ);
 	},
 
 	/**
