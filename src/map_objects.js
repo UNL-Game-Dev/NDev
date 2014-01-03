@@ -14,13 +14,13 @@
 /**
  * Default map object. If a map object does not specify a type, it defaults
  * to this.
- * Base usage: x,y, name, gid
+ * Base usage: x,y, name
  * Properties: none
  */
 Crafty.c("DefaultMapObject", {
 	init:
 	function() {
-		this.requires("2D, DOM");
+		this.requires("2D");
 	},
 	
 	mapObjectInit:
@@ -28,7 +28,11 @@ Crafty.c("DefaultMapObject", {
 		this.x = object.x;
 		this.y = object.y;
 		if(object.gid) {
-			this.requires("Tile" + object.gid);
+			this._sprite = "Tile" + object.gid;
+			this
+				.requires("DOM")
+				.requires(this._sprite)
+				.shift(0, -this.h);
 		}
 	}
 });

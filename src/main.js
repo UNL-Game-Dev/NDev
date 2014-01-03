@@ -32,6 +32,6 @@ Crafty.scene("testMap", function() {
 	// This triggers physics ticks, which are used to more precisely control
 	// when entities are updated.
 	var ticker = Crafty.e("PhysicsTicker, Persistent");
-
+	
 });
 

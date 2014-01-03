@@ -26,6 +26,10 @@
  <tileset firstgid="17" name="Backtiles" tilewidth="32" tileheight="32">
   <image source="ark.png" width="128" height="128"/>
  </tileset>
+ <objectgroup name="bg_entities" width="100" height="100">
+  <object gid="2" x="45" y="314"/>
+  <object gid="2" x="80" y="363"/>
+ </objectgroup>
  <layer name="bg2" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt1TEKAzEMBED/IYELJHD5/ytPlQuDiTlwpGIG1ItFaFsDAACA+x4xz+wl6I6YV/YSdO+YT/YSdGfMN3sJOv1Ri/6oRX/Uoj9q0R+16I//WL17/bHHmP/q3euPPcb8V+9ef+wx5j/e/Sx3/bHHr78zy11/5Jjlrj9yyB0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmLkArA8FlQ==

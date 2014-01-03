@@ -21,6 +21,7 @@ Crafty.c("Parallax", {
 	scrollFactor:
 	function(factor) {
 		this.factor = 1.0 - factor;
+		return this;
 	}
 
 });

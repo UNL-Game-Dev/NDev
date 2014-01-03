@@ -37,16 +37,17 @@ Crafty.c("TiledMap", {
 			// Extract layer information.
 			that._initLayerInfo(json.layers);
 
-			// Spawn Tiled-made objects.
-			that._spawnMapObjects(json.layers);
-
 			// Load it in.
 			that.setMapDataSource(json); 
 			that.createWorld( function( map ) {
 				console.log("Done creating world.");
+				that._arrangeLayers();
 				that.collisionize();
 				that._loaded = true;
-
+				
+				// Spawn Tiled-made objects.
+				that._spawnMapObjects(json.layers);
+				
 				if(loaded)
 					loaded();
 			});
@@ -64,6 +65,7 @@ Crafty.c("TiledMap", {
 			var entities = this.getEntitiesInLayer(layerName);
 			for(var i = entities.length - 1; i >= 0; --i) {
 				var ent = entities[i];
+				
 				ent.addComponent("Collision");
 				// Mark for collision.
 				ent.addComponent("Tile");
@@ -138,18 +140,39 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
+	
+	/**
+	 * Initializes tiles' z-indices based on the layers' z-indices.
+	 */
+	_arrangeLayers:
+	function() {
+		for(var layerName in this.getLayers()) {
+			if(this._layerType[layerName] === "tilelayer") {
+				var entities = this.getEntitiesInLayer(layerName);
+				var z = this._layerZ[layerName];
+				for(var i in entities) {
+					entities[i].z = z;
+				}
+			}
+		}
+	},
 
 	/**
 	 * Initializes _layerProperties, which lists layers' property dicts by the
-	 * layer's name.
+	 * layer's name; _layerType, which lists layers' types by the layer's name;
+	 * and _layerZ, which lists layers' Z indices by the layer's name.
 	 */
 	_initLayerInfo:
 	function(layers) {
 		this._layerProperties = {};
+		this._layerType = {};
+		this._layerZ = {};
 		for(var layeri in layers) {
 			var layer = layers[layeri];
 			// Set to {} if undefined for easier access later.
 			this._layerProperties[layer.name] = layer.properties || {};
+			this._layerType[layer.name] = layer.type;
+			this._layerZ[layer.name] = layeri;
 		}
 	},
 
@@ -167,6 +190,9 @@ Crafty.c("TiledMap", {
 					// or the default if none given.
 					var craftyObject = Crafty.e(object.type || "DefaultMapObject");
 					craftyObject.mapObjectInit(object);
+					if(craftyObject.__c["2D"]) {
+						craftyObject.z = this._layerZ[layer.name];
+					}
 				}
 			}
 		}
