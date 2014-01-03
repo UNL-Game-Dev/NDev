@@ -167,13 +167,26 @@ Crafty.c("TiledMap", {
 		this._layerProperties = {};
 		this._layerType = {};
 		this._layerZ = {};
+		
+		// Find the first solid layer, and use that for the Z-index of 0.
+		var solidLayer = 0;
+		for(var layeri in layers) {
+			var layer = layers[layeri];
+			console.log(layer);
+			if(layer.properties && layer.properties.solid) {
+				solidLayer = layeri;
+				break;
+			}
+		}
+		
 		for(var layeri in layers) {
 			var layer = layers[layeri];
 			// Set to {} if undefined for easier access later.
 			this._layerProperties[layer.name] = layer.properties || {};
 			this._layerType[layer.name] = layer.type;
-			this._layerZ[layer.name] = layeri;
+			this._layerZ[layer.name] = layeri - solidLayer;
 		}
+		console.log(this._layerProperties, this._layerType, this._layerZ);
 	},
 
 	/**
