@@ -28,7 +28,7 @@ Crafty.scene("testMap", function() {
 		player: [0, 0]
 	}, 0);
 	
-	Crafty.sprite(32, "assets/sprites/crystal.png", {
+	Crafty.sprite(32, "assets/sprites/crystals.png", {
 		crystal: [0, 0],
 		lightBeam: [1, 0]
 	});
