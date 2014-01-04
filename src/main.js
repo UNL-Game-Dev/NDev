@@ -27,6 +27,11 @@ Crafty.scene("testMap", function() {
 	Crafty.sprite(32, "assets/sprites/player.png", {
 		player: [0, 0]
 	}, 0);
+	
+	Crafty.sprite(32, "assets/sprites/crystal.png", {
+		crystal: [0, 0],
+		lightBeam: [1, 0]
+	});
 
 	var scroller = Crafty.e("Scroller, Persistent");
 
