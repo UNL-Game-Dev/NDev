@@ -11,10 +11,12 @@ Crafty.scene("testMap", function() {
 			} else if(e.key == Crafty.keys["2"]) {
 				this.loadMap("test2");
 			} else if(e.key == Crafty.keys["3"]) {
+				this.loadMap("palace");
+			} else if(e.key == Crafty.keys["0"]) {
 				Crafty.trigger("SpawnPlayer");
 			}
 		})
-		.loadMap("test2", function() {
+		.loadMap("palace", function() {
 			Crafty.trigger("SpawnPlayer");
 		});
 
