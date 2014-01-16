@@ -106,10 +106,10 @@ Crafty.c("MovingPlatform", {
 	function() {
 		this.requires("2D, DOM, Collision, Tile")
 			.bind("StartPlatform", function() {
-				this.moving = true;
+				this._moving = true;
 			})
 			.bind("StopPlatform", function() {
-				this.moving = false;
+				this._moving = false;
 			});
 	},
 	
