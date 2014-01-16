@@ -96,3 +96,28 @@ Crafty.c("MapDoor", {
 	}
 });
 
+/**
+ * A platform that moves along a specified path.
+ * Base usage: gid, name
+ * Properties: duration
+ */
+Crafty.c("MovingPlatform", {
+	init:
+	function() {
+		this.requires("2D, DOM, Collision, Tile")
+			.bind("StartPlatform", function() {
+				this.moving = true;
+			})
+			.bind("StopPlatform", function() {
+				this.moving = false;
+			});
+	},
+	
+	mapObjectInit:
+	function(object) {
+		this.requires("Tile" + object.gid);
+		this._name = object.name;
+		this._moving = true;
+	}
+});
+

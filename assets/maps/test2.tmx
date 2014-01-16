@@ -55,5 +55,6 @@
     <property name="targetMap" value="test3"/>
    </properties>
   </object>
+  <object name="lift1" type="MovingPlatform" gid="2" x="108" y="276"/>
  </objectgroup>
 </map>
