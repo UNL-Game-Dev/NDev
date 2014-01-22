@@ -166,9 +166,7 @@ Crafty.c("TiledMap", {
 					// Create a crafty entity with the given map component.
 					var craftyObject = Crafty.e(object.type);
 					// Let the object initialize itself.
-					if(craftyObject.mapObjectInit) {
-						craftyObject.mapObjectInit(object);
-					}
+					craftyObject.mapObjectInit(object);
 				}
 			}
 		}
