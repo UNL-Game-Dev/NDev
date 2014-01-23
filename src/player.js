@@ -17,50 +17,43 @@ Crafty.c("Player", {
 			.requires("PlatformControls")
 			.requires("DefaultPhysicsDraw")
 		// Define animations
-			.animate("PlayerStandLeft", [[0, 0], [1, 0], [2, 0], [3, 0], [3, 0], [2, 0], [1, 0], [0, 0]])
-			.animate("PlayerStandRight", [[4, 0], [5, 0], [6, 0], [7, 0], [7, 0], [6, 0], [5, 0], [4, 0]])
-			.animate("PlayerWalkLeft", 0, 1, 7)
-			.animate("PlayerWalkRight", 0, 2, 7)
-			.animate("PlayerJumpLeft", 0, 3, 3)
-			.animate("PlayerJumpRight", 4, 3, 7)
-			.animate("PlayerFallLeft", [[0, 4], [1, 4], [2, 4], [3, 4], [3, 4], [2, 4], [1, 4], [0, 4]])
-			.animate("PlayerFallRight", [[4, 4], [5, 4], [6, 4], [7, 4], [7, 4], [6, 4], [5, 4], [4, 4]])
-			.animate("PlayerLandLeft", 0, 5, 3)
-			.animate("PlayerLandRight", 4, 5, 7)
+			.reel("PlayerStandLeft", 1000, [[0, 0], [1, 0], [2, 0], [3, 0], [3, 0], [2, 0], [1, 0], [0, 0]])
+			.reel("PlayerStandRight", 1000, [[4, 0], [5, 0], [6, 0], [7, 0], [7, 0], [6, 0], [5, 0], [4, 0]])
+			.reel("PlayerWalkLeft", 1000, 0, 1, 8)
+			.reel("PlayerWalkRight", 1000, 0, 2, 8)
+			.reel("PlayerJumpLeft", 500, 0, 3, 4)
+			.reel("PlayerJumpRight", 500, 4, 3, 4)
+			.reel("PlayerFallLeft", 1000, [[0, 4], [1, 4], [2, 4], [3, 4], [3, 4], [2, 4], [1, 4], [0, 4]])
+			.reel("PlayerFallRight", 1000, [[4, 4], [5, 4], [6, 4], [7, 4], [7, 4], [6, 4], [5, 4], [4, 4]])
+			.reel("PlayerLandLeft", 500, 0, 5, 4)
+			.reel("PlayerLandRight", 500, 4, 5, 4)
 		// Bind animations
 			.bind("Stand", function() {
-				this.stop();
-				this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
+				this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
 			})
 			.bind("Walk", function(ev) {
-				this.stop();
 				if(this.grounded) {
-					this.animate(this.direction === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", 24, -1);
+					this.animate(this.direction === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", -1);
 				} else {
-					this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
+					this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
 				}
 			})
 			.bind("Jump", function() {
-				this.stop();
-				this.animate(this.direction === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 12, 0);
+				this.animate(this.direction === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 0);
 				this.timeout(function() {
 					if(!this.grounded) {
-						this.stop();
-						this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
+						this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
 					}
 				}, 500);
 			})
 			.bind("Fall", function() {
-				this.stop();
-				this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", 24, -1);
+				this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
 			})
 			.bind("Land", function() {
-				this.stop();
-				this.animate(this.direction === "left" ? "PlayerLandLeft" : "PlayerLandRight", 12, 0);
+				this.animate(this.direction === "left" ? "PlayerLandLeft" : "PlayerLandRight", 0);
 				this.timeout(function() {
 					if(this.grounded) {
-						this.stop();
-						this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", 24, -1);
+						this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
 					}
 				}, 500);
 			});

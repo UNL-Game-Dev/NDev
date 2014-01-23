@@ -26,8 +26,6 @@ Crafty.scene("testMap", function() {
 		player: [0, 0]
 	}, 0);
 
-	var scroller = Crafty.e("Scroller, Persistent");
-
 	// Create the physics ticker.
 	// This triggers physics ticks, which are used to more precisely control
 	// when entities are updated.

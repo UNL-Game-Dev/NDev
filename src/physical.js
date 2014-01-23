@@ -50,7 +50,7 @@ Crafty.c("Physical", {
 
 		this.bind("EvaluateAccel", function() {
 			// Seconds per frame.
-			var sPerF = 1.0 / Crafty.timer.getFPS();
+			var sPerF = 1.0 / Crafty.timer.FPS();
 			// Apply acceleration to velocity. Since velocity is stored as the
 			// difference between the prev frame and the next, apply as
 			// p += a * t^2
