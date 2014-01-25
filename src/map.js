@@ -59,7 +59,7 @@ Crafty.c("TiledMap", {
 		// Add tile bounds information.
 		for(var layerName in this.getLayers()) {
 			// If this layer isn't solid, don't bother.
-			if(!this._layerProperties[layerName].solid)
+			if(!this._layerInfo[layerName].properties.solid)
 				continue;
 
 			var entities = this.getEntitiesInLayer(layerName);
@@ -147,9 +147,9 @@ Crafty.c("TiledMap", {
 	_arrangeLayers:
 	function() {
 		for(var layerName in this.getLayers()) {
-			if(this._layerType[layerName] === "tilelayer") {
+			if(this._layerInfo[layerName].type === "tilelayer") {
 				var entities = this.getEntitiesInLayer(layerName);
-				var z = this._layerZ[layerName];
+				var z = this._layerInfo[layerName].z;
 				for(var i in entities) {
 					entities[i].z = z;
 				}
@@ -158,21 +158,18 @@ Crafty.c("TiledMap", {
 	},
 
 	/**
-	 * Initializes _layerProperties, which lists layers' property dicts by the
-	 * layer's name; _layerType, which lists layers' types by the layer's name;
-	 * and _layerZ, which lists layers' Z indices by the layer's name.
+	 * Initializes _layerInfo, which lists layers' property dicts, types and
+	 * z-indices by the layer's name.
 	 */
 	_initLayerInfo:
 	function(layers) {
-		this._layerProperties = {};
-		this._layerType = {};
-		this._layerZ = {};
+		this._layerInfo = {};
 		
 		// Find the first solid layer, and use that for the Z-index of 0.
 		var solidLayer = 0;
 		for(var layeri in layers) {
 			var layer = layers[layeri];
-			if(layer.properties && layer.properties.solid) {
+			if(layer.properties && layer.type == "tilelayer" && layer.properties.solid) {
 				solidLayer = layeri;
 				break;
 			}
@@ -180,10 +177,11 @@ Crafty.c("TiledMap", {
 		
 		for(var layeri in layers) {
 			var layer = layers[layeri];
-			// Set to {} if undefined for easier access later.
-			this._layerProperties[layer.name] = layer.properties || {};
-			this._layerType[layer.name] = layer.type;
-			this._layerZ[layer.name] = layeri - solidLayer;
+			this._layerInfo[layer.name] = {
+				properties: layer.properties || {},
+				type: layer.type,
+				z: layeri - solidLayer
+			};
 		}
 	},
 
@@ -204,7 +202,7 @@ Crafty.c("TiledMap", {
 					
 					// Set the entity's Z-index if it is 2D.
 					if(craftyObject.__c["2D"]) {
-						craftyObject.z = this._layerZ[layer.name];
+						craftyObject.z = this._layerInfo[layer.name].z;
 					}
 				}
 			}
