@@ -41,7 +41,7 @@ Crafty.c("TiledMap", {
 			that.setMapDataSource(json); 
 			that.createWorld( function( map ) {
 				console.log("Done creating world.");
-				that._arrangeLayers();
+				that._arrangeTileLayers();
 				that.collisionize();
 				that._loaded = true;
 				
@@ -56,37 +56,41 @@ Crafty.c("TiledMap", {
 
 	collisionize:
 	function() {
+		var that = this;
 		// Add tile bounds information.
-		for(var layerName in this.getLayers()) {
+		for(var layerName in that.getLayers()) {
 			// If this layer isn't solid, don't bother.
-			if(!this._layerInfo[layerName].properties.solid)
-				continue;
-
-			var entities = this.getEntitiesInLayer(layerName);
-			for(var i = entities.length - 1; i >= 0; --i) {
-				var ent = entities[i];
-				
-				ent.addComponent("Collision");
-				// Mark for collision.
-				ent.addComponent("Tile");
-
-				var gid = ent.gid;
-				var info = this._tileInfo[gid];
-				if(!info)
-					continue;
-				var tilesetInfo = this._tilesetInfo[info.tileseti];
-				var bounds = info.pts;
-				
-				var boundsdup = [];
-				for(var j = 0; j < bounds.length; ++j) {
-					boundsdup[j] = [
-						bounds[j][0] * tilesetInfo.width,
-						bounds[j][1] * tilesetInfo.height
-					];
+			if(this._layerInfo[layerName].properties.solid) {
+				var entities = that.getEntitiesInLayer(layerName);
+				for(var i = entities.length - 1; i >= 0; --i) {
+					var ent = entities[i];
+					this._collisionizeEntity(ent);
 				}
-				var poly = new Crafty.polygon(boundsdup);
-				ent.collision(poly);
 			}
+		}
+	},
+	
+	_collisionizeEntity:
+	function(ent) {
+		ent.addComponent("Collision");
+		// Mark for collision.
+		ent.addComponent("Tile");
+
+		var gid = ent.gid;
+		var info = this._tileInfo[gid];
+		if(info) {
+			var tilesetInfo = this._tilesetInfo[info.tileseti];
+			var bounds = info.pts;
+
+			var boundsdup = [];
+			for(var j = 0; j < bounds.length; ++j) {
+				boundsdup[j] = [
+					bounds[j][0] * tilesetInfo.width,
+					bounds[j][1] * tilesetInfo.height
+				];
+			}
+			var poly = new Crafty.polygon(boundsdup);
+			ent.collision(poly);
 		}
 	},
 
@@ -144,7 +148,7 @@ Crafty.c("TiledMap", {
 	/**
 	 * Initializes tiles' z-indices based on the layers' z-indices.
 	 */
-	_arrangeLayers:
+	_arrangeTileLayers:
 	function() {
 		for(var layerName in this.getLayers()) {
 			if(this._layerInfo[layerName].type === "tilelayer") {
@@ -203,6 +207,11 @@ Crafty.c("TiledMap", {
 					// Set the entity's Z-index if it is 2D.
 					if(craftyObject.__c["2D"]) {
 						craftyObject.z = this._layerInfo[layer.name].z;
+					}
+					
+					// If layer is solid, collisionize the entity.
+					if(this._layerInfo[layer.name].properties.solid) {
+						this._collisionizeEntity(craftyObject);
 					}
 				}
 			}

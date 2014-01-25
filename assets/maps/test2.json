@@ -3,6 +3,10 @@
         {
          "height":100,
          "name":"bg_entities",
+         "properties":
+            {
+             "solid":"true"
+            },
          "objects":[
                 {
                  "gid":2,
@@ -24,7 +28,7 @@
                  "name":"",
                  "properties":
                     {
-
+                     
                     },
                  "type":"",
                  "visible":true,

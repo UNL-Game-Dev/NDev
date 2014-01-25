@@ -29,6 +29,7 @@ Crafty.c("DefaultMapObject", {
 		this.y = object.y;
 		// If the object has a gid property, then display its image
 		if(object.gid) {
+			this.gid = object.gid;
 			this._sprite = "Tile" + object.gid;
 			this
 				.requires("DOM")
