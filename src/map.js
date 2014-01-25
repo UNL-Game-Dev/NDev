@@ -201,17 +201,21 @@ Crafty.c("TiledMap", {
 					var object = layer.objects[objecti];
 					// Create a crafty entity with the given map component,
 					// or the default if none given.
-					var craftyObject = Crafty.e(object.type || "DefaultMapObject");
-					craftyObject.mapObjectInit(object);
-					
+					var craftyObject;
+					if(object.type) {
+						craftyObject = Crafty.e(object.type);
+						craftyObject.mapObjectInit(object);
+					} else {
+						craftyObject = Crafty.e("DefaultMapObject");
+						craftyObject.mapObjectInit(object);
+						// If layer is solid, collisionize the entity.
+						if(this._layerInfo[layer.name].properties.solid) {
+							this._collisionizeEntity(craftyObject);
+						}
+					}
 					// Set the entity's Z-index if it is 2D.
 					if(craftyObject.__c["2D"]) {
 						craftyObject.z = this._layerInfo[layer.name].z;
-					}
-					
-					// If layer is solid, collisionize the entity.
-					if(this._layerInfo[layer.name].properties.solid) {
-						this._collisionizeEntity(craftyObject);
 					}
 				}
 			}
