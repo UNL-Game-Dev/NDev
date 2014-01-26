@@ -32,7 +32,7 @@
   </properties>
   <object gid="2" x="45" y="314"/>
   <object gid="2" x="72" y="373"/>
-  <object name="path1" type="Path" x="961" y="482">
+  <object name="path1" type="MapPath" x="961" y="482">
    <polygon points="0,0 144,1 144,-57 40,-56 20,-137"/>
   </object>
  </objectgroup>

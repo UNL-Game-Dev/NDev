@@ -141,6 +141,11 @@ Crafty.c("MovingPlatform", {
 			})
 			.bind("StopPlatform", function() {
 				this._moving = false;
+			})
+			.bind("PrePhysicsTick", function() {
+				if(this._moving) {
+					this.x += 1;
+				}
 			});
 	},
 	
@@ -154,6 +159,19 @@ Crafty.c("MovingPlatform", {
 		this._name = object.name;
 		this._moving = true;
 		this.path = object.properties.path;
+	}
+});
+
+/**
+ * A path with a list of vertices.
+ */
+Crafty.c("MapPath", {
+	init:
+	function() {
+	},
+	
+	mapObjectInit:
+	function(object) {
 	}
 });
 
