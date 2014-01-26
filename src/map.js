@@ -56,12 +56,11 @@ Crafty.c("TiledMap", {
 
 	collisionize:
 	function() {
-		var that = this;
 		// Add tile bounds information.
-		for(var layerName in that.getLayers()) {
+		for(var layerName in this.getLayers()) {
 			// If this layer isn't solid, don't bother.
 			if(this._layerInfo[layerName].properties.solid) {
-				var entities = that.getEntitiesInLayer(layerName);
+				var entities = this.getEntitiesInLayer(layerName);
 				for(var i = entities.length - 1; i >= 0; --i) {
 					var ent = entities[i];
 					this._collisionizeEntity(ent);
@@ -77,13 +76,13 @@ Crafty.c("TiledMap", {
 			ent.addComponent("Collision");
 			// Mark for collision.
 			ent.addComponent("Tile");
-
+			
 			var gid = ent.gid;
 			var info = this._tileInfo[gid];
 			if(info) {
 				var tilesetInfo = this._tilesetInfo[info.tileseti];
 				var bounds = info.pts;
-
+				
 				var boundsdup = [];
 				for(var j = 0; j < bounds.length; ++j) {
 					boundsdup[j] = [
