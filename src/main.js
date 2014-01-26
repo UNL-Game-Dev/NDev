@@ -6,15 +6,17 @@ Crafty.scene("testMap", function() {
 	var map = Crafty.e("2D, DOM, TiledMap, Persistent")
 		// Temporary level loading using 1, 2, 3, etc.
 		.bind('KeyDown', function(e) {
-			if(e.key == Crafty.keys["1"]) {
+			if(e.key === Crafty.keys["1"]) {
 				this.loadMap("test");
-			} else if(e.key == Crafty.keys["2"]) {
+			} else if(e.key === Crafty.keys["2"]) {
 				this.loadMap("test2");
-			} else if(e.key == Crafty.keys["3"]) {
+			} else if(e.key === Crafty.keys["3"]) {
+				this.loadMap("palace2");
+			} else if(e.key === Crafty.keys["0"]) {
 				Crafty.trigger("SpawnPlayer");
 			}
 		})
-		.loadMap("test2", function() {
+		.loadMap("palace", function() {
 			Crafty.trigger("SpawnPlayer");
 		});
 
