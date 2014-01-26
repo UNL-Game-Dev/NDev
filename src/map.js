@@ -40,13 +40,13 @@ Crafty.c("TiledMap", {
 			// Load it in.
 			that.setMapDataSource(json); 
 			that.createWorld( function( map ) {
-				console.log("Done creating world.");
 				that._arrangeTileLayers();
 				that.collisionize();
-				that._loaded = true;
-				
 				// Spawn Tiled-made objects.
 				that._spawnMapObjects();
+				
+				that._loaded = true;
+				console.log("Done creating world.");
 				
 				if(loaded)
 					loaded();
