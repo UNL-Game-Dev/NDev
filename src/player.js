@@ -8,7 +8,7 @@ Crafty.c("Player", {
 		this
 		// Base components
 			.requires("2D")
-			.requires("DOM")
+			.requires("Canvas")
 			.requires("SpriteAnimation")
 			.requires("player")
 			.requires("Collision")

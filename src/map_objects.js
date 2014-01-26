@@ -32,7 +32,7 @@ Crafty.c("DefaultMapObject", {
 			this.gid = object.gid;
 			this._sprite = "Tile" + object.gid;
 			this
-				.requires("DOM")
+				.requires("Canvas")
 				.requires(this._sprite);
 			// Shift upwards to correctly display image, since origin is
 			// bottom-left in Tiled but top-left in Crafty.
