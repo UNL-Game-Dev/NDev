@@ -67,6 +67,19 @@
                  "width":23,
                  "x":193,
                  "y":290
+                }, 
+                {
+                 "height":47,
+                 "name":"SaveZone",
+                 "properties":
+                    {
+
+                    },
+                 "type":"MapSaveZone",
+                 "visible":true,
+                 "width":46,
+                 "x":504,
+                 "y":118
                 }],
          "opacity":1,
          "properties":

@@ -55,5 +55,6 @@
     <property name="targetMap" value="test3"/>
    </properties>
   </object>
+  <object name="SaveZone" type="MapSaveZone" x="504" y="118" width="46" height="47"/>
  </objectgroup>
 </map>
