@@ -37,16 +37,17 @@ Crafty.c("TiledMap", {
 			// Extract layer information.
 			that._initLayerInfo(json.layers);
 
-			// Spawn Tiled-made objects.
-			that._spawnMapObjects(json.layers);
-
 			// Load it in.
 			that.setMapDataSource(json); 
-			that.createWorld( function( map ) {
-				console.log("Done creating world.");
+			that.createWorld(function(map) {
+				that._arrangeTileLayers();
 				that.collisionize();
+				// Spawn Tiled-made objects.
+				that._spawnMapObjects(json.layers);
+				
 				that._loaded = true;
-
+				console.log("Done creating world.");
+				
 				if(loaded)
 					loaded();
 			});
@@ -58,20 +59,27 @@ Crafty.c("TiledMap", {
 		// Add tile bounds information.
 		for(var layerName in this.getLayers()) {
 			// If this layer isn't solid, don't bother.
-			if(!this._layerProperties[layerName].solid)
-				continue;
-
-			var entities = this.getEntitiesInLayer(layerName);
-			for(var i = entities.length - 1; i >= 0; --i) {
-				var ent = entities[i];
-				ent.addComponent("Collision");
-				// Mark for collision.
-				ent.addComponent("Tile");
-
-				var gid = ent.gid;
-				var info = this._tileInfo[gid];
-				if(!info)
-					continue;
+			if(this._layerInfo[layerName].properties.solid) {
+				var entities = this.getEntitiesInLayer(layerName);
+				for(var i = entities.length - 1; i >= 0; --i) {
+					var ent = entities[i];
+					this._collisionizeEntity(ent);
+				}
+			}
+		}
+	},
+	
+	_collisionizeEntity:
+	function(ent) {
+		// Can only collisionize an entity if it has a gid.
+		if(ent.gid) {
+			ent.addComponent("Collision");
+			// Mark for collision.
+			ent.addComponent("Tile");
+			
+			var gid = ent.gid;
+			var info = this._tileInfo[gid];
+			if(info) {
 				var tilesetInfo = this._tilesetInfo[info.tileseti];
 				var bounds = info.pts;
 				
@@ -140,16 +148,47 @@ Crafty.c("TiledMap", {
 	},
 
 	/**
-	 * Initializes _layerProperties, which lists layers' property dicts by the
-	 * layer's name.
+	 * Initializes _layerInfo, which lists layers' property dicts, types,
+	 * z-indices, and object info by the layer's name.
 	 */
 	_initLayerInfo:
 	function(layers) {
-		this._layerProperties = {};
+		this._layerInfo = {};
+		
+		// Find the first solid tile layer, and use that for the Z-index of 0.
+		var solidLayer = 0;
 		for(var layeri in layers) {
 			var layer = layers[layeri];
-			// Set to {} if undefined for easier access later.
-			this._layerProperties[layer.name] = layer.properties || {};
+			if(layer.properties && layer.type == "tilelayer" && layer.properties.solid) {
+				solidLayer = layeri;
+				break;
+			}
+		}
+		
+		for(var layeri in layers) {
+			var layer = layers[layeri];
+			this._layerInfo[layer.name] = {
+				properties: layer.properties || {},
+				type: layer.type,
+				z: layeri - solidLayer,
+				objects: layer.objects
+			};
+		}
+	},
+	
+	/**
+	 * Initializes tiles' z-indices based on the layers' z-indices.
+	 */
+	_arrangeTileLayers:
+	function() {
+		for(var layerName in this.getLayers()) {
+			if(this._layerInfo[layerName].type === "tilelayer") {
+				var entities = this.getEntitiesInLayer(layerName);
+				var z = this._layerInfo[layerName].z;
+				for(var i in entities) {
+					entities[i].z = z;
+				}
+			}
 		}
 	},
 
@@ -157,16 +196,27 @@ Crafty.c("TiledMap", {
 	 * Spawns map objects. See map_objects.js for more on what it does.
 	 */
 	_spawnMapObjects:
-	function(layers) {
-		for(var layeri in layers) {
-			var layer = layers[layeri];
-			if(layer.type = "objectgroup") {
-				for(var objecti in layer.objects) {
-					var object = layer.objects[objecti];
-					// Create a crafty entity with the given map component.
-					var craftyObject = Crafty.e(object.type);
-					// Let the object initialize itself.
-					craftyObject.mapObjectInit(object);
+	function() {
+		for(var layerName in this.getLayers()) {
+			var layerInfo = this._layerInfo[layerName];
+			if(layerInfo.type === "objectgroup") {
+				var objects = layerInfo.objects;
+				for(var objecti in objects) {
+					var object = objects[objecti];
+					// Create a crafty entity with the given map component,
+					// or the default if none given.
+					var craftyObject = Crafty.e(object.type || "DefaultMapObject");
+					if(craftyObject.mapObjectInit) {
+						craftyObject.mapObjectInit(object);
+					} else {
+						console.error("Invalid object type: " + object.type);
+					}
+					// If layer is solid, collisionize the entity.
+					if(layerInfo.properties.solid) {
+						this._collisionizeEntity(craftyObject);
+					}
+					// Set the entity's Z-index.
+					craftyObject.z = layerInfo.z;
 				}
 			}
 		}
