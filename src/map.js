@@ -213,10 +213,8 @@ Crafty.c("TiledMap", {
 							this._collisionizeEntity(craftyObject);
 						}
 					}
-					// Set the entity's Z-index if it is 2D.
-					if(craftyObject.__c["2D"]) {
-						craftyObject.z = this._layerInfo[layer.name].z;
-					}
+					// Set the entity's Z-index.
+					craftyObject.z = this._layerInfo[layer.name].z;
 				}
 			}
 		}
