@@ -12,6 +12,7 @@ Crafty.c("ZoneEnterTrigger", {
 				if(this.onZoneEnterTrigger) {
 					this.onZoneEnterTrigger();
 				}
+				this._triggerCollidingLast = true;
 			}
 		}, function() {
 			this._triggerCollidingLast = false;

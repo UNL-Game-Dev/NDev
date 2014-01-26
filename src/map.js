@@ -13,6 +13,8 @@ Crafty.c("TiledMap", {
 	function(mapName, loaded) {
 		var that = this;
 
+		this.mapName = mapName;
+
 		// Remove all entities that have 2D but don't have Persistent.
 		var old2D = Crafty("2D");
 		var i = old2D.length - 1;

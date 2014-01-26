@@ -45,7 +45,7 @@ Crafty.scene("testMap", function() {
 		map.loadMap(savedLocation.map, function() {
 			var restoredPlayer = Crafty.e("Player");
 			restoredPlayer.setPhysPos(savedLocation.x, savedLocation.y);
-			Crafty.viewport.follow(player);
+			Crafty.viewport.follow(restoredPlayer);
 		});
 	}
 });
