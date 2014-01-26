@@ -36,14 +36,15 @@ Crafty.c("TiledMap", {
 
 			// Extract layer information.
 			that._initLayerInfo(json.layers);
+			
+			// Spawn Tiled-made objects.
+			that._spawnMapObjects(json.layers);
 
 			// Load it in.
 			that.setMapDataSource(json); 
-			that.createWorld( function( map ) {
+			that.createWorld(function(map) {
 				that._arrangeTileLayers();
 				that.collisionize();
-				// Spawn Tiled-made objects.
-				that._spawnMapObjects();
 				
 				that._loaded = true;
 				console.log("Done creating world.");
@@ -171,8 +172,7 @@ Crafty.c("TiledMap", {
 			this._layerInfo[layer.name] = {
 				properties: layer.properties || {},
 				type: layer.type,
-				z: layeri - solidLayer,
-				objects: layer.objects
+				z: layeri - solidLayer
 			};
 		}
 	},
@@ -197,11 +197,11 @@ Crafty.c("TiledMap", {
 	 * Spawns map objects. See map_objects.js for more on what it does.
 	 */
 	_spawnMapObjects:
-	function() {
-		for(var layerName in this.getLayers()) {
-			var layerInfo = this._layerInfo[layerName];
+	function(layers) {
+		for(var layeri in layers) {
+			var layerInfo = this._layerInfo[layer.name];
 			if(layerInfo.type === "objectgroup") {
-				var objects = layerInfo.objects;
+				var objects = layer.objects;
 				for(var objecti in objects) {
 					var object = objects[objecti];
 					// Create a crafty entity with the given map component,
