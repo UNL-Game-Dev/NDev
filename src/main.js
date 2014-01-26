@@ -11,12 +11,10 @@ Crafty.scene("testMap", function() {
 			} else if(e.key == Crafty.keys["2"]) {
 				this.loadMap("test2");
 			} else if(e.key == Crafty.keys["3"]) {
-				this.loadMap("palace");
-			} else if(e.key == Crafty.keys["0"]) {
 				Crafty.trigger("SpawnPlayer");
 			}
 		})
-		.loadMap("palace", function() {
+		.loadMap("test2", function() {
 			Crafty.trigger("SpawnPlayer");
 		});
 
@@ -32,8 +30,6 @@ Crafty.scene("testMap", function() {
 		lightCrystal: [0, 0],
 		lightBeam: [1, 0]
 	});
-
-	var scroller = Crafty.e("Scroller, Persistent");
 
 	// Create the physics ticker.
 	// This triggers physics ticks, which are used to more precisely control
