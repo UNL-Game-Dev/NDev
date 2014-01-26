@@ -32,7 +32,7 @@ Crafty.c("PlayerSpawn", {
 		this.bind("SpawnPlayer", function() {
 			var player = Crafty.e("Player");
 			player.setPhysPos(this.x, this.y);
-			Crafty("Scroller").target = player;
+			Crafty.viewport.follow(player);
 		});
 	}
 });
@@ -91,7 +91,7 @@ Crafty.c("MapDoor", {
 					this._collidingLast = true;
 				}
 			});
-			Crafty("Scroller").target = player;
+			Crafty.viewport.follow(player);
 		});
 	}
 });
