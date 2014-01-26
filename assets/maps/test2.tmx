@@ -32,6 +32,9 @@
   </properties>
   <object gid="2" x="45" y="314"/>
   <object gid="2" x="72" y="373"/>
+  <object name="path1" type="Path" x="961" y="482">
+   <polygon points="0,0 144,1 144,-57 40,-56 20,-137"/>
+  </object>
  </objectgroup>
  <layer name="bg2" width="100" height="100">
   <data encoding="base64" compression="zlib">
@@ -62,6 +65,10 @@
     <property name="targetMap" value="test3"/>
    </properties>
   </object>
-  <object name="lift1" type="MovingPlatform" gid="2" x="108" y="276"/>
+  <object name="lift1" type="MovingPlatform" gid="2" x="962" y="515">
+   <properties>
+    <property name="path" value="path1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

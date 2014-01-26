@@ -130,7 +130,7 @@ Crafty.c("MapDoor", {
 /**
  * A platform that moves along a specified path.
  * Base usage: gid, name
- * Properties: duration
+ * Properties: path
  */
 Crafty.c("MovingPlatform", {
 	init:
@@ -146,9 +146,14 @@ Crafty.c("MovingPlatform", {
 	
 	mapObjectInit:
 	function(object) {
+		/* test */
+		this.x = object.x;
+		this.y = object.y;
+		/* end test */
 		this.requires("Tile" + object.gid);
 		this._name = object.name;
 		this._moving = true;
+		this.path = object.properties.path;
 	}
 });
 

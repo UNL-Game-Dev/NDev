@@ -2,11 +2,7 @@
  "layers":[
         {
          "height":100,
-         "name":"bg_entities",
-         "properties":
-            {
-             "solid":"true"
-            },
+         "name":"bg_objects",
          "objects":[
                 {
                  "gid":2,
@@ -28,15 +24,53 @@
                  "name":"",
                  "properties":
                     {
-                     
+
                     },
                  "type":"",
                  "visible":true,
                  "width":0,
                  "x":72,
                  "y":373
+                }, 
+                {
+                 "height":0,
+                 "name":"path1",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":144,
+                         "y":1
+                        }, 
+                        {
+                         "x":144,
+                         "y":-57
+                        }, 
+                        {
+                         "x":40,
+                         "y":-56
+                        }, 
+                        {
+                         "x":20,
+                         "y":-137
+                        }],
+                 "properties":
+                    {
+
+                    },
+                 "type":"Path",
+                 "visible":true,
+                 "width":0,
+                 "x":961,
+                 "y":482
                 }],
          "opacity":1,
+         "properties":
+            {
+             "solid":"true"
+            },
          "type":"objectgroup",
          "visible":true,
          "width":100,
@@ -117,13 +151,13 @@
                  "name":"lift1",
                  "properties":
                     {
-
+                     "path":"path1"
                     },
                  "type":"MovingPlatform",
                  "visible":true,
                  "width":0,
-                 "x":108,
-                 "y":276
+                 "x":962,
+                 "y":515
                 }],
          "opacity":1,
          "properties":
