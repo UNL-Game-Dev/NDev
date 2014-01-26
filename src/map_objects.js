@@ -135,7 +135,7 @@ Crafty.c("MapDoor", {
 Crafty.c("MovingPlatform", {
 	init:
 	function() {
-		this.requires("2D, DOM, Collision, Tile")
+		this.requires("2D, DOM, Collision, Tile, Physical, FakeInertia, DefaultPhysicsDraw")
 			.attr({
 				_moving: false
 			})
@@ -147,7 +147,7 @@ Crafty.c("MovingPlatform", {
 			})
 			.bind("PrePhysicsTick", function() {
 				if(this._moving) {
-					this.x += 1;
+					this._phX += 1;
 				}
 			});
 	},
@@ -155,8 +155,7 @@ Crafty.c("MovingPlatform", {
 	mapObjectInit:
 	function(object) {
 		/* test */
-		this.x = object.x;
-		this.y = object.y;
+		this.setPhysPos(object.x, object.y);
 		/* end test */
 		this.requires("Tile" + object.gid);
 		this._name = object.name;
@@ -170,6 +169,7 @@ Crafty.c("MovingPlatform", {
 Crafty.c("MapPath", {
 	init:
 	function() {
+		
 	},
 	
 	mapObjectInit:
