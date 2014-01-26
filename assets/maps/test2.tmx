@@ -27,6 +27,9 @@
   <image source="ark.png" width="128" height="128"/>
  </tileset>
  <objectgroup name="bg_objects" width="100" height="100">
+  <properties>
+   <property name="solid" value="true"/>
+  </properties>
   <object gid="2" x="45" y="314"/>
   <object gid="2" x="72" y="373"/>
  </objectgroup>
