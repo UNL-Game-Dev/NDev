@@ -206,7 +206,11 @@ Crafty.c("TiledMap", {
 					// Create a crafty entity with the given map component,
 					// or the default if none given.
 					var craftyObject = Crafty.e(object.type || "DefaultMapObject");
-					craftyObject.mapObjectInit(object);
+					if(craftyObject.mapObjectInit) {
+						craftyObject.mapObjectInit(object);
+					} else {
+						console.error("Invalid object type: " + object.type);
+					}
 					// If layer is solid, collisionize the entity.
 					if(layerInfo.properties.solid) {
 						this._collisionizeEntity(craftyObject);
