@@ -10,6 +10,37 @@
  *   properties   (dictionary of more properties)
  * See the map json for more on the values.
  */
+ 
+/**
+ * Default map object. If a map object does not specify a type, it defaults
+ * to this.
+ * Base usage: x,y
+ * Properties: none
+ */
+Crafty.c("DefaultMapObject", {
+	init:
+	function() {
+		this.requires("2D");
+	},
+	
+	mapObjectInit:
+	function(object) {
+		this.x = object.x;
+		this.y = object.y;
+		// If the object has a gid property, then display its image
+		if(object.gid) {
+			this.gid = object.gid;
+			this._sprite = "Tile" + object.gid;
+			this
+				.requires("DOM")
+				.requires(this._sprite);
+			// Shift upwards to correctly display image, since origin is
+			// bottom-left in Tiled but top-left in Crafty.
+			this.x = object.x;
+			this.y = object.y - this.h;
+		}
+	}
+});
 
 /**
  * A player spawn point. If a player doesn't already exist in the map, spawns
