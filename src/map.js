@@ -72,25 +72,28 @@ Crafty.c("TiledMap", {
 	
 	_collisionizeEntity:
 	function(ent) {
-		ent.addComponent("Collision");
-		// Mark for collision.
-		ent.addComponent("Tile");
+		// Can only collisionize an entity if it has a gid.
+		if(ent.gid) {
+			ent.addComponent("Collision");
+			// Mark for collision.
+			ent.addComponent("Tile");
 
-		var gid = ent.gid;
-		var info = this._tileInfo[gid];
-		if(info) {
-			var tilesetInfo = this._tilesetInfo[info.tileseti];
-			var bounds = info.pts;
+			var gid = ent.gid;
+			var info = this._tileInfo[gid];
+			if(info) {
+				var tilesetInfo = this._tilesetInfo[info.tileseti];
+				var bounds = info.pts;
 
-			var boundsdup = [];
-			for(var j = 0; j < bounds.length; ++j) {
-				boundsdup[j] = [
-					bounds[j][0] * tilesetInfo.width,
-					bounds[j][1] * tilesetInfo.height
-				];
+				var boundsdup = [];
+				for(var j = 0; j < bounds.length; ++j) {
+					boundsdup[j] = [
+						bounds[j][0] * tilesetInfo.width,
+						bounds[j][1] * tilesetInfo.height
+					];
+				}
+				var poly = new Crafty.polygon(boundsdup);
+				ent.collision(poly);
 			}
-			var poly = new Crafty.polygon(boundsdup);
-			ent.collision(poly);
 		}
 	},
 
@@ -201,17 +204,11 @@ Crafty.c("TiledMap", {
 					var object = layer.objects[objecti];
 					// Create a crafty entity with the given map component,
 					// or the default if none given.
-					var craftyObject;
-					if(object.type) {
-						craftyObject = Crafty.e(object.type);
-						craftyObject.mapObjectInit(object);
-					} else {
-						craftyObject = Crafty.e("DefaultMapObject");
-						craftyObject.mapObjectInit(object);
-						// If layer is solid, collisionize the entity.
-						if(this._layerInfo[layer.name].properties.solid) {
-							this._collisionizeEntity(craftyObject);
-						}
+					var craftyObject = Crafty.e(object.type || "DefaultMapObject");
+					craftyObject.mapObjectInit(object);
+					// If layer is solid, collisionize the entity.
+					if(this._layerInfo[layer.name].properties.solid) {
+						this._collisionizeEntity(craftyObject);
 					}
 					// Set the entity's Z-index.
 					craftyObject.z = this._layerInfo[layer.name].z;
