@@ -2,11 +2,7 @@
  "layers":[
         {
          "height":100,
-         "name":"bg_entities",
-         "properties":
-            {
-             "solid":"true"
-            },
+         "name":"bg_objects",
          "objects":[
                 {
                  "gid":2,
@@ -28,7 +24,7 @@
                  "name":"",
                  "properties":
                     {
-                     
+
                     },
                  "type":"",
                  "visible":true,
@@ -37,6 +33,10 @@
                  "y":373
                 }],
          "opacity":1,
+         "properties":
+            {
+             "solid":"true"
+            },
          "type":"objectgroup",
          "visible":true,
          "width":100,
@@ -138,6 +138,19 @@
                  "width":0,
                  "x":84,
                  "y":262
+                }, 
+                {
+                 "height":42,
+                 "name":"SaveHere!",
+                 "properties":
+                    {
+
+                    },
+                 "type":"MapSaveZone",
+                 "visible":true,
+                 "width":37,
+                 "x":508,
+                 "y":119
                 }],
          "opacity":1,
          "properties":
