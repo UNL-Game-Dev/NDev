@@ -136,6 +136,9 @@ Crafty.c("MovingPlatform", {
 	init:
 	function() {
 		this.requires("2D, DOM, Collision, Tile")
+			.attr({
+				_moving: false
+			})
 			.bind("StartPlatform", function() {
 				this._moving = true;
 			})
@@ -157,7 +160,6 @@ Crafty.c("MovingPlatform", {
 		/* end test */
 		this.requires("Tile" + object.gid);
 		this._name = object.name;
-		this._moving = true;
 		this.path = object.properties.path;
 	}
 });
