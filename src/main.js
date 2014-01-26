@@ -36,14 +36,16 @@ Crafty.scene("testMap", function() {
 	// Load up the starting info if the player hasn't made a save state yet.
 	var savedLocation = gs.data.lastSavedLocation;
 	if(savedLocation == undefined) {
+		// No save--spawn at start.
 		map.loadMap("test2", function() {
 			Crafty.trigger("SpawnPlayer");
 		});
 	} else {
+		// Player has a defined saved location.
 		map.loadMap(savedLocation.map, function() {
 			var restoredPlayer = Crafty.e("Player");
 			restoredPlayer.setPhysPos(savedLocation.x, savedLocation.y);
-			Crafty("Scroller").target = player;
+			Crafty.viewport.follow(player);
 		});
 	}
 });

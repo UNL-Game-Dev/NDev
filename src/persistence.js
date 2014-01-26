@@ -54,6 +54,11 @@ Crafty.c("GameState", {
 		if(slot) {
 			var allData = JSON.parse(localStorage["saveData"]);
 			this.data = allData[slot];
+			// Handle no save state.
+			if(this.data == undefined) {
+				this.data = {};
+			}
+			console.log("Got slot ", slot, allData, this.data);
 		}
 		return slot;
 	},
