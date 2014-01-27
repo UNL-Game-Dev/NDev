@@ -53,7 +53,8 @@ Crafty.c("GameState", {
 		var slot = this._getSlotByUndefineableName(slotName);
 		if(slot) {
 			var allData = JSON.parse(localStorage["saveData"]);
-			this.data = allData[slot];
+			this.data = allData[slot] || {};
+			console.log("Got slot ", slot, allData, this.data);
 		}
 		return slot;
 	},

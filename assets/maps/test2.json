@@ -158,6 +158,19 @@
                  "width":0,
                  "x":962,
                  "y":515
+                }, 
+                {
+                 "height":42,
+                 "name":"SaveHere!",
+                 "properties":
+                    {
+
+                    },
+                 "type":"MapSaveZone",
+                 "visible":true,
+                 "width":37,
+                 "x":508,
+                 "y":119
                 }],
          "opacity":1,
          "properties":
