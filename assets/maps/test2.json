@@ -35,26 +35,26 @@
                 {
                  "height":0,
                  "name":"path1",
-                 "polygon":[
+                 "polyline":[
                         {
                          "x":0,
                          "y":0
                         }, 
                         {
-                         "x":144,
-                         "y":1
+                         "x":169,
+                         "y":0
                         }, 
                         {
-                         "x":144,
-                         "y":-57
+                         "x":169,
+                         "y":-61
                         }, 
                         {
-                         "x":40,
-                         "y":-56
+                         "x":46,
+                         "y":-43
                         }, 
                         {
-                         "x":20,
-                         "y":-137
+                         "x":25,
+                         "y":-111
                         }],
                  "properties":
                     {
@@ -63,8 +63,8 @@
                  "type":"MapPath",
                  "visible":true,
                  "width":0,
-                 "x":961,
-                 "y":482
+                 "x":964,
+                 "y":483
                 }],
          "opacity":1,
          "properties":
@@ -158,19 +158,6 @@
                  "width":0,
                  "x":962,
                  "y":515
-                }, 
-                {
-                 "height":42,
-                 "name":"SaveHere!",
-                 "properties":
-                    {
-
-                    },
-                 "type":"MapSaveZone",
-                 "visible":true,
-                 "width":37,
-                 "x":508,
-                 "y":119
                 }],
          "opacity":1,
          "properties":

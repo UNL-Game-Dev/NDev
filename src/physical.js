@@ -241,6 +241,10 @@ function dist2(v) {
 	return x*x + y*y;
 }
 
+function dist(v) {
+	return Math.sqrt(dist2(v));
+}
+
 // Returns v1 + v2
 function add(v1, v2) {
 	return [v1[0] + v2[0], v1[1] + v2[1]];
