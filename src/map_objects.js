@@ -132,8 +132,9 @@ Crafty.c("MovingPlatform", {
 				_endVertIndex: 1,
 				_startVert: null,
 				_endVert: null,
-				_segmentDuration: 2.0,
-				_segmentLength: 0
+				_segmentDuration: 1.0,
+				_segmentLength: 0,
+				_speed: 50
 			})
 			.bind("StartPlatform", function() {
 				this._moving = true;
@@ -151,7 +152,7 @@ Crafty.c("MovingPlatform", {
 						this._startVert = [startVertRel.x + this.path.x, startVertRel.y + this.path.y];
 						this._endVert = [endVertRel.x + this.path.x, endVertRel.y + this.path.y];
 						this._segmentLength = dist(sub(this._endVert, this._startVert));
-						this._segmentDuration = 2.0;
+						this._segmentDuration = this._segmentLength / this._speed;
 						this.setPhysPos(this._startVert[0], this._startVert[1]);
 					}
 					
@@ -174,12 +175,11 @@ Crafty.c("MovingPlatform", {
 						x = this._startVert[0];
 						y = this._startVert[1];
 						this._segmentLength = dist(sub(this._endVert, this._startVert));
-						this._segmentDuration = 2.0;
+						this._segmentDuration = this._segmentLength / this._speed;
 					}
 					
 					this._phX = x;
 					this._phY = y;
-					//this.setPhysPos(x, y);
 				}
 			});
 	},
