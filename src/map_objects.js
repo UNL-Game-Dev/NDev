@@ -124,71 +124,18 @@ Crafty.c("MapSaveZone", {
 Crafty.c("MovingPlatform", {
 	init:
 	function() {
-		this.requires("2D, DOM, Collision, Tile, Physical, FakeInertia, DefaultPhysicsDraw")
+		this.requires("2D, DOM, Tween, Collision, Tile, Physical, FakeInertia, DefaultPhysicsDraw")
 			.attr({
 				path: null,
 				_moving: false,
-				_startVertIndex: 0,
-				_endVertIndex: 1,
-				_startVert: null,
-				_endVert: null,
-				_segmentDuration: 1.0,
-				_segmentLength: 0,
-				_speed: 50
-			})
-			.bind("StartPlatform", function() {
-				this._moving = true;
-			})
-			.bind("StopPlatform", function() {
-				this._moving = false;
-			})
-			.bind("PrePhysicsTick", function() {
-				if(this._moving) {
-					var pathVertices = this.path.vertices;
-					var numVertices = pathVertices.length;
-					if(!this._startVert) {
-						var startVertRel = pathVertices[this._startVertIndex];
-						var endVertRel = pathVertices[this._endVertIndex];
-						this._startVert = [startVertRel.x + this.path.x, startVertRel.y + this.path.y];
-						this._endVert = [endVertRel.x + this.path.x, endVertRel.y + this.path.y];
-						this._segmentLength = dist(sub(this._endVert, this._startVert));
-						this._segmentDuration = this._segmentLength / this._speed;
-						this.setPhysPos(this._startVert[0], this._startVert[1]);
-					}
-					
-					var x = this._phX, y = this._phY;
-					var dt = 1.0 / Crafty.timer.FPS();
-					var targetDir = norm(sub(this._endVert, this._startVert));
-					targetDir[0] *= this._segmentLength / this._segmentDuration * dt;
-					targetDir[1] *= this._segmentLength / this._segmentDuration * dt;
-					
-					x += targetDir[0];
-					y += targetDir[1];
-					
-					if(dist(sub([x, y], this._startVert)) >= this._segmentLength) {
-						this._startVertIndex = (this._startVertIndex + 1) % numVertices;
-						this._endVertIndex = (this._endVertIndex + 1) % numVertices;
-						var startVertRel = pathVertices[this._startVertIndex];
-						var endVertRel = pathVertices[this._endVertIndex];
-						this._startVert = [startVertRel.x + this.path.x, startVertRel.y + this.path.y];
-						this._endVert = [endVertRel.x + this.path.x, endVertRel.y + this.path.y];
-						x = this._startVert[0];
-						y = this._startVert[1];
-						this._segmentLength = dist(sub(this._endVert, this._startVert));
-						this._segmentDuration = this._segmentLength / this._speed;
-					}
-					
-					this._phX = x;
-					this._phY = y;
-				}
+				_destVertIndex: 1,
+				_speed: 5.0
 			});
 	},
 	
 	mapObjectInit:
 	function(object) {
-		/* test */
 		this.setPhysPos(object.x, object.y);
-		/* end test */
 		this.requires("Tile" + object.gid);
 		this._name = object.name;
 		this._pathName = object.properties.path;
@@ -199,19 +146,43 @@ Crafty.c("MovingPlatform", {
 			var path = Crafty(paths[i]);
 			if(path.name === this._pathName) {
 				this.path = path;
-				this.trigger("StartPlatform");
+				this._advance();
 				break;
 			}
 		}
 		if(!this.path) {
 			this.bind("PathCreated", function(path) {
 				if(path.name === this._pathName) {
-					this.path = path;
-					this.trigger("StartPlatform");
 					this.unbind("PathCreated");
+					this.path = path;
+					this._advance();
 				}
 			});
 		}
+	},
+	
+	/*
+	 * Move the platform along the next segment.
+	 */
+	_advance:
+	function() {
+		var path = this.path;
+		var pathVertices = path.vertices;
+		
+		// Get the two vertices of the path.
+		var pos1 = pathVertices[this._destVertIndex];
+		this._destVertIndex = (this._destVertIndex + 1) % pathVertices.length;
+		var pos2 = pathVertices[this._destVertIndex];
+		
+		var length = dist(sub([pos1.x, pos1.y], [pos2.x, pos2.y]));
+		var duration = length / (this._speed / Crafty.timer.FPS());
+		
+		// Start at the beginning vertex.
+		this.attr({ _phX: pos1.x + path.x, _phY: pos1.y + path.y })
+		// Move to the destination.
+		    .tween({ _phX: pos2.x + path.x, _phY: pos2.y + path.y }, duration)
+		// Advance again when done.
+			.timeout(this._advance, duration);
 	}
 });
 
