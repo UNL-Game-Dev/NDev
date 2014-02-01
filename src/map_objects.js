@@ -124,12 +124,10 @@ Crafty.c("MapSaveZone", {
 Crafty.c("MovingPlatform", {
 	init:
 	function() {
-		this.requires("2D, DOM, Tween, Collision, Tile, Physical, FakeInertia, DefaultPhysicsDraw")
-			.attr({
-				path: null,
-				_moving: false,
-				_destVertIndex: 1,
-				_speed: 5.0
+		this.requires("2D, DOM, Tween, Collision, Tile, Physical, FakeInertia,"
+			+ "DefaultPhysicsDraw")
+			.bind("PrePhysicsTick", function() {
+				//this.attr({ _phX: this._twX, _phY: this._twY });
 			});
 	},
 	
@@ -139,6 +137,7 @@ Crafty.c("MovingPlatform", {
 		this.requires("Tile" + object.gid);
 		this._name = object.name;
 		this._pathName = object.properties.path;
+		this._destVertIndex = 0;
 		
 		// See if path exists yet, or attach it when it exists.
 		var paths = Crafty("MapPath");
@@ -168,29 +167,48 @@ Crafty.c("MovingPlatform", {
 	function() {
 		var path = this.path;
 		var pathVertices = path.vertices;
+		var durations = path.segmentDurations;
 		
-		// Get the two vertices of the path.
+		// Get the duration of this segment, in milliseconds.
+		var time = durations[this._destVertIndex] * 1000;
+		
+		// Get the path's start and end vertices.
 		var pos1 = pathVertices[this._destVertIndex];
 		this._destVertIndex = (this._destVertIndex + 1) % pathVertices.length;
 		var pos2 = pathVertices[this._destVertIndex];
 		
-		var length = dist(sub([pos1.x, pos1.y], [pos2.x, pos2.y]));
-		var duration = length / (this._speed / Crafty.timer.FPS());
-		
 		// Start at the beginning vertex.
 		this.attr({ _phX: pos1.x + path.x, _phY: pos1.y + path.y })
 		// Move to the destination.
-		    .tween({ _phX: pos2.x + path.x, _phY: pos2.y + path.y }, duration)
+		    .tween({ _phX: pos2.x + path.x, _phY: pos2.y + path.y }, time)
 		// Advance again when done.
-			.timeout(this._advance, duration);
+			.timeout(this._advance, time);
 	}
 });
 
 /**
  * A path with a list of vertices.
- * Base usage: x,y, name, polyline
+ * Base usage: x,y, name, polyline OR polygon
+ *     If the path object is a polyline, the platform will animate back and
+ *         forth across the path.
+ *     If the path object is a polygon, the platform will animate cyclically
+ *         around the path.
+ * Properties:
+ *     time (optional)
+ *         Either a single number specifying the entire path's period in seconds
+ *             (uniform speed), or a list of numbers giving the duration of
+ *             movement along each path segment.
+ *         If not given, the platform will move with a uniform default speed
+ *             around the path.
+ *         If the path is a polyline, you can specify segment durations in one
+ *             direction, in which case the duration will be the same forwards and
+ *             backwards. Alternatively, you can specify different durations going
+ *             in each direction, going from beginning to end back to beginning.
+ *         
  */
 Crafty.c("MapPath", {
+	_defaultSpeed: 50.0,
+	
 	init:
 	function() {
 		this.requires("2D");
@@ -201,8 +219,74 @@ Crafty.c("MapPath", {
 		this.x = object.x;
 		this.y = object.y;
 		this.name = object.name;
-		this.vertices = object.polyline;
+		var vertices = object.polygon || this._unfoldList(object.polyline);
+		this.vertices = vertices;
+		this.pathType = object.polygon ? "polygon" : "polyline";
+		
+		// Set the duration of each segment.
+		var time, durations = [];
+		if(object.properties && object.properties.time != undefined) {
+			time = $.parseJSON(object.properties.time);
+		}
+		// Check whether a list of durations or a single duration was given.
+		if(typeof time == typeof []) {
+			// Set path segment durations to the list given.
+			durations = time;
+			
+			if(this.pathType === "polyline") {
+				// If durations are only given going in one direction,
+				// assign those durations in the opposite direction as well.
+				var numSegments = object.polyline.length - 1;
+				for(var i = 0; i < numSegments; i++) {
+					var j = numSegments * 2 - 1 - i;
+					durations[j] = durations[j] != undefined
+						? durations[j]
+						: durations[i];
+				}
+			}
+		} else {
+			// Calculate the duration of each segment.
+			// Use the segment lengths.
+			var totalLength = 0;
+			var segmentLengths = [];
+			for(var i in vertices) {
+				j = (Number(i) + 1) % vertices.length;
+				var vi = vertices[i], vj = vertices[j];
+				var length = dist(sub([vi.x, vi.y], [vj.x, vj.y]));
+				totalLength += length;
+				segmentLengths[i] = length;
+			}
+			if(typeof time == typeof 0) {
+				// Set duration of each segment based on the total time and
+				// segment lengths.
+				for(var i in segmentLengths) {
+					durations[i] = time * segmentLengths[i] / totalLength;
+				}
+			} else {
+				// Set duration of each segment based on the default speed.
+				for(var i in segmentLengths) {
+					durations[i] = segmentLengths[i] / this._defaultSpeed;
+				}
+			}
+		}
+		this.segmentDurations = durations;
 		Crafty.trigger("PathCreated", this);
+	},
+	
+	/*
+	 * Unfolds a list, i.e. returns a new list with elements appended in
+	 * reverse order such that the new list consists of elements in the order
+	 *     [ a[0], a[1], ..., a[N-2], a[N-1], a[N-2], ..., a[1] ].
+	 */
+	_unfoldList:
+	function(list) {
+		// Copy list
+		var result = list.slice();
+		var n = list.length;
+		for(var i = n - 2; i >= 1; i--) {
+			result.push(result[i]);
+		}
+		return result;
 	}
 });
 

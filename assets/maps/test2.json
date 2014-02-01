@@ -58,13 +58,57 @@
                         }],
                  "properties":
                     {
-
+                     "time":"[3,1,3,1,0.5]"
                     },
                  "type":"MapPath",
                  "visible":true,
                  "width":0,
                  "x":964,
                  "y":483
+                }, 
+                {
+                 "height":0,
+                 "name":"path2",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":58,
+                         "y":0
+                        }, 
+                        {
+                         "x":57,
+                         "y":-55
+                        }, 
+                        {
+                         "x":0,
+                         "y":-55
+                        }],
+                 "properties":
+                    {
+                     "time":"0.5"
+                    },
+                 "type":"MapPath",
+                 "visible":true,
+                 "width":0,
+                 "x":507,
+                 "y":65
+                }, 
+                {
+                 "gid":5,
+                 "height":0,
+                 "name":"lift2",
+                 "properties":
+                    {
+                     "path":"path2"
+                    },
+                 "type":"MovingPlatform",
+                 "visible":true,
+                 "width":0,
+                 "x":504,
+                 "y":99
                 }],
          "opacity":1,
          "properties":
