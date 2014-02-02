@@ -219,7 +219,13 @@ Crafty.c("MapPath", {
 		this.x = object.x;
 		this.y = object.y;
 		this.name = object.name;
-		var vertices = object.polygon || this._unfoldList(object.polyline);
+		// Get the cyclic polygon path if it exists, otherwise use the polyline
+		// path back-and-forth.
+		var vertices = object.polygon;
+		if(!vertices) {
+			vertices = object.polyline
+						.concat(object.polyline.slice(1, -1).reverse());
+		}
 		this.vertices = vertices;
 		this.pathType = object.polygon ? "polygon" : "polyline";
 		
@@ -271,22 +277,6 @@ Crafty.c("MapPath", {
 		}
 		this.segmentDurations = durations;
 		Crafty.trigger("PathCreated", this);
-	},
-	
-	/*
-	 * Unfolds a list, i.e. returns a new list with elements appended in
-	 * reverse order such that the new list consists of elements in the order
-	 *     [ a[0], a[1], ..., a[N-2], a[N-1], a[N-2], ..., a[1] ].
-	 */
-	_unfoldList:
-	function(list) {
-		// Copy list
-		var result = list.slice();
-		var n = list.length;
-		for(var i = n - 2; i >= 1; i--) {
-			result.push(result[i]);
-		}
-		return result;
 	}
 });
 
