@@ -79,6 +79,7 @@
     <property name="targetMap" value="test3"/>
    </properties>
   </object>
+  <object name="SaveHere!" type="MapSaveZone" x="508" y="119" width="37" height="42"/>
   <object name="lift1" type="MovingPlatform" gid="2" x="962" y="515">
    <properties>
     <property name="path" value="path1"/>
