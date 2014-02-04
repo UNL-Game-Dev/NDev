@@ -130,8 +130,9 @@ Crafty.c("MovingPlatform", {
 	
 	mapObjectInit:
 	function(object) {
-		this.setPhysPos(object.x, object.y);
+		// Give it the right tile sprite.
 		this.requires("Tile" + object.gid);
+		this.setPhysPos(object.x, object.y);
 		this._name = object.name;
 		this._pathName = object.properties.path;
 		this._destVertIndex = 0;
