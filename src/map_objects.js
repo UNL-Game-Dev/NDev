@@ -125,10 +125,7 @@ Crafty.c("MovingPlatform", {
 	init:
 	function() {
 		this.requires("2D, DOM, Tween, Collision, Tile, Physical, FakeInertia,"
-			+ "DefaultPhysicsDraw")
-			.bind("PrePhysicsTick", function() {
-				//this.attr({ _phX: this._twX, _phY: this._twY });
-			});
+			+ "DefaultPhysicsDraw");
 	},
 	
 	mapObjectInit:
