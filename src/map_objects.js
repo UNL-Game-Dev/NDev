@@ -221,8 +221,8 @@ Crafty.c("MapPath", {
 		// path back-and-forth.
 		var vertices = object.polygon;
 		if(!vertices) {
-			vertices = object.polyline
-						.concat(object.polyline.slice(1, -1).reverse());
+			var backVertices = object.polyline.slice(1, -1).reverse();
+			vertices = object.polyline.concat(backVertices);
 		}
 		this.vertices = vertices;
 		this.pathType = object.polygon ? "polygon" : "polyline";
