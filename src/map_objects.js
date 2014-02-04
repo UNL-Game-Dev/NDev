@@ -243,9 +243,9 @@ Crafty.c("MapPath", {
 				var numSegments = object.polyline.length - 1;
 				for(var i = 0; i < numSegments; i++) {
 					var j = numSegments * 2 - 1 - i;
-					durations[j] = durations[j] != undefined
-						? durations[j]
-						: durations[i];
+					if(durations[j] == undefined) {
+						durations[j] =  durations[i];
+					}
 				}
 			}
 		} else {
@@ -254,7 +254,7 @@ Crafty.c("MapPath", {
 			var totalLength = 0;
 			var segmentLengths = [];
 			for(var i in vertices) {
-				j = (Number(i) + 1) % vertices.length;
+				var j = (Number(i) + 1) % vertices.length;
 				var vi = vertices[i], vj = vertices[j];
 				var length = dist(sub([vi.x, vi.y], [vj.x, vj.y]));
 				totalLength += length;
