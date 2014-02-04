@@ -131,18 +131,21 @@ Crafty.c("TileConstraint", {
 				this.y = this._phY;
 				// Find the first hit, process that.
 				var hits = this.hit("Tile");
-				if(!hits)
-					break;
-				var hit = hits[0];
-				// Just resolve it lazily, yay verlet integration.
-				var norm = hit.normal;
-				norm.x *= -hit.overlap;
-				norm.y *= -hit.overlap;
-				this._phX += norm.x;
-				this._phY += norm.y;
-				// Maintain a "current normals" list in case other components
-				// (such as platforming physics) are interested.
-				this.currentNormals.push([norm.x, norm.y]);
+				if(hits) {
+					var hit = hits[0];
+					// Just resolve it lazily, yay verlet integration.
+					var norm = hit.normal;
+					var ob = hit.obj;
+					if(-norm.y >= Math.abs(norm.x)) {
+						norm.x *= -hit.overlap;
+						norm.y *= -hit.overlap;
+						this._phX += norm.x;
+						this._phY += norm.y;
+						// Maintain a "current normals" list in case other components
+						// (such as platforming physics) are interested.
+						this.currentNormals.push([norm.x, norm.y]);
+					}
+				}
 			}
 		});
 	}
