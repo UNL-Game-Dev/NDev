@@ -125,16 +125,14 @@ Crafty.c("MovingPlatform", {
 	init:
 	function() {
 		this.requires("2D, DOM, Tween, Collision, Tile, Physical, FakeInertia,"
-			+ "DefaultPhysicsDraw")
-			.bind("PrePhysicsTick", function() {
-				//this.attr({ _phX: this._twX, _phY: this._twY });
-			});
+			+ "DefaultPhysicsDraw");
 	},
 	
 	mapObjectInit:
 	function(object) {
-		this.setPhysPos(object.x, object.y);
+		// Give it the right tile sprite.
 		this.requires("Tile" + object.gid);
+		this.setPhysPos(object.x, object.y);
 		this._name = object.name;
 		this._pathName = object.properties.path;
 		this._destVertIndex = 0;
@@ -223,8 +221,8 @@ Crafty.c("MapPath", {
 		// path back-and-forth.
 		var vertices = object.polygon;
 		if(!vertices) {
-			vertices = object.polyline
-						.concat(object.polyline.slice(1, -1).reverse());
+			var backVertices = object.polyline.slice(1, -1).reverse();
+			vertices = object.polyline.concat(backVertices);
 		}
 		this.vertices = vertices;
 		this.pathType = object.polygon ? "polygon" : "polyline";
@@ -245,9 +243,9 @@ Crafty.c("MapPath", {
 				var numSegments = object.polyline.length - 1;
 				for(var i = 0; i < numSegments; i++) {
 					var j = numSegments * 2 - 1 - i;
-					durations[j] = durations[j] != undefined
-						? durations[j]
-						: durations[i];
+					if(durations[j] == undefined) {
+						durations[j] =  durations[i];
+					}
 				}
 			}
 		} else {
@@ -256,7 +254,7 @@ Crafty.c("MapPath", {
 			var totalLength = 0;
 			var segmentLengths = [];
 			for(var i in vertices) {
-				j = (Number(i) + 1) % vertices.length;
+				var j = (Number(i) + 1) % vertices.length;
 				var vi = vertices[i], vj = vertices[j];
 				var length = dist(sub([vi.x, vi.y], [vj.x, vj.y]));
 				totalLength += length;
