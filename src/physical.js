@@ -120,7 +120,6 @@ Crafty.c("TileConstraint", {
 		this.requires("Physical");
 		
 		this.currentNormals = [];
-		this._oneWay = false;
 
 		this.bind("ResolveConstraint", function() {
 			this.currentNormals = [];

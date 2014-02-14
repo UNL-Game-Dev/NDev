@@ -147,7 +147,7 @@ Crafty.c("TiledMap", {
 				var pts = properties.bounds
 					? $.parseJSON(properties.bounds)
 					: undefined;
-				var oneway = !!properties.oneway || false;
+				var oneway = !!properties.oneway;
 
 				// Store the bounds points and the tileset index of each tile.
 				this._tileInfo[gid] = {
