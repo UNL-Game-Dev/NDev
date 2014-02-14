@@ -124,40 +124,45 @@ Crafty.c("TileConstraint", {
 
 		this.bind("ResolveConstraint", function() {
 			this.currentNormals = [];
-			
-			// Loop through collisions and resolve each.
-			this.x = this._phX;
-			this.y = this._phY;
-			var hits = this.hit("Tile");
-			if(hits) {
-				var newDisplacement = [ 0, 0 ];
-				var oldDisplacement = this.getDisplacement();
-				for(var i in hits) {
-					var hit = hits[i];
+			/*
+			 * Try 20 times, since there could only possibly be 20 tiles next
+			 * to you at once, right?
+			 * This may remain, since Crafty doesn't provide a way to test
+			 * against a single entity. (And this collision lookup IS optimized
+			 * with a spatial map.)
+			 * Collisions can't simply be looped through, since when the player
+			 * overlaps two tiles, both emit a collision! This results in double
+			 * the force required being applied, making things bounce. No good.
+			 */
+			for(var i = 20; i >= 0; --i) {
+				this.x = this._phX;
+				this.y = this._phY;
+				// Find the first hit, process that.
+				var hits = this.hit("Tile");
+				if(!hits)
+					break;
+				var hit = hits[0];
+				var norm = scale([hit.normal.x, hit.normal.y], -hit.overlap);
+				var prevDisplacement = this.getDisplacement();
+				var ob = hit.obj;
+				// See if collision should be resolved.
+				if(!ob.oneway
+				|| this._checkOneWayCollision(norm, prevDisplacement)) {
 					// Just resolve it lazily, yay verlet integration.
-					var norm = scale([hit.normal.x, hit.normal.y], -hit.overlap);
-					var ob = hit.obj;
-					// See if the collision should be resolved.
-					if(!ob.oneway
-					|| this._checkOneWayCollision(norm, oldDisplacement)) {
-						// Add the component of the normal that is perpendicular to
-						// the current displacement.
-						newDisplacement = add_perp(newDisplacement, norm);
-						// Maintain a "current normals" list in case other components
-						// (such as platforming physics) are interested.
-						this.currentNormals.push(norm);
-					}
+					this._phX += norm[0];
+					this._phY += norm[1];
+					// Maintain a "current normals" list in case other components
+					// (such as platforming physics) are interested.
+					this.currentNormals.push(norm);
 				}
-				this._phX += newDisplacement[0];
-				this._phY += newDisplacement[1];
 			}
 		});
 	},
 	
 	_checkOneWayCollision:
-	function(norm, oldDisplacement) {
+	function(norm, prevDisplacement) {
 		return -norm[1] >= Math.abs(norm[0])
-			&& dot(norm, add(norm, oldDisplacement)) <= 1.0;
+			&& dot(norm, add(norm, prevDisplacement)) <= 1.0;
 	}
 });
 
@@ -271,18 +276,6 @@ function sub(v1, v2) {
 // Returns v * scalar
 function scale(v, scalar) {
 	return [v[0]*scalar, v[1]*scalar];
-}
-
-// Returns v1 + (component of v2 perpendicular to v1)
-function add_perp(v1, v2) {
-	var result;
-	if(dist(v1) > 0) {
-		result = sub(add(v1, v2),
-			scale(v1, dot(v1, v2) / (dist(v1) * dist(v2))));
-	} else {
-		result = v2;
-	}
-	return result;
 }
 
 // Returns angle of v w/r to x axis, in degrees
