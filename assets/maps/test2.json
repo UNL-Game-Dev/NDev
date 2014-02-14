@@ -31,6 +31,84 @@
                  "width":0,
                  "x":72,
                  "y":373
+                }, 
+                {
+                 "height":0,
+                 "name":"path1",
+                 "polyline":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":169,
+                         "y":0
+                        }, 
+                        {
+                         "x":169,
+                         "y":-61
+                        }, 
+                        {
+                         "x":46,
+                         "y":-43
+                        }, 
+                        {
+                         "x":25,
+                         "y":-111
+                        }],
+                 "properties":
+                    {
+                     "time":"[3,1,3,1,0.5]"
+                    },
+                 "type":"MapPath",
+                 "visible":true,
+                 "width":0,
+                 "x":964,
+                 "y":483
+                }, 
+                {
+                 "height":0,
+                 "name":"path2",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":58,
+                         "y":0
+                        }, 
+                        {
+                         "x":57,
+                         "y":-55
+                        }, 
+                        {
+                         "x":0,
+                         "y":-55
+                        }],
+                 "properties":
+                    {
+                     "time":"0.5"
+                    },
+                 "type":"MapPath",
+                 "visible":true,
+                 "width":0,
+                 "x":507,
+                 "y":65
+                }, 
+                {
+                 "gid":5,
+                 "height":0,
+                 "name":"lift2",
+                 "properties":
+                    {
+                     "path":"path2"
+                    },
+                 "type":"MovingPlatform",
+                 "visible":true,
+                 "width":0,
+                 "x":504,
+                 "y":99
                 }],
          "opacity":1,
          "properties":
@@ -112,34 +190,6 @@
                  "y":290
                 }, 
                 {
-                 "gid":2,
-                 "height":0,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":50,
-                 "y":272
-                }, 
-                {
-                 "gid":2,
-                 "height":0,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":84,
-                 "y":262
-                }, 
-                {
                  "height":42,
                  "name":"SaveHere!",
                  "properties":
@@ -151,6 +201,20 @@
                  "width":37,
                  "x":508,
                  "y":119
+                }, 
+                {
+                 "gid":2,
+                 "height":0,
+                 "name":"lift1",
+                 "properties":
+                    {
+                     "path":"path1"
+                    },
+                 "type":"MovingPlatform",
+                 "visible":true,
+                 "width":0,
+                 "x":962,
+                 "y":515
                 }],
          "opacity":1,
          "properties":

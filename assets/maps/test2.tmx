@@ -32,6 +32,23 @@
   </properties>
   <object gid="2" x="45" y="314"/>
   <object gid="2" x="72" y="373"/>
+  <object name="path1" type="MapPath" x="964" y="483">
+   <properties>
+    <property name="time" value="[3,1,3,1,0.5]"/>
+   </properties>
+   <polyline points="0,0 169,0 169,-61 46,-43 25,-111"/>
+  </object>
+  <object name="path2" type="MapPath" x="507" y="65">
+   <properties>
+    <property name="time" value="0.5"/>
+   </properties>
+   <polygon points="0,0 58,0 57,-55 0,-55"/>
+  </object>
+  <object name="lift2" type="MovingPlatform" gid="5" x="504" y="99">
+   <properties>
+    <property name="path" value="path2"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="bg2" width="100" height="100">
   <data encoding="base64" compression="zlib">
@@ -62,8 +79,11 @@
     <property name="targetMap" value="test3"/>
    </properties>
   </object>
-  <object gid="2" x="50" y="272"/>
-  <object gid="2" x="84" y="262"/>
   <object name="SaveHere!" type="MapSaveZone" x="508" y="119" width="37" height="42"/>
+  <object name="lift1" type="MovingPlatform" gid="2" x="962" y="515">
+   <properties>
+    <property name="path" value="path1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -71,8 +71,17 @@ Crafty.c("Physical", {
 		this._phY = y;
 		this._phPX = x;
 		this._phPY = y;
+	},
+	
+	getDX:
+	function() {
+		return this._phX - this._phPX;
+	},
+	
+	getDY:
+	function() {
+		return this._phY - this._phPY;
 	}
-
 });
 
 /**
@@ -86,6 +95,17 @@ Crafty.c("DefaultPhysicsDraw", {
 			this.x = (this._phPX);
 			this.y = (this._phPY);
 		});
+	}
+});
+
+/**
+ * General constraint for responding to physical events including tile collision
+ * and platform movement.
+ */
+Crafty.c("PhysicalConstraint", {
+	init:
+	function() {
+		this.requires("TileConstraint, PlatformConstraint");
 	}
 });
 
@@ -130,7 +150,28 @@ Crafty.c("TileConstraint", {
 			}
 		});
 	}
-})
+});
+
+/**
+ * Applies a platform constraint on the entity, such that the entity lying on
+ * the platform will move with it.
+ */
+Crafty.c("PlatformConstraint", {
+	init:
+	function() {
+		this.bind("ResolveConstraint", function() {
+			this.x = this._phX;
+			this.y = this._phY + 1;
+			var hits = this.hit("MovingPlatform");
+			if(hits) {
+				var hit = hits[0];
+				var platform = hit.obj;
+				this._phX += platform.getDX();
+				this._phY += platform.getDY();
+			}
+		});
+	}
+});
 
 /**
  * Apply a simple, constant acceleration downwards on the physical entity.
@@ -139,7 +180,7 @@ Crafty.c("PhysicsGravity", {
 	init:
 	function() {
 		this.bind("PrePhysicsTick", function() {
-				this._phAY += 280;
+			this._phAY += 280;
 		});
 	}
 });
@@ -158,6 +199,20 @@ Crafty.c("Inertia", {
 			this._phPY = this._phY;
 			this._phX += this._phX - px;
 			this._phY += this._phY - py;
+		});
+	}
+});
+
+/**
+ * "Fake" inertia that responds to movement of object but does not continue
+ * movement, such as a moving platform.
+ */
+Crafty.c("FakeInertia", {
+	init:
+	function() {
+		this.bind("EvaluateInertia", function() {
+			this._phPX = this._phX;
+			this._phPY = this._phY;
 		});
 	}
 });
@@ -188,6 +243,10 @@ function dist2(v) {
 	var x = v[0];
 	var y = v[1];
 	return x*x + y*y;
+}
+
+function dist(v) {
+	return Math.sqrt(dist2(v));
 }
 
 // Returns v1 + v2
