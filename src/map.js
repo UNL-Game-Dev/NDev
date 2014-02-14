@@ -98,7 +98,9 @@ Crafty.c("TiledMap", {
 				}
 				
 				// Set whether the entity is one-way collidable.
-				ent.oneway = tileInfo.oneway;
+				if(tileInfo.oneway) {
+					ent.addComponent("OneWay");
+				}
 			}
 		}
 	},

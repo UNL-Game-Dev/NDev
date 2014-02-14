@@ -145,7 +145,7 @@ Crafty.c("TileConstraint", {
 				var prevDisplacement = this.getDisplacement();
 				var ob = hit.obj;
 				// See if collision should be resolved.
-				if(!ob.oneway
+				if(!ob.has("OneWay")
 				|| this._checkOneWayCollision(norm, prevDisplacement)) {
 					// Just resolve it lazily, yay verlet integration.
 					this._phX += norm[0];
