@@ -77,6 +77,11 @@ Crafty.c("Physical", {
 	getDY:
 	function() {
 		return this._phY - this._phPY;
+	},
+	
+	getDisplacement:
+	function() {
+		return [this.getDX(), this.getDY()];
 	}
 });
 
@@ -112,6 +117,8 @@ Crafty.c("PhysicalConstraint", {
 Crafty.c("TileConstraint", {
 	init:
 	function() {
+		this.requires("Physical");
+		
 		this.currentNormals = [];
 
 		this.bind("ResolveConstraint", function() {
@@ -134,17 +141,27 @@ Crafty.c("TileConstraint", {
 				if(!hits)
 					break;
 				var hit = hits[0];
-				// Just resolve it lazily, yay verlet integration.
-				var norm = hit.normal;
-				norm.x *= -hit.overlap;
-				norm.y *= -hit.overlap;
-				this._phX += norm.x;
-				this._phY += norm.y;
-				// Maintain a "current normals" list in case other components
-				// (such as platforming physics) are interested.
-				this.currentNormals.push([norm.x, norm.y]);
+				var norm = scale([hit.normal.x, hit.normal.y], -hit.overlap);
+				var prevDisplacement = this.getDisplacement();
+				var ob = hit.obj;
+				// See if collision should be resolved.
+				if(!ob.has("OneWay")
+				|| this._checkOneWayCollision(norm, prevDisplacement)) {
+					// Just resolve it lazily, yay verlet integration.
+					this._phX += norm[0];
+					this._phY += norm[1];
+					// Maintain a "current normals" list in case other components
+					// (such as platforming physics) are interested.
+					this.currentNormals.push(norm);
+				}
 			}
 		});
+	},
+	
+	_checkOneWayCollision:
+	function(norm, prevDisplacement) {
+		return -norm[1] >= Math.abs(norm[0])
+			&& dot(norm, add(norm, prevDisplacement)) <= 1.0;
 	}
 });
 
@@ -260,3 +277,7 @@ function scale(v, scalar) {
 	return [v[0]*scalar, v[1]*scalar];
 }
 
+// Returns angle of v w/r to x axis, in degrees
+function angle(v) {
+	return Math.atan2(-v[1], v[0]) * 180 / Math.PI;
+}
