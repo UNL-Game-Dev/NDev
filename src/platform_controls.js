@@ -1,4 +1,3 @@
-
 /**
  * Component that controls a physical object in a platformer style. Uses arrow 
  * keys for movement at the moment.
@@ -34,7 +33,7 @@ Crafty.c("PlatformControls", {
 			
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
-			if(ev.keyCode === Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW) {
+			if(ev.keyCode === Crafty.keys.LEFT_ARROW || ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 				// Update direction based on which key was pressed.
 				if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
 					this.direction = "left";
