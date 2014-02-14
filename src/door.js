@@ -39,11 +39,17 @@ Crafty.c("Door", {
 
 				// Undo the fade to black.
 				$(overlay).fadeTo(600, 0.0);
+
+				// Enable physics.
+				Crafty("PhysicsTicker").enabled = true;
 			});
 		};
 
 		// Load the next map after the fade to black completes.
 		$(overlay).fadeTo(600, 1.0, goThrough);
+
+		// Disable physics until the other side.
+		Crafty("PhysicsTicker").enabled = false;
 	},
 });
 
