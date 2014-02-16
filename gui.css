@@ -1,17 +1,23 @@
+body
+{
+	font-family: Arial,sans-serif;
+	font-size: 16px;
+}
+
 .dialog
 {
-	background-color: #FFF;
-	opacity: 0.5;
+	background-color: rgba(0, 0, 0, 0.6);
 	border: 2px solid #000;
-	position: absolute;
-
+	margin: 0px auto;
+	padding: 5px;
+	color: #fff;
 }
 
 .save-screen
 {
 	width: 300px;
 	height: 150px;
-	padding: auto 0px;
+	margin-top: 200px;
 }
 
 .screen-overlay
@@ -19,4 +25,16 @@
 	position: absolute;
 	width: 800px;
 	height: 600px;
+}
+
+h2
+{
+	text-align: center;
+	margin: 0px;
+}
+
+.save-screen .selected
+{
+	background-color: #FFF;
+	color: #000;
 }
