@@ -1,4 +1,3 @@
-
 /**
  * Component that controls a physical object in a platformer style. Uses arrow 
  * keys for movement at the moment.
@@ -43,6 +42,22 @@ Crafty.c("PlatformControls", {
 				}
 				
 				this.trigger("Walk");
+			}
+			if(ev.keyCode == Crafty.keys.SPACE) {
+				var bullet = Crafty.e("Projectile");
+				bullet.setPhysPos(this.x, this.y);
+				if(this.direction == "left") {
+					bullet._phX = bullet._phPX - 10;
+				} else {
+					bullet._phX = bullet._phPX + 10;
+				}
+				if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
+					bullet._phX = bullet._phPX;
+					bullet._phY = bullet._phPY - 10;
+				} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+					bullet._phX = bullet._phPX;
+					bullet._phY = bullet._phPY + 10;
+				}
 			}
 		});
 		this.bind("KeyUp", function(ev) {
