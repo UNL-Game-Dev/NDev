@@ -7,13 +7,17 @@
  */
 Crafty.c("PhysicsTicker", {
 
+	enabled: true,
+
 	init:
 	function() {
 		this.bind("EnterFrame", function() {
-			Crafty.trigger("PrePhysicsTick");
-			Crafty.trigger("EvaluateAccel");
-			Crafty.trigger("ResolveConstraint");
-			Crafty.trigger("EvaluateInertia");
+			if(this.enabled) {
+				Crafty.trigger("PrePhysicsTick");
+				Crafty.trigger("EvaluateAccel");
+				Crafty.trigger("ResolveConstraint");
+				Crafty.trigger("EvaluateInertia");
+			}
 			Crafty.trigger("UpdateDraw");
 			Crafty.trigger("UpdateViewport");
 		});
