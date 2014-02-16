@@ -278,3 +278,25 @@ Crafty.c("MapPath", {
 	}
 });
 
+/**
+ * Obstacle that moves horizontally until it hits a wall, then switches direction.
+ */
+Crafty.c("PingPongObstacle", {
+	_defaultSpeed: 50.0,
+	init:
+	function() {
+		this.speed = this._defaultSpeed;
+	},
+	
+	mapObjectInit:
+	function(object) {
+		var properties = object.properties;
+		if(properties.speed != undefined) {
+			this.speed = propertes.speed;
+		}
+		this.bind("PrePhysicsTick", function() {
+			this.
+		});
+	}
+});
+
