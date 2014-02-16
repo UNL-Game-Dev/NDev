@@ -1,4 +1,4 @@
-{ "height":32,
+{ "height":100,
  "layers":[
         {
          "height":100,
@@ -215,6 +215,20 @@
                  "width":0,
                  "x":962,
                  "y":515
+                }, 
+                {
+                 "gid":9,
+                 "height":0,
+                 "name":"DeadlySpikes",
+                 "properties":
+                    {
+
+                    },
+                 "type":"PingPongObstacle",
+                 "visible":true,
+                 "width":0,
+                 "x":387,
+                 "y":319
                 }],
          "opacity":1,
          "properties":
@@ -267,7 +281,7 @@
                 }
             },
          "tilewidth":32
-        },
+        }, 
         {
          "firstgid":17,
          "image":"ark.png",
@@ -304,5 +318,5 @@
         }],
  "tilewidth":32,
  "version":1,
- "width":32
+ "width":100
 }

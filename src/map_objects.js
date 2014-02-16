@@ -32,7 +32,7 @@ Crafty.c("DefaultMapObject", {
 			this.gid = object.gid;
 			this._sprite = "Tile" + object.gid;
 			this
-				.requires("DOM")
+				.requires("Canvas")
 				.requires(this._sprite);
 			// Shift upwards to correctly display image, since origin is
 			// bottom-left in Tiled but top-left in Crafty.
@@ -124,7 +124,7 @@ Crafty.c("MapSaveZone", {
 Crafty.c("MovingPlatform", {
 	init:
 	function() {
-		this.requires("2D, DOM, Tween, Collision, Tile, Physical, FakeInertia,"
+		this.requires("2D, Canvas, Tween, Collision, Tile, Physical, FakeInertia,"
 			+ "DefaultPhysicsDraw");
 	},
 	
@@ -280,23 +280,29 @@ Crafty.c("MapPath", {
 
 /**
  * Obstacle that moves horizontally until it hits a wall, then switches direction.
+ * Base usage: x,y
+ * Properties: speed, direction
  */
 Crafty.c("PingPongObstacle", {
-	_defaultSpeed: 50.0,
 	init:
 	function() {
-		this.speed = this._defaultSpeed;
+		this.requires("PingPong");
 	},
 	
 	mapObjectInit:
 	function(object) {
+		this.setPhysPos(object.x, object.y);
 		var properties = object.properties;
+		if(object.gid != undefined) {
+			this.addComponent("Canvas");
+			this.addComponent("Tile" + object.gid);
+		}
 		if(properties.speed != undefined) {
 			this.speed = propertes.speed;
 		}
-		this.bind("PrePhysicsTick", function() {
-			this.
-		});
+		if(properties.direction != undefined) {
+			this.direction(properties.direction);
+		}
 	}
 });
 

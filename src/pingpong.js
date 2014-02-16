@@ -6,16 +6,20 @@ Crafty.c("PingPong", {
 	
 	init:
 	function() {
-		this.requires("2D, Collision, Physical, FakeInertia, DefaultPhysicsDraw");
+		this.requires("2D, Collision, Physical, FakeInertia, DefaultPhysicsDraw")
 		.attr({
 			speed: this._defaultSpeed,
-			_dir: [ 1, 0 ]
+			_dir: [1, 0]
 		})
 		.bind("PrePhysicsTick", function() {
-			var fps = Crafty.timer.FPS();
-			this._phX += this.speed / fps;
+			//var fps = Crafty.timer.FPS();
+			//this._phX += this._dir[0] * this.speed / fps;
+			//this._phY += this._dir[1] * this.speed / fps;
 		});
-	}
+	},
 	
-	direction
+	direction:
+	function(angle) {
+		this._dir = [Math.cos(angle*pi/180), Math.sin(angle*pi/180)];
+	}
 });

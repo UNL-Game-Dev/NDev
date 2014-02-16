@@ -105,5 +105,6 @@
     <property name="path" value="path1"/>
    </properties>
   </object>
+  <object name="DeadlySpikes" type="PingPongObstacle" gid="9" x="387" y="319"/>
  </objectgroup>
 </map>
