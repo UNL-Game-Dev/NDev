@@ -32,6 +32,19 @@
                  "width":24,
                  "x":138,
                  "y":110
+                }, 
+                {
+                 "height":101,
+                 "name":"SaveZone",
+                 "properties":
+                    {
+
+                    },
+                 "type":"MapSaveZone",
+                 "visible":true,
+                 "width":95,
+                 "x":222,
+                 "y":73
                 }],
          "opacity":1,
          "type":"objectgroup",
