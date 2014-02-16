@@ -63,7 +63,6 @@ Crafty.c("PlayerSpawn", {
 		this.bind("SpawnPlayer", function() {
 			var player = Crafty.e("Player");
 			player.setPhysPos(this.x, this.y);
-			Crafty.viewport.follow(player);
 		});
 	}
 });

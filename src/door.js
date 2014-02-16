@@ -28,7 +28,6 @@ Crafty.c("Door", {
 					this.setCollidingLast(true);
 				}
 			});
-			Crafty.viewport.follow(player);
 		});
 	},
 });
