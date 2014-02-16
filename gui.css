@@ -1,0 +1,22 @@
+.dialog
+{
+	background-color: #FFF;
+	opacity: 0.5;
+	border: 2px solid #000;
+	position: absolute;
+
+}
+
+.save-screen
+{
+	width: 300px;
+	height: 150px;
+	padding: auto 0px;
+}
+
+.screen-overlay
+{
+	position: absolute;
+	width: 800px;
+	height: 600px;
+}
