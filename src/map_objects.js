@@ -268,7 +268,7 @@ Crafty.c("MapPath", {
 
 /**
  * Obstacle that moves horizontally until it hits a wall, then switches direction.
- * Base usage: x,y, w,h
+ * Base usage: x,y
  * Properties: speed, direction
  */
 Crafty.c("PingPongObstacle", {
@@ -288,6 +288,7 @@ Crafty.c("PingPongObstacle", {
 		if(properties.direction != undefined) {
 			this.direction(properties.direction);
 		}
+		this.bind("");
 	}
 });
 

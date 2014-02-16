@@ -17,6 +17,15 @@ Crafty.c("TileImage", {
 				.requires("Canvas")
 				.requires(this._sprite);
 		}
+		// When moving object, correct for the fact that Tiled has origin at the
+		// bottom-left while Crafty has origin at the top-left.
+		this.unbind("UpdateDraw");
+		this.bind("UpdateDraw", function() {
+			if(this.has("Physical")) {
+				this.x = Math.round(this._phPX);
+				this.y = Math.round(this._phPY) - this.h;
+			}
+		});
 		return this;
 	}
 });
