@@ -274,7 +274,7 @@ Crafty.c("MapPath", {
 Crafty.c("PingPongHazard", {
 	init:
 	function() {
-		this.requires("PingPong, TileImage, Hazard");
+		this.requires("PingPong, TileImage, Hazard, Tile");
 	},
 	
 	mapObjectInit:

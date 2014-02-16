@@ -224,7 +224,7 @@
                     {
 
                     },
-                 "type":"PingPongObstacle",
+                 "type":"PingPongHazard",
                  "visible":true,
                  "width":0,
                  "x":387,
