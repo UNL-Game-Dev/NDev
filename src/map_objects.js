@@ -267,14 +267,14 @@ Crafty.c("MapPath", {
 });
 
 /**
- * Obstacle that moves horizontally until it hits a wall, then switches direction.
+ * Hazardous object that moves horizontally until it hits a wall, then switches direction.
  * Base usage: x,y
  * Properties: speed, direction
  */
-Crafty.c("PingPongObstacle", {
+Crafty.c("PingPongHazard", {
 	init:
 	function() {
-		this.requires("PingPong, TileImage");
+		this.requires("PingPong, TileImage, Hazard");
 	},
 	
 	mapObjectInit:
@@ -288,7 +288,6 @@ Crafty.c("PingPongObstacle", {
 		if(properties.direction != undefined) {
 			this.direction(properties.direction);
 		}
-		this.bind("");
 	}
 });
 
