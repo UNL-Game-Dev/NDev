@@ -15,6 +15,7 @@ Crafty.c("PhysicsTicker", {
 			Crafty.trigger("ResolveConstraint");
 			Crafty.trigger("EvaluateInertia");
 			Crafty.trigger("UpdateDraw");
+			Crafty.trigger("UpdateViewport");
 		});
 	}
 
@@ -93,8 +94,8 @@ Crafty.c("DefaultPhysicsDraw", {
 	init:
 	function() {
 		this.bind("UpdateDraw", function() {
-			this.x = (this._phPX);
-			this.y = (this._phPY);
+			this.x = Math.round(this._phPX);
+			this.y = Math.round(this._phPY);
 		});
 	}
 });

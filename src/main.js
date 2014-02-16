@@ -3,7 +3,11 @@
  * Main entry point to game. Called in html.
  */
 Crafty.scene("testMap", function() {
-	var map = Crafty.e("2D, DOM, TiledMap, Persistent")
+
+	// Use pixel art mode so canvas doesn't show fractional seams.
+	Crafty.pixelart(true);
+
+	var map = Crafty.e("2D, Canvas, TiledMap, Persistent")
 		// Temporary level loading using 1, 2, 3, etc.
 		.bind('KeyDown', function(e) {
 			if(e.key == Crafty.keys["1"]) {
@@ -15,7 +19,7 @@ Crafty.scene("testMap", function() {
 			}
 		});
 
-	var bg = Crafty.e("2D, DOM, Image, Parallax, Persistent")
+	var bg = Crafty.e("2D, Canvas, Image, Parallax, Persistent")
 		.image("http://www.mlahanas.de/Greeks/images/Parallax.jpg")
 		.scrollFactor(0.2);
 	bg.z = -100;
@@ -46,7 +50,6 @@ Crafty.scene("testMap", function() {
 		map.loadMap(savedLocation.map, function() {
 			var restoredPlayer = Crafty.e("Player");
 			restoredPlayer.setPhysPos(savedLocation.x, savedLocation.y);
-			Crafty.viewport.follow(restoredPlayer);
 		});
 	}
 });
