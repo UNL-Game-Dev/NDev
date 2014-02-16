@@ -3,6 +3,10 @@
  * Main entry point to game. Called in html.
  */
 Crafty.scene("testMap", function() {
+
+	// Use pixel art mode so canvas doesn't show fractional seams.
+	Crafty.pixelart(true);
+
 	var map = Crafty.e("2D, Canvas, TiledMap, Persistent")
 		// Temporary level loading using 1, 2, 3, etc.
 		.bind('KeyDown', function(e) {
@@ -46,7 +50,6 @@ Crafty.scene("testMap", function() {
 		map.loadMap(savedLocation.map, function() {
 			var restoredPlayer = Crafty.e("Player");
 			restoredPlayer.setPhysPos(savedLocation.x, savedLocation.y);
-			Crafty.viewport.follow(restoredPlayer);
 		});
 	}
 });

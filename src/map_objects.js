@@ -20,25 +20,14 @@
 Crafty.c("DefaultMapObject", {
 	init:
 	function() {
-		this.requires("2D");
+		this.requires("TileImage");
 	},
 	
 	mapObjectInit:
 	function(object) {
+		this.tile(object.gid);
 		this.x = object.x;
-		this.y = object.y;
-		// If the object has a gid property, then display its image
-		if(object.gid) {
-			this.gid = object.gid;
-			this._sprite = "Tile" + object.gid;
-			this
-				.requires("Canvas")
-				.requires(this._sprite);
-			// Shift upwards to correctly display image, since origin is
-			// bottom-left in Tiled but top-left in Crafty.
-			this.x = object.x;
-			this.y = object.y - this.h;
-		}
+		this.y = object.y - this.h;
 	}
 });
 
@@ -63,7 +52,6 @@ Crafty.c("PlayerSpawn", {
 		this.bind("SpawnPlayer", function() {
 			var player = Crafty.e("Player");
 			player.setPhysPos(this.x, this.y);
-			Crafty.viewport.follow(player);
 		});
 	}
 });
@@ -280,23 +268,20 @@ Crafty.c("MapPath", {
 
 /**
  * Obstacle that moves horizontally until it hits a wall, then switches direction.
- * Base usage: x,y
+ * Base usage: x,y, w,h
  * Properties: speed, direction
  */
 Crafty.c("PingPongObstacle", {
 	init:
 	function() {
-		this.requires("PingPong");
+		this.requires("PingPong, TileImage");
 	},
 	
 	mapObjectInit:
 	function(object) {
 		this.setPhysPos(object.x, object.y);
 		var properties = object.properties;
-		if(object.gid != undefined) {
-			this.addComponent("Canvas");
-			this.addComponent("Tile" + object.gid);
-		}
+		this.tile(object.gid);
 		if(properties.speed != undefined) {
 			this.speed = propertes.speed;
 		}

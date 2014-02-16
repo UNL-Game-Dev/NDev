@@ -12,9 +12,9 @@ Crafty.c("PingPong", {
 			_dir: [1, 0]
 		})
 		.bind("PrePhysicsTick", function() {
-			//var fps = Crafty.timer.FPS();
-			//this._phX += this._dir[0] * this.speed / fps;
-			//this._phY += this._dir[1] * this.speed / fps;
+			var fps = Crafty.timer.FPS();
+			this._phX += this._dir[0] * this.speed / fps;
+			this._phY += this._dir[1] * this.speed / fps;
 		});
 	},
 	
