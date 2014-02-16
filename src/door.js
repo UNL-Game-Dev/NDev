@@ -37,10 +37,11 @@ Crafty.c("Door", {
 				});
 
 				// Undo the fade to black.
-				$(overlay).fadeTo(600, 0.0);
+				$(overlay).fadeTo(600, 0.0, function() {
+					// Enable physics.
+					Crafty("PhysicsTicker").enabled = true;
+				});
 
-				// Enable physics.
-				Crafty("PhysicsTicker").enabled = true;
 			});
 		};
 

@@ -17,9 +17,9 @@ Crafty.c("PhysicsTicker", {
 				Crafty.trigger("EvaluateAccel");
 				Crafty.trigger("ResolveConstraint");
 				Crafty.trigger("EvaluateInertia");
-				Crafty.trigger("UpdateDraw");
-				Crafty.trigger("UpdateViewport");
 			}
+			Crafty.trigger("UpdateDraw");
+			Crafty.trigger("UpdateViewport");
 		});
 	}
 
