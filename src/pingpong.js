@@ -9,12 +9,20 @@ Crafty.c("PingPong", {
 		this.requires("2D, Collision, Physical, FakeInertia, DefaultPhysicsDraw")
 		.attr({
 			speed: this._defaultSpeed,
-			_dir: [1, 0]
+			_dir: [1, 0],
+			_reversed: false
 		})
 		.bind("PrePhysicsTick", function() {
 			var fps = Crafty.timer.FPS();
-			this._phX += this._dir[0] * this.speed / fps;
-			this._phY += this._dir[1] * this.speed / fps;
+			
+			// Reverse when hitting a wall.
+			if(this.hit("Tile")) {
+				this._reversed = !this._reversed;
+			}
+			
+			var backForth = this._reversed ? -1 : 1;
+			this._phX += backForth * this._dir[0] * this.speed / fps;
+			this._phY += backForth * this._dir[1] * this.speed / fps;
 		});
 	},
 	
