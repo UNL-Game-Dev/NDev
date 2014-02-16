@@ -35,7 +35,6 @@ Crafty.c("Door", {
 						this.setCollidingLast(true);
 					}
 				});
-				Crafty.viewport.follow(player);
 
 				// Undo the fade to black.
 				$(overlay).fadeTo(600, 0.0);

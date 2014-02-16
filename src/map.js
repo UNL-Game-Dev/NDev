@@ -26,7 +26,6 @@ Crafty.c("TiledMap", {
 			}
 			--i;
 		}
-
 		$.getJSON("assets/maps/"+mapName+".json", function(json) {
 			// Modify the tile image paths to match existing paths.
 			for(var i = 0; i < json.tilesets.length; i++) {
@@ -80,20 +79,28 @@ Crafty.c("TiledMap", {
 			ent.addComponent("Tile");
 			
 			var gid = ent.gid;
-			var info = this._tileInfo[gid];
-			if(info) {
-				var tilesetInfo = this._tilesetInfo[info.tileseti];
-				var bounds = info.pts;
+			var tileInfo = this._tileInfo[gid];
+			if(tileInfo) {
+				var tilesetInfo = this._tilesetInfo[tileInfo.tileseti];
+				var bounds = tileInfo.pts;
 				
-				var boundsdup = [];
-				for(var j = 0; j < bounds.length; ++j) {
-					boundsdup[j] = [
-						bounds[j][0] * tilesetInfo.width,
-						bounds[j][1] * tilesetInfo.height
-					];
+				// Make entity collidable with custom bounds.
+				if(bounds) {
+					var boundsdup = [];
+					for(var j = 0; j < bounds.length; ++j) {
+						boundsdup[j] = [
+							bounds[j][0] * tilesetInfo.width,
+							bounds[j][1] * tilesetInfo.height
+						];
+					}
+					var poly = new Crafty.polygon(boundsdup);
+					ent.collision(poly);
 				}
-				var poly = new Crafty.polygon(boundsdup);
-				ent.collision(poly);
+				
+				// Set whether the entity is one-way collidable.
+				if(tileInfo.oneway) {
+					ent.addComponent("OneWay");
+				}
 			}
 		}
 	},
@@ -138,12 +145,17 @@ Crafty.c("TiledMap", {
 
 			for(var tilei in tileset.tileproperties) {
 				var gid = parseInt(tilei) + parseInt(tileset.firstgid);
-				var pts = $.parseJSON(tileset.tileproperties[tilei].bounds);
+				var properties = tileset.tileproperties[tilei];
+				var pts = properties.bounds
+					? $.parseJSON(properties.bounds)
+					: undefined;
+				var oneway = !!properties.oneway;
 
 				// Store the bounds points and the tileset index of each tile.
 				this._tileInfo[gid] = {
-					"pts": pts,
-					"tileseti": tileseti
+					oneway: oneway,
+					pts: pts,
+					tileseti: tileseti
 				};
 			}
 		}
