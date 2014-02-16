@@ -94,8 +94,8 @@ Crafty.c("DefaultPhysicsDraw", {
 	init:
 	function() {
 		this.bind("UpdateDraw", function() {
-			this.x = Math.floor(this._phPX);
-			this.y = Math.floor(this._phPY);
+			this.x = Math.round(this._phPX);
+			this.y = Math.round(this._phPY);
 		});
 	}
 });
