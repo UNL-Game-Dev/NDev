@@ -1,4 +1,3 @@
-
 /**
  * Component that controls a physical object in a platformer style. Uses arrow 
  * keys for movement at the moment.
@@ -34,7 +33,7 @@ Crafty.c("PlatformControls", {
 			
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
-			if(ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW) {
+			if(ev.keyCode === Crafty.keys.LEFT_ARROW || ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 				// Update direction based on which key was pressed.
 				if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
 					this.direction = "left";
@@ -46,7 +45,7 @@ Crafty.c("PlatformControls", {
 			}
 		});
 		this.bind("KeyUp", function(ev) {
-			if(ev.keyCode == Crafty.keys.LEFT_ARROW || ev.keyCode == Crafty.keys.RIGHT_ARROW) {
+			if(ev.keyCode === Crafty.keys.LEFT_ARROW || ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
 					this.direction = "left";
 					this.trigger("Walk");
@@ -136,10 +135,7 @@ Crafty.c("PlatformControls", {
 				}
 			} else if(desvx == 0.0) {
 				// Player might want to stop.
-				// Stop on the ground, but not in the air.
-				if(this.grounded) {
-					this._vx = approach(this._vx, desvx, this.slowToStopDV);
-				}
+				this._vx = approach(this._vx, desvx, this.slowToStopDV);
 			} else {
 				// The player is trying to turn around.
 				// This is like "braking" in preparation to accelerate the other
@@ -162,6 +158,12 @@ Crafty.c("PlatformControls", {
 		}).bind("EvaluateInertia", function() {
 			if(this.grounded) {
 				// If on the ground, use simple weird physics!
+
+				// If player was just about stopped horizontally, reset _vx.
+				if(approx(this._phPX, this._phX, 0.01)) {
+					this._vx = 0;
+				}
+
 				this._phPX = this._phX;
 				this._phPY = this._phY;
 				this._phX = this._phX;
@@ -170,6 +172,12 @@ Crafty.c("PlatformControls", {
 				this._phY += 0.01;
 				
 			} else {
+				// If player was just about stopped vertically, stop jump
+				// prematurely if there was a jump in progress.
+				if(approx(this._phPY, this._phY, 0.1)) {
+					this._forceRemaining = 0.0;
+				}
+
 				// If in the air, use normal inertial physics.
 				var px = this._phPX;
 				var py = this._phPY;
@@ -229,6 +237,10 @@ Crafty.c("PlatformControls", {
 		}
 	}
 });
+
+function approx(a, b, maxErr) {
+	return Math.abs(a - b) <= maxErr;
+}
 
 /**
  * Returns a number that's closer to desired, constrained by:

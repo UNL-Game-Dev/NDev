@@ -13,7 +13,7 @@ Crafty.c("Player", {
 			.requires("player")
 			.requires("Collision")
 			.requires("Physical")
-			.requires("TileConstraint")
+			.requires("PhysicalConstraint")
 			.requires("PlatformControls")
 			.requires("DefaultPhysicsDraw")
 		// Define animations

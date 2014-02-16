@@ -67,8 +67,22 @@ Crafty.c("Physical", {
 		this._phY = y;
 		this._phPX = x;
 		this._phPY = y;
+	},
+	
+	getDX:
+	function() {
+		return this._phX - this._phPX;
+	},
+	
+	getDY:
+	function() {
+		return this._phY - this._phPY;
+	},
+	
+	getDisplacement:
+	function() {
+		return [this.getDX(), this.getDY()];
 	}
-
 });
 
 /**
@@ -86,12 +100,25 @@ Crafty.c("DefaultPhysicsDraw", {
 });
 
 /**
+ * General constraint for responding to physical events including tile collision
+ * and platform movement.
+ */
+Crafty.c("PhysicalConstraint", {
+	init:
+	function() {
+		this.requires("TileConstraint, PlatformConstraint");
+	}
+});
+
+/**
  * Applies a simple tile constraint on the attached physical entity, forcing it
  * to remain outside of tiles.
  */
 Crafty.c("TileConstraint", {
 	init:
 	function() {
+		this.requires("Physical");
+		
 		this.currentNormals = [];
 
 		this.bind("ResolveConstraint", function() {
@@ -114,19 +141,50 @@ Crafty.c("TileConstraint", {
 				if(!hits)
 					break;
 				var hit = hits[0];
-				// Just resolve it lazily, yay verlet integration.
-				var norm = hit.normal;
-				norm.x *= -hit.overlap;
-				norm.y *= -hit.overlap;
-				this._phX += norm.x;
-				this._phY += norm.y;
-				// Maintain a "current normals" list in case other components
-				// (such as platforming physics) are interested.
-				this.currentNormals.push([norm.x, norm.y]);
+				var norm = scale([hit.normal.x, hit.normal.y], -hit.overlap);
+				var prevDisplacement = this.getDisplacement();
+				var ob = hit.obj;
+				// See if collision should be resolved.
+				if(!ob.has("OneWay")
+				|| this._checkOneWayCollision(norm, prevDisplacement)) {
+					// Just resolve it lazily, yay verlet integration.
+					this._phX += norm[0];
+					this._phY += norm[1];
+					// Maintain a "current normals" list in case other components
+					// (such as platforming physics) are interested.
+					this.currentNormals.push(norm);
+				}
+			}
+		});
+	},
+	
+	_checkOneWayCollision:
+	function(norm, prevDisplacement) {
+		return -norm[1] >= Math.abs(norm[0])
+			&& dot(norm, add(norm, prevDisplacement)) <= 1.0;
+	}
+});
+
+/**
+ * Applies a platform constraint on the entity, such that the entity lying on
+ * the platform will move with it.
+ */
+Crafty.c("PlatformConstraint", {
+	init:
+	function() {
+		this.bind("ResolveConstraint", function() {
+			this.x = this._phX;
+			this.y = this._phY + 1;
+			var hits = this.hit("MovingPlatform");
+			if(hits) {
+				var hit = hits[0];
+				var platform = hit.obj;
+				this._phX += platform.getDX();
+				this._phY += platform.getDY();
 			}
 		});
 	}
-})
+});
 
 /**
  * Apply a simple, constant acceleration downwards on the physical entity.
@@ -135,7 +193,7 @@ Crafty.c("PhysicsGravity", {
 	init:
 	function() {
 		this.bind("PrePhysicsTick", function() {
-				this._phAY += 280;
+			this._phAY += 280;
 		});
 	}
 });
@@ -154,6 +212,20 @@ Crafty.c("Inertia", {
 			this._phPY = this._phY;
 			this._phX += this._phX - px;
 			this._phY += this._phY - py;
+		});
+	}
+});
+
+/**
+ * "Fake" inertia that responds to movement of object but does not continue
+ * movement, such as a moving platform.
+ */
+Crafty.c("FakeInertia", {
+	init:
+	function() {
+		this.bind("EvaluateInertia", function() {
+			this._phPX = this._phX;
+			this._phPY = this._phY;
 		});
 	}
 });
@@ -186,6 +258,10 @@ function dist2(v) {
 	return x*x + y*y;
 }
 
+function dist(v) {
+	return Math.sqrt(dist2(v));
+}
+
 // Returns v1 + v2
 function add(v1, v2) {
 	return [v1[0] + v2[0], v1[1] + v2[1]];
@@ -201,3 +277,7 @@ function scale(v, scalar) {
 	return [v[0]*scalar, v[1]*scalar];
 }
 
+// Returns angle of v w/r to x axis, in degrees
+function angle(v) {
+	return Math.atan2(-v[1], v[0]) * 180 / Math.PI;
+}
