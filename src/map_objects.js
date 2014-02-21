@@ -274,14 +274,16 @@ Crafty.c("MapPath", {
 Crafty.c("PingPongHazard", {
 	init:
 	function() {
-		this.requires("PingPong, TileImage, Hazard, Tile");
+		this.requires("PingPong, 2D, Canvas, Hazard, Tile");
 	},
 	
 	mapObjectInit:
 	function(object) {
-		this.setPhysPos(object.x, object.y);
+		if(object.gid) {
+			this.addComponent("Tile" + object.gid);
+		}
+		this.setPhysPos(object.x, object.y - this.h);
 		var properties = object.properties;
-		this.tile(object.gid);
 		if(properties.speed != undefined) {
 			this.speed = propertes.speed;
 		}

@@ -19,7 +19,7 @@ Crafty.c("PingPong", {
 			if(this.hit("Tile")) {
 				this._reversed = !this._reversed;
 			}
-			
+						
 			var backForth = this._reversed ? -1 : 1;
 			this._phX += backForth * this._dir[0] * this.speed / fps;
 			this._phY += backForth * this._dir[1] * this.speed / fps;
@@ -28,6 +28,6 @@ Crafty.c("PingPong", {
 	
 	direction:
 	function(angle) {
-		this._dir = [Math.cos(angle*Math.pi/180), Math.sin(angle*Math.pi/180)];
+		this._dir = [Math.cos(angle*Math.PI/180), -Math.sin(angle*Math.PI/180)];
 	}
 });
