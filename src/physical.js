@@ -103,8 +103,14 @@ Crafty.c("DefaultPhysicsDraw", {
 			this.y = this._phPY;
 		});
 		this.bind("UpdateDraw", function() {
-			this.x = Math.round(this._phPX);
-			this.y = Math.round(this._phPY);
+			if(this._override) {
+				this._override = false;
+				this.x = Math.round(this._overrideX);
+				this.y = Math.round(this._overrideY);
+			} else {
+				this.x = Math.round(this._phPX);
+				this.y = Math.round(this._phPY);
+			}
 		});
 	}
 });
@@ -193,6 +199,10 @@ Crafty.c("PlatformConstraint", {
 				var platform = hit.obj;
 				this._phX += platform.getDX();
 				this._phY += platform.getDY();
+				
+				this._override = true;
+				this._overrideX = platform._phX + Math.round(this._phX - platform._phX);
+				this._overrideY = platform._phY + Math.round(this._phY - platform._phY);
 			}
 		});
 	}
