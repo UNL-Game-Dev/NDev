@@ -222,7 +222,7 @@
                  "name":"DeadlySpikes",
                  "properties":
                     {
-
+                     "direction":"45"
                     },
                  "type":"PingPongHazard",
                  "visible":true,

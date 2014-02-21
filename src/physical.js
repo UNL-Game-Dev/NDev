@@ -13,9 +13,9 @@ Crafty.c("PhysicsTicker", {
 	function() {
 		this.bind("EnterFrame", function() {
 			if(this.enabled) {
-				Crafty.trigger("UpdateCollisions");
 				Crafty.trigger("PrePhysicsTick");
 				Crafty.trigger("EvaluateAccel");
+				Crafty.trigger("UpdateCollisions");
 				Crafty.trigger("ResolveConstraint");
 				Crafty.trigger("EvaluateInertia");
 			}
@@ -99,8 +99,8 @@ Crafty.c("DefaultPhysicsDraw", {
 	init:
 	function() {
 		this.bind("UpdateCollisions", function() {
-			this.x = this._phX;
-			this.y = this._phY;
+			this.x = this._phPX;
+			this.y = this._phPY;
 		});
 		this.bind("UpdateDraw", function() {
 			this.x = Math.round(this._phPX);

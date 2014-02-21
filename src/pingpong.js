@@ -28,6 +28,6 @@ Crafty.c("PingPong", {
 	
 	direction:
 	function(angle) {
-		this._dir = [Math.cos(angle*pi/180), Math.sin(angle*pi/180)];
+		this._dir = [Math.cos(angle*Math.pi/180), Math.sin(angle*Math.pi/180)];
 	}
 });
