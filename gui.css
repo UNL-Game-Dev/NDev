@@ -25,7 +25,8 @@ body
 .save-screen
 {
 	bottom: 0px;
-	right: 0px;
+	left: 350px;
+	width: 100px;
 }
 
 h2
