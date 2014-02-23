@@ -3,6 +3,9 @@
  * Includes all the base components and animations for a player.
  */
 Crafty.c("Player", {
+	// Default time to recover from being hit, in seconds.
+	defaultRecoveryTime: 1.0,
+	
 	init:
 	function() {
 		this
@@ -57,7 +60,29 @@ Crafty.c("Player", {
 						this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
 					}
 				}, 500);
+			})
+		// Player attributes
+			.attr({
+				// Time to recover from being hit, in seconds.
+				recoveryTime: this.defaultRecoveryTime,
+				
+				// Whether or not player can be hit.
+				invincible: false,
 			});
+		
+		
+		this.onHit("Hazard", function(hits) {
+			if(!this.invincible) {
+				this.invincible = true;
+				var hit = hits[0];
+				var norm = hit.normal;
+				// TODO: Respond to this hazardous collision somehow.
+				console.log('Ouch. You just came into contact with a dangerous object. Watch out next time.');
+				this.timeout(function() {
+					this.invincible = false;
+				}, this.recoveryTime * 1000);
+			}
+		});
 
 		this.makeScrollTarget();
 	}

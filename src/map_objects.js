@@ -285,7 +285,7 @@ Crafty.c("PingPongHazard", {
 		this.setPhysPos(object.x, object.y - this.h);
 		var properties = object.properties;
 		if(properties.speed != undefined) {
-			this.speed = propertes.speed;
+			this.speed = properties.speed;
 		}
 		if(properties.direction != undefined) {
 			this.direction(properties.direction);
