@@ -29,6 +29,9 @@ Crafty.scene("testMap", function() {
 	}, 0);
 	
 	Crafty.sprite("assets/sprites/projectile.png", {projectile: [0, 0, 8, 8]});
+	
+	Crafty.sprite("assets/sprites/test_enemy_1.png", {test_enemy_1: [0, 0, 32, 32]});
+	Crafty.sprite("assets/sprites/test_enemy_2.png", {test_enemy_2: [0, 0, 32, 32]});
 
 	// Create the physics ticker.
 	// This triggers physics ticks, which are used to more precisely control
