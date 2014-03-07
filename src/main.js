@@ -36,7 +36,7 @@ Crafty.scene("testMap", function() {
 	var ticker = Crafty.e("PhysicsTicker, Persistent");
 	
 	// Create the global game state object, which saves and loads data.
-	var gs = Crafty.e("GameState, Persistent");
+	var gs = Crafty.e("GameState, PickupState, Persistent");
 	gs.setSaveSlot("defaultSaveSlot");
 	gs.load();
 
