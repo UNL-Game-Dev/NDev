@@ -16,6 +16,7 @@ Crafty.c("PhysicsTicker", {
 				Crafty.trigger("PrePhysicsTick");
 				Crafty.trigger("EvaluateAccel");
 				Crafty.trigger("UpdateCollisions");
+        Crafty.trigger("EvaluateHits");
 				Crafty.trigger("ResolveConstraint");
 				Crafty.trigger("EvaluateInertia");
 			}
@@ -45,7 +46,7 @@ Crafty.c("PhysicsTicker", {
  */
 Crafty.c("Physical", {
 
-	init: 
+	init:
 	function() {
 		this._phX = this._x;
 		this._phY = this._y;
@@ -74,17 +75,17 @@ Crafty.c("Physical", {
 		this._phPX = x;
 		this._phPY = y;
 	},
-	
+
 	getDX:
 	function() {
 		return this._phX - this._phPX;
 	},
-	
+
 	getDY:
 	function() {
 		return this._phY - this._phPY;
 	},
-	
+
 	getDisplacement:
 	function() {
 		return [this.getDX(), this.getDY()];
@@ -99,8 +100,8 @@ Crafty.c("DefaultPhysicsDraw", {
 	init:
 	function() {
 		this.bind("UpdateCollisions", function() {
-			this.x = this._phPX;
-			this.y = this._phPY;
+			this.x =  this._phPX;
+			this.y =  this._phPY;
 		});
 		this.bind("UpdateDraw", function() {
 			if(this._override) {
@@ -127,6 +128,25 @@ Crafty.c("PhysicalConstraint", {
 });
 
 /**
+ * Applies a hazard response, such that the entity will be notified upon
+ * collision with hazardous objects.
+ */
+Crafty.c("HazardResponse", {
+  init:
+  function() {
+    this.bind("EvaluateHits", function() {
+      this.x = this._phX;
+      this.y = this._phY;
+      var hits = this.hit("Hazard");
+      for(var i in hits) {
+        var hit = hits[i];
+        this.trigger("Hurt", hit);
+      }
+    });
+  }
+});
+
+/**
  * Applies a simple tile constraint on the attached physical entity, forcing it
  * to remain outside of tiles.
  */
@@ -134,7 +154,7 @@ Crafty.c("TileConstraint", {
 	init:
 	function() {
 		this.requires("Physical");
-		
+
 		this.currentNormals = [];
 
 		this.bind("ResolveConstraint", function() {
@@ -173,7 +193,7 @@ Crafty.c("TileConstraint", {
 			}
 		});
 	},
-	
+
 	_checkOneWayCollision:
 	function(norm, prevDisplacement) {
 		return -norm[1] >= Math.abs(norm[0])
@@ -199,7 +219,7 @@ Crafty.c("PlatformConstraint", {
 				var platform = hit.obj;
 				this._phX += platform.getDX();
 				this._phY += platform.getDY();
-				
+
 				this._override = true;
 				this._overrideX = platform._phX + Math.round(this._phX - platform._phX);
 				this._overrideY = platform._phY + Math.round(this._phY - platform._phY);
@@ -236,7 +256,7 @@ Crafty.c("Inertia", {
 			this._phY += this._phY - py;
 		});
 	},
-	
+
 	applyImpulse:
 	function(px, py) {
 		this._phX = this._phPX + px;

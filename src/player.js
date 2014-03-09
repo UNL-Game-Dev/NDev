@@ -5,7 +5,7 @@
 Crafty.c("Player", {
 	// Default time to recover from being hit, in seconds.
 	defaultRecoveryTime: 1.0,
-	
+
 	init:
 	function() {
 		this
@@ -17,6 +17,7 @@ Crafty.c("Player", {
 			.requires("Collision")
 			.requires("Physical")
 			.requires("PhysicalConstraint")
+      .requires("HazardResponse")
 			.requires("PlatformControls")
 			.requires("DefaultPhysicsDraw")
 			.requires("ScrollTarget")
@@ -65,19 +66,18 @@ Crafty.c("Player", {
 			.attr({
 				// Time to recover from being hit, in seconds.
 				recoveryTime: this.defaultRecoveryTime,
-				
+
 				// Whether or not player can be hit.
 				invincible: false,
 			});
-		
-		
-		this.onHit("Hazard", function(hits) {
+
+
+		this.bind("Hurt", function(hit) {
 			if(!this.invincible) {
 				this.invincible = true;
-				var hit = hits[0];
 				var norm = hit.normal;
 				// TODO: Respond to this hazardous collision somehow.
-				console.log('Ouch. You just came into contact with a dangerous object. Watch out next time.');
+				console.error('Ouch. You just came into contact with a dangerous object. Watch out next time.');
 				this.timeout(function() {
 					this.invincible = false;
 				}, this.recoveryTime * 1000);
