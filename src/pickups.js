@@ -1,8 +1,10 @@
+
+
 /**
  A list of pickups available. Just a list of strings, really, but might allow
  for autocomplete or easier detection of fault.
  */
-pickup = {
+var pickup = {
 	icePick: "Ice Pick",
 	icePick2: "Second Ice Pick",
 	pistol: "Pistol",
@@ -10,9 +12,13 @@ pickup = {
 	dynamite: "Dynamite",
 	shield: "Shield",
 	boomstick: "Boomstick"
-}
+};
 
+/**
+ * Keeps track of pickups that the player encounters and uses.
+ */
 Crafty.c("PickupState", {
+
 	init:
 	function() {
 		this.requires("GameState");
@@ -21,8 +27,8 @@ Crafty.c("PickupState", {
 	ensureInit:
 	function() {
 		// Set up pickups object if it doesn't already exist.
-		this.data.pickups ||= {};
-	}
+		this.data.pickups = this.data.pickups || {};
+	},
 
 	has:
 	function(pickupName) {
