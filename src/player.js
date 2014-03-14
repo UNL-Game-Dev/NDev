@@ -19,7 +19,7 @@ Crafty.c("Player", {
 			.requires("Collision")
 			.requires("Physical")
 			.requires("PhysicalConstraint")
-      .requires("HazardResponse")
+            .requires("HazardResponse")
 			.requires("PlatformControls")
 			.requires("DefaultPhysicsDraw")
 			.requires("ScrollTarget")
