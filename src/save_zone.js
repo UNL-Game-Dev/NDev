@@ -9,28 +9,17 @@ Crafty.c("SaveZone", {
 		this.requires("Collision");
 
 		this.requires("ZoneEnterTrigger")
-			.setOnZoneEnter(this.promptSave);
+			.setOnZoneEnter(this.triggerSave);
 	},
 
-	promptSave:
+	triggerSave:
 	function() {
-		if(!this._promptActive) {
-			var saveZone = this;
-
-			console.log("Prompting save.");
-
-			var dialog = Crafty.e("HTML, Mouse")
-				.attr({ x: this.x, y: this.y, w: 150, h:100 })
-				.replace(dialogHTML)
-				.one("Click", function(e) {
-					// Save, so that the player will respawn at this zone.
-					saveGame(saveZone);
-					// Destroy the dialog, not the zone!
-					this.destroy();
-				});
-
-			this._promptActive = true;
-		}
+		saveGame(this);
+		// Show the GUI tip that saving's happening.
+		$(".save-screen")
+			.slideDown(1000)
+			.delay(500)
+			.slideUp(1000);
 	},
 });
 
