@@ -18,12 +18,13 @@ Crafty.c("Projectile", {
 			.timeout(function() {
 				this.destroy();
 			}, 3000)
-		// Destroy on collision with tile
-			.onHit("Tile", this.onHitTile);
-	},
-	
-	onHitTile:
-	function() {
-		this.destroy();
+		// Collisions
+			.onHit("Tile", this.destroy)
+			.onHit("Enemy", function(hit) {
+				for (var i = 0; i < hit.length; i++) {
+					hit[i].obj.destroy();
+				}
+				this.destroy();
+			});
 	}
 });

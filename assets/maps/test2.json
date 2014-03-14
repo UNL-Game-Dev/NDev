@@ -1,4 +1,4 @@
-{ "height":32,
+{ "height":100,
  "layers":[
         {
          "height":100,
@@ -109,6 +109,58 @@
                  "width":0,
                  "x":504,
                  "y":99
+                }, 
+                {
+                 "height":32,
+                 "name":"enemy2",
+                 "properties":
+                    {
+                     "type":"e1"
+                    },
+                 "type":"EnemySpawn",
+                 "visible":true,
+                 "width":32,
+                 "x":513,
+                 "y":244
+                }, 
+                {
+                 "height":32,
+                 "name":"enemy1",
+                 "properties":
+                    {
+                     "type":"e1"
+                    },
+                 "type":"EnemySpawn",
+                 "visible":true,
+                 "width":32,
+                 "x":335,
+                 "y":43
+                }, 
+                {
+                 "height":32,
+                 "name":"enemy3",
+                 "properties":
+                    {
+                     "type":"e2"
+                    },
+                 "type":"EnemySpawn",
+                 "visible":true,
+                 "width":32,
+                 "x":617,
+                 "y":42
+                }, 
+                {
+                 "height":32,
+                 "name":"enemy4",
+                 "properties":
+                    {
+                     "type":"e2"
+                    },
+                 "type":"EnemySpawn",
+                 "visible":true,
+                 "width":32,
+                 "x":832,
+                 "y":285
                 }],
          "opacity":1,
          "properties":
@@ -172,8 +224,8 @@
                  "type":"PlayerSpawn",
                  "visible":true,
                  "width":32,
-                 "x":92,
-                 "y":160
+                 "x":257,
+                 "y":196
                 }, 
                 {
                  "height":26,
@@ -267,7 +319,7 @@
                 }
             },
          "tilewidth":32
-        },
+        }, 
         {
          "firstgid":17,
          "image":"ark.png",
@@ -304,5 +356,5 @@
         }],
  "tilewidth":32,
  "version":1,
- "width":32
+ "width":100
 }
