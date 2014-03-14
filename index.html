@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<head>	
+<head>
 	<!-- Libraries -->
 	<script type="text/javascript" src="lib/jquery.min.js"></script>
 	<script type="text/javascript" src="lib/crafty.js"></script>
@@ -15,21 +15,33 @@
 	<script type="text/javascript" src="src/zone_trigger.js"></script>
 	<script type="text/javascript" src="src/save_zone.js"></script>
 	<script type="text/javascript" src="src/door.js"></script>
-	
+
 	<script type="text/javascript" src="src/parallax.js"></script>
 	<script type="text/javascript" src="src/scroll_target.js"></script>
 	<script type="text/javascript" src="src/physical.js"></script>
 	<script type="text/javascript" src="src/platform_controls.js"></script>
-	<script type="text/javascript" src="src/persistence.js"></script>
 	<script type="text/javascript" src="src/projectile.js"></script>
 	<script type="text/javascript" src="src/enemy.js"></script>
 	<script type="text/javascript" src="src/enemy_controls.js"></script>
+
+	<link rel="stylesheet" href="gui.css" type="text/css" />
 </head>
 <body>
 	<script type="text/javascript">
 		Crafty.init(800, 600);
 		Crafty.scene("testMap");
+		$(function() {
+			$(".screen-overlay").appendTo("#cr-stage");
+		})
 	</script>
+
+	<div class="screen-overlay">
+		<div style="margin: 0px auto; width: 0px;">
+			<!-- GUI Prototypes. Applied in game to the screen when used. -->
+			<div class="dialog save-screen">
+				<h2>Saving</h2>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
-

@@ -12,8 +12,8 @@ Crafty.c("ScrollTarget", {
 	function() {
 		this.bind("UpdateViewport", function() {
 			if(currentTarget == this) {
-				Crafty.viewport.x = -Math.floor(this.x - 400);
-				Crafty.viewport.y = -Math.floor(this.y - 300);
+				Crafty.viewport.x = -Math.floor(this.x - 400 + currentTarget.w/2.0);
+				Crafty.viewport.y = -Math.floor(this.y - 300 + currentTarget.h/2.0);
 			}
 		});
 	},
