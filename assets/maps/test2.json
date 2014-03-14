@@ -267,6 +267,21 @@
                  "width":0,
                  "x":962,
                  "y":515
+                }, 
+                {
+                 "gid":9,
+                 "height":0,
+                 "name":"DeadlySpikes",
+                 "properties":
+                    {
+                     "direction":"0",
+                     "speed":"10"
+                    },
+                 "type":"PingPongHazard",
+                 "visible":true,
+                 "width":0,
+                 "x":385,
+                 "y":320
                 }],
          "opacity":1,
          "properties":

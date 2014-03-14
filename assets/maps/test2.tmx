@@ -125,5 +125,11 @@
     <property name="path" value="path1"/>
    </properties>
   </object>
+  <object name="DeadlySpikes" type="PingPongHazard" gid="9" x="385" y="320">
+   <properties>
+    <property name="direction" value="0"/>
+    <property name="speed" value="10"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

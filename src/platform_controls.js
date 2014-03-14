@@ -16,6 +16,9 @@ Crafty.c("PlatformControls", {
 	slowToStopDV: 0.3,
 	// Actively slowing down when turning around.
 	activeBrakeDV: 0.5,
+	
+	// Time to recover after being hit.
+	recoveryTime: 1.0,
 
 	init:
 	function() {
@@ -30,6 +33,8 @@ Crafty.c("PlatformControls", {
 
 		this._upHeld = false;
 		this._forceRemaining = 0;
+		
+		this.invincible = false;
 			
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
@@ -251,6 +256,12 @@ Crafty.c("PlatformControls", {
 				}
 			}
 		}
+	},
+	
+	applyImpulse:
+	function(px, py) {
+		this._phX = this._phPX + px;
+		this._phY = this._phPY + py;
 	}
 });
 
