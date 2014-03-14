@@ -22,12 +22,26 @@
 	<script type="text/javascript" src="src/platform_controls.js"></script>
 	<script type="text/javascript" src="src/projectile.js"></script>
 	<script type="text/javascript" src="src/pickups.js"></script>
+
+	<link rel="stylesheet" href="gui.css" type="text/css" />
 </head>
 <body>
 	<script type="text/javascript">
 		Crafty.init(800, 600);
 		Crafty.scene("testMap");
+		$(function() {
+			$(".screen-overlay").appendTo("#cr-stage");
+		})
 	</script>
+
+	<div class="screen-overlay">
+		<div style="margin: 0px auto; width: 0px;">
+			<!-- GUI Prototypes. Applied in game to the screen when used. -->
+			<div class="dialog save-screen">
+				<h2>Saving</h2>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
 
