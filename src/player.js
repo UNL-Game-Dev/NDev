@@ -2,9 +2,11 @@
  * Player component.
  * Includes all the base components and animations for a player.
  */
+
+// Default time to recover from being hit, in seconds.
+var defaultRecoveryTime = 1.0;
+
 Crafty.c("Player", {
-	// Default time to recover from being hit, in seconds.
-	defaultRecoveryTime: 1.0,
 
 	init:
 	function() {
@@ -65,7 +67,7 @@ Crafty.c("Player", {
 		// Player attributes
 			.attr({
 				// Time to recover from being hit, in seconds.
-				recoveryTime: this.defaultRecoveryTime,
+				recoveryTime: defaultRecoveryTime,
 
 				// Whether or not player can be hit.
 				invincible: false,
