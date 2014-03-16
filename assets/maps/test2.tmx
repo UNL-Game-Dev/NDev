@@ -25,7 +25,71 @@
  </tileset>
  <tileset firstgid="17" name="Backtiles" tilewidth="32" tileheight="32">
   <image source="ark.png" width="128" height="128"/>
+  <tile id="8">
+   <properties>
+    <property name="oneway" value="true"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="oneway" value="true"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="oneway" value="true"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="oneway" value="true"/>
+   </properties>
+  </tile>
  </tileset>
+ <objectgroup name="bg_objects" width="100" height="100">
+  <properties>
+   <property name="solid" value="true"/>
+  </properties>
+  <object gid="2" x="45" y="314"/>
+  <object gid="2" x="72" y="373"/>
+  <object name="path1" type="MapPath" x="964" y="483">
+   <properties>
+    <property name="time" value="[3,1,3,1,0.5]"/>
+   </properties>
+   <polyline points="0,0 169,0 169,-61 46,-43 25,-111"/>
+  </object>
+  <object name="path2" type="MapPath" x="507" y="65">
+   <properties>
+    <property name="time" value="0.5"/>
+   </properties>
+   <polygon points="0,0 58,0 57,-55 0,-55"/>
+  </object>
+  <object name="lift2" type="MovingPlatform" gid="5" x="504" y="99">
+   <properties>
+    <property name="path" value="path2"/>
+   </properties>
+  </object>
+  <object name="enemy2" type="EnemySpawn" x="513" y="244" width="32" height="32">
+   <properties>
+    <property name="type" value="e1"/>
+   </properties>
+  </object>
+  <object name="enemy1" type="EnemySpawn" x="335" y="43" width="32" height="32">
+   <properties>
+    <property name="type" value="e1"/>
+   </properties>
+  </object>
+  <object name="enemy3" type="EnemySpawn" x="617" y="42" width="32" height="32">
+   <properties>
+    <property name="type" value="e2"/>
+   </properties>
+  </object>
+  <object name="enemy4" type="EnemySpawn" x="832" y="285" width="32" height="32">
+   <properties>
+    <property name="type" value="e2"/>
+   </properties>
+  </object>
+ </objectgroup>
  <layer name="bg2" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt1TEKAzEMBED/IYELJHD5/ytPlQuDiTlwpGIG1ItFaFsDAACA+x4xz+wl6I6YV/YSdO+YT/YSdGfMN3sJOv1Ri/6oRX/Uoj9q0R+16I//WL17/bHHmP/q3euPPcb8V+9ef+wx5j/e/Sx3/bHHr78zy11/5Jjlrj9yyB0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmLkArA8FlQ==
@@ -33,7 +97,7 @@
  </layer>
  <layer name="bg" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1ssKgzAQBVB/oe937f9/ZWfRisxGCjWJeA5cEnfDLHLtOoDle0QukevofFadCIAl20X2tYdgcIqcaw/B4Ba51x6CQR951R5ipXJX6I6y8r5zV+iOsvK+c1eMvw+RTWT7Ob/34/xjrkbef+4K3VFW3rf+qEt/tOWX/mB+U/3hvSprqq+9V23xXrXF/y4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/9Ab3iAdF
+   eJzt1ssKg0AMBVB/oe9CC+3/f2WzsINkI4U6GfAcuKi7kEWu0wQAACydIufqIWhukXv1EDSPyLN6CJpX5F09xE7lrtAdfeV9567QHX3lfeeuWH5fIofIcX5+36/bj7kbef+5K3RHX3nf+qOW/hjLL/3B9tb6w73qa62v3auxuFdj8b8LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAP30AuFsGpA==
   </data>
  </layer>
  <layer name="test" width="100" height="100">
@@ -41,18 +105,30 @@
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1+0KgjAYBtD5I+3+rzgWjobMubcSg86BQVBpPI/7KCX+wbSO+eofwtM9vTrRy7iz89JLXM5pOfH65do6GTMFPltneUuxfOu5wr5IPjnTeR3luY/MrSV4v39TnvGI3Mkn65s+9n1r38i9lnXraP3Sx77Wel7yrOdOnXfr+63RuydtZY+ts+5lvD0jtc5mR+coffSN5B+dB71O9HGO3t6T36vPt9v5xzXqXtLmNdfJvfhf/ltGzl4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD7Hpk5AXI=
+   eJzt11sKwjAQBdD4oXULCrr/ZWrEYChp2vFBhZ4DQUFNZW6TTFNiC3bPcVj7j/BwTK9M5LLcVL0u93G+j9Po9RqcXy5xuU7DD+cvc8tkmV3gu3Ut9ylW33qtMC1Sn1zTw3OU+z6ytobg9bam3OMROZNP9jd5TPvWuZFzLfvW3P4lj2mt/bzUs147db1bv2+N3jVpK2dsXetejcc9Uqs3m+uj5NG3pP7RddDLRB6/0Tt78md1fztef6yjziWN3rOenIvn8v+ypPcCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADedwM7kgIt
   </data>
  </layer>
  <objectgroup name="entities" width="100" height="100">
   <properties>
    <property name="spawnMode" value="TiledComponents"/>
   </properties>
-  <object name="SpawnPoint" type="PlayerSpawn" x="92" y="160" width="32" height="32"/>
+  <object name="SpawnPoint" type="PlayerSpawn" x="257" y="196" width="32" height="32"/>
   <object name="DoorToElsewhere" type="MapDoor" x="193" y="290" width="23" height="26">
    <properties>
     <property name="targetDoor" value="DoorFromElsewhere"/>
     <property name="targetMap" value="test3"/>
+   </properties>
+  </object>
+  <object name="SaveHere!" type="MapSaveZone" x="508" y="119" width="37" height="42"/>
+  <object name="lift1" type="MovingPlatform" gid="2" x="962" y="515">
+   <properties>
+    <property name="path" value="path1"/>
+   </properties>
+  </object>
+  <object name="DeadlySpikes" type="PingPongHazard" gid="9" x="385" y="320">
+   <properties>
+    <property name="direction" value="0"/>
+    <property name="speed" value="10"/>
    </properties>
   </object>
  </objectgroup>
