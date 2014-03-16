@@ -19,11 +19,6 @@ Crafty.scene("testMap", function() {
 			}
 		});
 
-	var bg = Crafty.e("2D, Canvas, Image, Parallax, Persistent")
-		.image("http://www.mlahanas.de/Greeks/images/Parallax.jpg")
-		.scrollFactor(0.2);
-	bg.z = -100;
-
 	Crafty.sprite(32, "assets/sprites/player.png", {
 		player: [0, 0]
 	}, 0);
