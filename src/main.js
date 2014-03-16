@@ -19,10 +19,7 @@ Crafty.scene("testMap", function() {
 			} else if(e.key === Crafty.keys["0"]) {
 				Crafty.trigger("SpawnPlayer");
 			}
-		})*/
-		.loadMap("palace", function() {
-			Crafty.trigger("SpawnPlayer");
-		});
+		})*/;
 
 	var bg = Crafty.e("2D, Canvas, Image, Parallax, Persistent")
 		.image("http://www.mlahanas.de/Greeks/images/Parallax.jpg")
@@ -52,7 +49,7 @@ Crafty.scene("testMap", function() {
 	var savedLocation = gs.data.lastSavedLocation;
 	if(savedLocation == undefined) {
 		// No save--spawn at start.
-		map.loadMap("test2", function() {
+		map.loadMap("palace", function() {
 			Crafty.trigger("SpawnPlayer");
 		});
 	} else {

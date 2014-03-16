@@ -169,32 +169,38 @@ Crafty.c("TileConstraint", {
 			 * overlaps two tiles, both emit a collision! This results in double
 			 * the force required being applied, making things bounce. No good.
 			 */
+            var alreadyChecked = {};
 			for(var i = 20; i >= 0; --i) {
 				this.x = this._phX;
 				this.y = this._phY;
 				// Find the first hit, process that.
 				var hits = this.hit("Tile");
-				if(!hits)
-					break;
-				var hit = hits[0];
-				var norm = scale([hit.normal.x, hit.normal.y], -hit.overlap);
-				var prevDisplacement = this.getDisplacement();
-				var ob = hit.obj;
-				// See if collision should be resolved.
-				if(!ob.has("OneWay")
-				|| this._checkOneWayCollision(norm, prevDisplacement)) {
-					// Just resolve it lazily, yay verlet integration.
-					this._phX += norm[0];
-					this._phY += norm[1];
-					// Maintain a "current normals" list in case other components
-					// (such as platforming physics) are interested.
-					this.currentNormals.push(norm);
-				}
+                var hit = null, ob, norm;
+                for(var j in hits) {
+                    hit = hits[j];
+                    ob = hit.obj;
+                    norm = scale([hit.normal.x, hit.normal.y], -hit.overlap);
+                    var prevDisplacement = this.getDisplacement();
+                    if(!ob.has("OneWay")
+                    || this._oneWayCollides(norm, prevDisplacement)) {
+                        break;
+                    } else {
+                        hit = null;
+                    }
+                }
+                if(!hit)
+                    break;
+                // Just resolve it lazily, yay verlet integration.
+                this._phX += norm[0];
+                this._phY += norm[1];
+                // Maintain a "current normals" list in case other components
+                // (such as platforming physics) are interested.
+                this.currentNormals.push(norm);
 			}
 		});
 	},
 
-	_checkOneWayCollision:
+	_oneWayCollides:
 	function(norm, prevDisplacement) {
 		return -norm[1] >= Math.abs(norm[0])
 			&& dot(norm, add(norm, prevDisplacement)) <= 1.0;
