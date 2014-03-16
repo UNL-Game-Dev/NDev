@@ -4,6 +4,12 @@ function PickupEntry(name, max) {
 	this.max = max || 1;
 }
 
+function addPistol() {
+	// Demonstrates how to use the PickupState component.
+	Crafty("PickupState").addPickup("pistol");
+	throw "Debug function!";
+}
+
 /**
  * Keeps track of pickups that the player encounters and uses.
  */
@@ -27,6 +33,10 @@ Crafty.c("PickupState", {
 		this.requires("GameState");
 	},
 
+	/**
+	 * Returns the number of the specified pickup the player has. Checks for key
+	 * validity, throwing if not. (Don't catch, let it surface: easier to fix.)
+	 */
 	hasPickup:
 	function(pickupName) {
 		var pickups = this._ensureInit();
@@ -35,6 +45,10 @@ Crafty.c("PickupState", {
 		return pickups[pickupName] || 0;
 	},
 
+	/**
+	 * Adds pickups of the given name (see the pickup object for valid names)
+	 * with the given count. Count's default is 1. Negatives work.
+	 */
 	addPickup:
 	function(pickupName, count) {
 		// Initialize count to 1 if undefined.
