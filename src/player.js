@@ -2,7 +2,12 @@
  * Player component.
  * Includes all the base components and animations for a player.
  */
+
+// Default time to recover from being hit, in seconds.
+var defaultRecoveryTime = 1.0;
+
 Crafty.c("Player", {
+
 	init:
 	function() {
 		this
@@ -14,6 +19,7 @@ Crafty.c("Player", {
 			.requires("Collision")
 			.requires("Physical")
 			.requires("PhysicalConstraint")
+            .requires("HazardResponse")
 			.requires("PlatformControls")
 			.requires("DefaultPhysicsDraw")
 			.requires("ScrollTarget")
@@ -57,7 +63,28 @@ Crafty.c("Player", {
 						this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
 					}
 				}, 500);
+			})
+		// Player attributes
+			.attr({
+				// Time to recover from being hit, in seconds.
+				recoveryTime: defaultRecoveryTime,
+
+				// Whether or not player can be hit.
+				invincible: false,
 			});
+
+
+		this.bind("Hurt", function(hit) {
+			if(!this.invincible) {
+				this.invincible = true;
+				var norm = hit.normal;
+				// TODO: Respond to this hazardous collision somehow.
+				console.error('Ouch. You just came into contact with a dangerous object. Watch out next time.');
+				this.timeout(function() {
+					this.invincible = false;
+				}, this.recoveryTime * 1000);
+			}
+		});
 
 		this.makeScrollTarget();
 	}
