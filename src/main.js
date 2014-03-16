@@ -9,7 +9,7 @@ Crafty.scene("testMap", function() {
 
 	var map = Crafty.e("2D, Canvas, TiledMap, Persistent")
 		// Temporary level loading using 1, 2, 3, etc.
-		.bind('KeyDown', function(e) {
+		/*.bind('KeyDown', function(e) {
 			if(e.key === Crafty.keys["1"]) {
 				this.loadMap("test");
 			} else if(e.key === Crafty.keys["2"]) {
@@ -19,7 +19,7 @@ Crafty.scene("testMap", function() {
 			} else if(e.key === Crafty.keys["0"]) {
 				Crafty.trigger("SpawnPlayer");
 			}
-		})
+		})*/
 		.loadMap("palace", function() {
 			Crafty.trigger("SpawnPlayer");
 		});
