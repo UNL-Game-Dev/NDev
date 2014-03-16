@@ -53,6 +53,7 @@ Crafty.c("TiledMap", {
 					loaded();
 			});
 		});
+        return this;
 	},
 
 	collisionize:
