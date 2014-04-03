@@ -79,7 +79,7 @@
    </properties>
   </object>
   <object name="path1" type="MapPath" x="1408" y="579">
-   <polygon points="0,0 -129,0 -129,-254 0,-254"/>
+   <polygon points="0,0 -129,0 -129,-259 0,-259"/>
   </object>
  </objectgroup>
  <layer name="Tile Layer 3" width="32" height="32">
