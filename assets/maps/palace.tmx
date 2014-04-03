@@ -2,6 +2,12 @@
 <map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="64" tileheight="64">
  <tileset firstgid="1" name="palace" tilewidth="64" tileheight="64">
   <image source="palace.png" width="512" height="512"/>
+  <tile id="10">
+   <properties>
+    <property name="bounds" value="[[0,0],[1,0],[0.84,0.33],[0.16,0.33]]"/>
+    <property name="oneway" value="true"/>
+   </properties>
+  </tile>
   <tile id="11">
    <properties>
     <property name="oneway" value="true"/>
@@ -59,9 +65,22 @@
    eJzt0bEJAAAIBLFv3H9lJ7AUBBO4CS6BHTXED/4DAMAtDQRFAD0=
   </data>
  </layer>
- <objectgroup name="Object Layer 1" width="32" height="32">
+ <objectgroup name="not solid objects" width="32" height="32">
   <object name="SpawnPoint" type="PlayerSpawn" x="1234" y="771"/>
   <object name="window" gid="48" x="1753" y="477"/>
+ </objectgroup>
+ <objectgroup name="solid objects" width="32" height="32">
+  <properties>
+   <property name="solid" value="true"/>
+  </properties>
+  <object name="lift1" type="MovingPlatform" gid="11" x="1408" y="640">
+   <properties>
+    <property name="path" value="path1"/>
+   </properties>
+  </object>
+  <object name="path1" type="MapPath" x="1408" y="579">
+   <polygon points="0,0 -129,0 -129,-254 0,-254"/>
+  </object>
  </objectgroup>
  <layer name="Tile Layer 3" width="32" height="32">
   <data encoding="base64" compression="zlib">

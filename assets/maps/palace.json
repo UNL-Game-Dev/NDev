@@ -54,7 +54,7 @@
         }, 
         {
          "height":32,
-         "name":"Object Layer 1",
+         "name":"not solid objects",
          "objects":[
                 {
                  "height":0,
@@ -84,6 +84,65 @@
                  "y":477
                 }],
          "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":32,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":32,
+         "name":"solid objects",
+         "objects":[
+                {
+                 "gid":11,
+                 "height":0,
+                 "name":"lift1",
+                 "properties":
+                    {
+                     "path":"path1"
+                    },
+                 "type":"MovingPlatform",
+                 "visible":true,
+                 "width":0,
+                 "x":1408,
+                 "y":640
+                }, 
+                {
+                 "height":0,
+                 "name":"path1",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-129,
+                         "y":0
+                        }, 
+                        {
+                         "x":-129,
+                         "y":-254
+                        }, 
+                        {
+                         "x":0,
+                         "y":-254
+                        }],
+                 "properties":
+                    {
+
+                    },
+                 "type":"MapPath",
+                 "visible":true,
+                 "width":0,
+                 "x":1408,
+                 "y":579
+                }],
+         "opacity":1,
+         "properties":
+            {
+             "solid":"true"
+            },
          "type":"objectgroup",
          "visible":true,
          "width":32,
@@ -123,6 +182,11 @@
          "tileheight":64,
          "tileproperties":
             {
+             "10":
+                {
+                 "bounds":"[[0,0],[1,0],[0.84,0.33],[0.16,0.33]]",
+                 "oneway":"true"
+                },
              "11":
                 {
                  "oneway":"true"

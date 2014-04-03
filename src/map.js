@@ -79,6 +79,7 @@ Crafty.c("TiledMap", {
 			// Mark for collision.
 			ent.addComponent("Tile");
 
+
 			var gid = ent.gid;
 			var tileInfo = this._tileInfo[gid];
 			if(tileInfo) {
@@ -98,10 +99,10 @@ Crafty.c("TiledMap", {
 					ent.collision(poly);
 				}
 
-				// Set whether the entity is one-way collidable.
-				if(tileInfo.oneway) {
-					ent.addComponent("OneWay");
-				}
+                // Set whether the entity is one-way collidable.
+                if(tileInfo.oneway) {
+                    ent.addComponent("OneWay");
+                }
 			}
 		}
 	},

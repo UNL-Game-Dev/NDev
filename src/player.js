@@ -18,7 +18,7 @@ Crafty.c("Player", {
 			.requires("player")
 			.requires("Collision")
 			.requires("Physical")
-			.requires("PhysicalConstraint")
+			.requires("PlatformConstraint")
             .requires("HazardResponse")
 			.requires("PlatformControls")
 			.requires("DefaultPhysicsDraw")

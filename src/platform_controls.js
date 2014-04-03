@@ -2,7 +2,8 @@
  * Component that controls a physical object in a platformer style. Uses arrow
  * keys for movement at the moment.
  *
- * Also fires events indicating standing still, walking, jumping, falling, and landing.
+ * Also fires events indicating standing still, walking, jumping, falling, and
+ * landing.
  */
 Crafty.c("PlatformControls", {
 
@@ -22,6 +23,8 @@ Crafty.c("PlatformControls", {
 
 	init:
 	function() {
+        this.requires("TileConstraint");
+
 		this.grounded = false;
 		this.direction = "right";
 
@@ -38,7 +41,8 @@ Crafty.c("PlatformControls", {
 
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
-			if(ev.keyCode === Crafty.keys.LEFT_ARROW || ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+			if(ev.keyCode === Crafty.keys.LEFT_ARROW
+            || ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 				// Update direction based on which key was pressed.
 				if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
 					this.direction = "left";
@@ -66,7 +70,8 @@ Crafty.c("PlatformControls", {
 			}
 		});
 		this.bind("KeyUp", function(ev) {
-			if(ev.keyCode === Crafty.keys.LEFT_ARROW || ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+			if(ev.keyCode === Crafty.keys.LEFT_ARROW
+            || ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
 					this.direction = "left";
 					this.trigger("Walk");
@@ -102,11 +107,14 @@ Crafty.c("PlatformControls", {
 				}
 			}
 
+            // Trigger falling, walking or landing animation.
 			if(!this.grounded && lastGrounded) {
 				this.trigger("Fall");
 			} else if(this.grounded && !lastGrounded) {
-				if((Crafty.keydown[Crafty.keys.LEFT_ARROW] && !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
-				|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW] && !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
+				if((Crafty.keydown[Crafty.keys.LEFT_ARROW]
+                && !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
+				|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW]
+                && !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
 					this.trigger("Walk");
 				} else {
 					this.trigger("Land");
@@ -227,12 +235,12 @@ Crafty.c("PlatformControls", {
 		this._sensor.x = this._phX;
 		this._sensor.y = this._phY;
 
-		if(this._sensor.hit("Tile")) {
+		if(this.hitTile(this._sensor)) {
 			// Player can't move sideways.
 			// Iterate upwards to see if the player can stick up.
 			for(var y = this._sensor.y; y >= this._phY - xvel; --y) {
 				this._sensor.y = y;
-				if(!this._sensor.hit("Tile")) {
+				if(!this.hitTile(this._sensor)) {
 					// If the player moves up to y, they can stick!
 					// Move the player to y+1, so that the player is
 					// still in the ground after sticking.
@@ -246,7 +254,7 @@ Crafty.c("PlatformControls", {
 			// Iterate downwards to see if the player can stick down.
 			for(var y = this._sensor.y; y <= this._phY + xvel; ++y) {
 				this._sensor.y = y;
-				if(this._sensor.hit("Tile")) {
+				if(this.hitTile(this._sensor)) {
 					// If the player moves down to y, they can stick!
 					// Move the player to y+1, so that the player is
 					// put in the ground after sticking.

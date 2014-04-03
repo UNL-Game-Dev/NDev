@@ -120,12 +120,12 @@ Crafty.c("DefaultPhysicsDraw", {
  * General constraint for responding to physical events including tile collision
  * and platform movement.
  */
-Crafty.c("PhysicalConstraint", {
+/*Crafty.c("PhysicalConstraint", {
 	init:
 	function() {
 		this.requires("TileConstraint, PlatformConstraint");
 	}
-});
+});*/
 
 /**
  * Applies a hazard response, such that the entity will be notified upon
@@ -169,41 +169,69 @@ Crafty.c("TileConstraint", {
 			 * overlaps two tiles, both emit a collision! This results in double
 			 * the force required being applied, making things bounce. No good.
 			 */
-            var alreadyChecked = {};
 			for(var i = 20; i >= 0; --i) {
 				this.x = this._phX;
 				this.y = this._phY;
 				// Find the first hit, process that.
-				var hits = this.hit("Tile");
-                var hit = null, ob, norm;
-                for(var j in hits) {
-                    hit = hits[j];
-                    ob = hit.obj;
-                    norm = scale([hit.normal.x, hit.normal.y], -hit.overlap);
-                    var prevDisplacement = this.getDisplacement();
-                    if(!ob.has("OneWay")
-                    || this._oneWayCollides(norm, prevDisplacement)) {
-                        break;
-                    } else {
-                        hit = null;
-                    }
-                }
+                var hit = this.hitTile();
+
                 if(!hit)
                     break;
+
                 // Just resolve it lazily, yay verlet integration.
-                this._phX += norm[0];
-                this._phY += norm[1];
+                var norm = hit.normal;
+                var overlap = scale([norm.x, norm.y], -hit.overlap);
+                this._phX += overlap[0];
+                this._phY += overlap[1];
                 // Maintain a "current normals" list in case other components
                 // (such as platforming physics) are interested.
-                this.currentNormals.push(norm);
+                this.currentNormals.push(overlap);
 			}
 		});
 	},
 
+    /**
+     * Check for valid collision with tile.
+     * Parameters:
+     *     component: string (optional) - component to check for
+     *     sensor: object (optional) - alternate object to use as a sensor
+     * Returns hit info if there was a collision, false otherwise.
+     */
+    hitTile:
+    function() {
+        var sensor = this;
+        var component = null;
+        if(arguments.length === 1) {
+            if(typeof arguments[0] === "string") {
+                component = arguments[0];
+            } else {
+                sensor = arguments[0];
+            }
+        } else if(arguments.length === 2) {
+            component = arguments[0];
+            sensor = arguments[1];
+        }
+        var hits = sensor.hit("Tile");
+        for(var j in hits) {
+            var hit = hits[j];
+            var ob = hit.obj;
+            if(!component || ob.has(component)) {
+                var norm = hit.normal;
+                var overlap = scale([norm.x, norm.y], -hit.overlap);
+                var prevDisplacement = this.getDisplacement();
+                if(!ob.has("OneWay")
+                || this._oneWayCollides(overlap, prevDisplacement)) {
+                    return hit;
+                }
+            }
+        }
+        return false;
+    },
+
 	_oneWayCollides:
-	function(norm, prevDisplacement) {
-		return -norm[1] >= Math.abs(norm[0])
-			&& dot(norm, add(norm, prevDisplacement)) <= 1.0;
+	function(overlap, prevDisplacement) {
+		return -overlap[1] >= Math.abs(overlap[0])
+			&& dot(overlap, add(overlap, prevDisplacement)) <= 1.0;
 	}
 });
 
@@ -214,14 +242,14 @@ Crafty.c("TileConstraint", {
 Crafty.c("PlatformConstraint", {
 	init:
 	function() {
+        this.requires("TileConstraint");
 		this.bind("ResolveConstraint", function() {
 			this.x = this._phX;
 			this.y = this._phY;
 			this.y++;
-			var hits = this.hit("MovingPlatform");
+			var hit = this.hitTile("MovingPlatform");
 			this.y--;
-			if(hits) {
-				var hit = hits[0];
+			if(hit) {
 				var platform = hit.obj;
 				this._phX += platform.getDX();
 				this._phY += platform.getDY();

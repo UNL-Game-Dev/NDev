@@ -131,14 +131,17 @@ Crafty.c("MapSaveZone", {
 Crafty.c("MovingPlatform", {
 	init:
 	function() {
-		this.requires("2D, Canvas, Tween, Collision, Tile, Physical, FakeInertia,"
+		this.requires("2D, Canvas, Tween, Physical, FakeInertia,"
 			+ "DefaultPhysicsDraw");
 	},
 
 	mapObjectInit:
 	function(object) {
 		// Give it the right tile sprite.
-		this.requires("Tile" + object.gid);
+        if(object.gid) {
+            this.gid = object.gid;
+		    this.addComponent("Tile" + object.gid);
+        }
 		this.setPhysPos(object.x, object.y);
 		this._name = object.name;
 		this._pathName = object.properties.path;
@@ -293,7 +296,7 @@ Crafty.c("MapPath", {
 Crafty.c("PingPongHazard", {
 	init:
 	function() {
-		this.requires("PingPong, 2D, Canvas, Hazard, Tile");
+		this.requires("PingPong, 2D, Canvas, Hazard");
 	},
 
 	mapObjectInit:
