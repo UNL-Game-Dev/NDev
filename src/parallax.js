@@ -10,7 +10,9 @@ Crafty.c("Parallax", {
 		this.bind("ViewportScroll", function() {
 			// Oppose the viewport movement.
 			this.x = -Crafty.viewport.x * this.factor;
+			this.x += 400 * this.factor;
 			this.y = -Crafty.viewport.y * this.factor;
+			this.y += 300 * this.factor;
 		});
 	},
 
