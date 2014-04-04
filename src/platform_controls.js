@@ -48,7 +48,8 @@ Crafty.c("PlatformControls", {
 				
 				this.trigger("Walk");
 			}
-			if(ev.keyCode == Crafty.keys.SPACE) {
+			if(ev.keyCode == Crafty.keys.SPACE &&
+					Crafty("PickupState").hasPickup("pistol")) {
 				var bullet = Crafty.e("Projectile");
 				bullet.setPhysPos(this.x, this.y);
 				if(this.direction == "left") {
