@@ -2,6 +2,21 @@
  "layers":[
         {
          "height":100,
+         "image":"test2full.png",
+         "name":"bg_parallax",
+         "opacity":1,
+         "properties":
+            {
+             "parallaxFactor":"0.7"
+            },
+         "type":"imagelayer",
+         "visible":false,
+         "width":100,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":100,
          "name":"bg_objects",
          "objects":[
                 {

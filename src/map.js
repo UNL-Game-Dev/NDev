@@ -1,4 +1,6 @@
 
+var _mapFolder = "assets/maps/";
+
 /**
  * Crafty component for loading a tiled map.
  */
@@ -26,11 +28,11 @@ Crafty.c("TiledMap", {
 			}
 			--i;
 		}
-		$.getJSON("assets/maps/"+mapName+".json", function(json) {
+		$.getJSON(_mapFolder + mapName + ".json", function(json) {
 			// Modify the tile image paths to match existing paths.
 			for(var i = 0; i < json.tilesets.length; i++) {
 				json.tilesets[i].image =
-					"assets/maps/" + json.tilesets[i].image;
+					_mapFolder + json.tilesets[i].image;
 			}
 			// Extract tile bounds information.
 			that._initTileInfo(json.tilesets);
@@ -183,12 +185,9 @@ Crafty.c("TiledMap", {
 
 		for(var layeri in layers) {
 			var layer = layers[layeri];
-			this._layerInfo[layer.name] = {
-				properties: layer.properties || {},
-				type: layer.type,
-				z: layeri - solidLayer,
-				objects: layer.objects
-			};
+			layer.properties = layer.properties || {};
+			layer.z = layeri - solidLayer;
+			this._layerInfo[layer.name] = layer;
 		}
 	},
 
@@ -233,6 +232,19 @@ Crafty.c("TiledMap", {
 					}
 					// Set the entity's Z-index.
 					craftyObject.z = layerInfo.z;
+				}
+			} else if(layerInfo.type === "imagelayer") {
+				console.log(layerInfo);
+				// This is probably a parallax layer.
+				var parallaxFactor = layerInfo.properties.parallaxFactor;
+				if(parallaxFactor) {
+					// Create the image and entity.
+					var parallaxImg = Crafty.e("2D, Canvas, Image, Parallax")
+						.image(_mapFolder + layerInfo.image)
+						.scrollFactor(parallaxFactor)
+						.attr({
+							z: layerInfo.z
+						});
 				}
 			}
 		}
