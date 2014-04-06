@@ -65,7 +65,7 @@ function getOverlay() {
 			'background-color: #000; opacity: 0.0;'+
 			'width: 800px; height: 600px;' +
 			'z-index: 50; position: absolute;' +
-			'" >&nbsp;</div>'
+			'" >&nbsp;</div>' // Add space to force redraw. (Bugfix.)
 		);
 		screenOverlay = $("#door-overlay")[0];
 	}
