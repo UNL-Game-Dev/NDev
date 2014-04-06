@@ -9,7 +9,7 @@ Crafty.scene("testMap", function() {
 
 	var map = Crafty.e("2D, Canvas, TiledMap, Persistent")
 		// Temporary level loading using 1, 2, 3, etc.
-		/*.bind('KeyDown', function(e) {
+		.bind('KeyDown', function(e) {
 			if(e.key === Crafty.keys["1"]) {
 				this.loadMap("test");
 			} else if(e.key === Crafty.keys["2"]) {
@@ -19,7 +19,7 @@ Crafty.scene("testMap", function() {
 			} else if(e.key === Crafty.keys["0"]) {
 				Crafty.trigger("SpawnPlayer");
 			}
-		})*/;
+		});
 
 	Crafty.sprite(32, "assets/sprites/player.png", {
 		player: [0, 0]
@@ -44,7 +44,7 @@ Crafty.scene("testMap", function() {
 	var savedLocation = gs.data.lastSavedLocation;
 	if(savedLocation == undefined) {
 		// No save--spawn at start.
-		map.loadMap("palace", function() {
+		map.loadMap("test2", function() {
 			Crafty.trigger("SpawnPlayer");
 		});
 	} else {
