@@ -131,8 +131,8 @@ Crafty.c("MapSaveZone", {
 Crafty.c("MovingPlatform", {
 	init:
 	function() {
-		this.requires("2D, Canvas, Tween, Physical, FakeInertia,"
-			+ "DefaultPhysicsDraw");
+		this.requires("2D, Canvas, Tween, Physical, Collision, Tile,"
+            + "FakeInertia, DefaultPhysicsDraw");
 	},
 
 	mapObjectInit:
@@ -296,7 +296,7 @@ Crafty.c("MapPath", {
 Crafty.c("PingPongHazard", {
 	init:
 	function() {
-		this.requires("PingPong, 2D, Canvas, Hazard");
+		this.requires("PingPong, 2D, Canvas, Hazard, Tile");
 	},
 
 	mapObjectInit:
