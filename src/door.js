@@ -60,14 +60,14 @@ var screenOverlay = null;
  */
 function getOverlay() {
 	if(screenOverlay == null) {
-		$("#cr-stage").append(
-			'<div id="overlay" style="' +
+		$(".screen-overlay").append(
+			'<div id="door-overlay" style="' +
 			'background-color: #000; opacity: 0.0;'+
 			'width: 800px; height: 600px;' +
 			'z-index: 50; position: absolute;' +
-			'" />'
+			'" >&nbsp;</div>'
 		);
-		screenOverlay = $("#overlay")[0];
+		screenOverlay = $("#door-overlay")[0];
 	}
 	return screenOverlay;
 }
