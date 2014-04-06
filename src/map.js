@@ -57,7 +57,7 @@ Crafty.c("TiledMap", {
 		});
         return this;
 	},
-
+    
 	collisionize:
 	function() {
 		// Add tile bounds information.
@@ -72,7 +72,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-
+    
 	_collisionizeEntity:
 	function(ent) {
 		// Can only collisionize an entity if it has a gid.
