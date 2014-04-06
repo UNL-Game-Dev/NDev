@@ -1,7 +1,7 @@
 /**
- * Component that controls a physical object in a platformer style. Uses arrow 
+ * Component that controls a physical object in a platformer style. Uses arrow
  * keys for movement at the moment.
- * 
+ *
  * Also fires events indicating standing still, walking, jumping, falling, and landing.
  */
 Crafty.c("PlatformControls", {
@@ -16,7 +16,7 @@ Crafty.c("PlatformControls", {
 	slowToStopDV: 0.3,
 	// Actively slowing down when turning around.
 	activeBrakeDV: 0.5,
-	
+
 	// Time to recover after being hit.
 	recoveryTime: 1.0,
 
@@ -33,9 +33,9 @@ Crafty.c("PlatformControls", {
 
 		this._upHeld = false;
 		this._forceRemaining = 0;
-		
+
 		this.invincible = false;
-			
+
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
 			if(ev.keyCode === Crafty.keys.LEFT_ARROW || ev.keyCode === Crafty.keys.RIGHT_ARROW) {
@@ -45,7 +45,7 @@ Crafty.c("PlatformControls", {
 				} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 					this.direction = "right";
 				}
-				
+
 				this.trigger("Walk");
 			}
 			if(ev.keyCode == Crafty.keys.SPACE &&
@@ -81,11 +81,11 @@ Crafty.c("PlatformControls", {
 				}
 			}
 		});
-		
+
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
-		
+
 		this.bind("PrePhysicsTick", function() {
 			// The key "x" target difference.
 			var kx =
@@ -102,7 +102,7 @@ Crafty.c("PlatformControls", {
 					break;
 				}
 			}
-			
+
 			if(!this.grounded && lastGrounded) {
 				this.trigger("Fall");
 			} else if(this.grounded && !lastGrounded) {
@@ -192,7 +192,7 @@ Crafty.c("PlatformControls", {
 				this._phY = this._phY;
 
 				this._phY += 0.01;
-				
+
 			} else {
 				// If player was just about stopped vertically, stop jump
 				// prematurely if there was a jump in progress.
@@ -220,7 +220,7 @@ Crafty.c("PlatformControls", {
 		// First check to see if the player can move sideways.
 		// If not, check to see how much up is necessary.
 		// If so, check to see how much down is necessary.
-		
+
 		// Find the xvel first.
 		var xvel = Math.abs(this._phX - this._phPX)*2;
 
@@ -258,7 +258,7 @@ Crafty.c("PlatformControls", {
 			}
 		}
 	},
-	
+
 	applyImpulse:
 	function(px, py) {
 		this._phX = this._phPX + px;

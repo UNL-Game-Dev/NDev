@@ -18,15 +18,15 @@ Crafty.c("EnemyGroundControls", {
 		this._sensor.w = this.w;
 		this._sensor.h = this.h;
 		this._sensor.addComponent("Collision");
-		
+
 		this._forceRemaining = 0;
-		
+
 		this._vx = 0;
-		
+
 		this.bind("PrePhysicsTick", function() {
-			
+
 			this.target = Crafty("Player");
-			
+
 			// The desired x direction.
 			var kx = (this.target.x > this.x ? 1 : 0) + (this.target.x < this.x ? -1 : 0);
 
@@ -40,7 +40,7 @@ Crafty.c("EnemyGroundControls", {
 					break;
 				}
 			}
-			
+
 			/*
 			// Saving this for when enemies have animations.
 			if(!this.grounded && lastGrounded) {
@@ -53,7 +53,7 @@ Crafty.c("EnemyGroundControls", {
 				}
 			}
 			*/
-			
+
 			// Jump if on the ground and not moving.
 			if(this._vx == 0 && this.grounded) {
 				//this.trigger("Jump");
@@ -112,7 +112,7 @@ Crafty.c("EnemyGroundControls", {
 			}
 
 		});
-		
+
 		this.bind("EvaluateInertia", function() {
 			if(this.grounded) {
 				// If on the ground, use simple weird physics!
@@ -128,7 +128,7 @@ Crafty.c("EnemyGroundControls", {
 				this._phY = this._phY;
 
 				this._phY += 0.01;
-				
+
 			} else {
 				// If just about stopped vertically, stop jump
 				// prematurely if there was a jump in progress.
@@ -156,7 +156,7 @@ Crafty.c("EnemyGroundControls", {
 		// First check to see if the enemy can move sideways.
 		// If not, check to see how much up is necessary.
 		// If so, check to see how much down is necessary.
-		
+
 		// Find the xvel first.
 		var xvel = Math.abs(this._phX - this._phPX)*2;
 
@@ -200,21 +200,21 @@ Crafty.c("EnemyGroundControls", {
  * Controls basic flying enemies.
  */
  Crafty.c("EnemyAirControls", {
-	
+
 	vx: 0.0,		// x velocity
 	vy: 0.0,		// y velocity
 	acc: 0.1,		// rate at which vx and vy change
 	maxSpeed: 2.0,	// hard limit on vx and vy
-	
+
 	init:
 	function() {
-	
+
 		this.requires("Inertia");
-		
+
 		this.bind("PrePhysicsTick", function() {
-			
+
 			this.target = Crafty("Player");
-			
+
 			// This should all be improved...
 			var dx = this.target.x - this.x;
 			var dy = this.target.y - this.y;
@@ -239,7 +239,7 @@ Crafty.c("EnemyGroundControls", {
 					this.vy *= 0.1;
 				}
 			}
-			
+
 			// Set x and y speed.
 			this._phX = this._phPX + this.vx;
 			this._phY = this._phPY + this.vy;

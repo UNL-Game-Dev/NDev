@@ -41,16 +41,16 @@ Crafty.c("TiledMap", {
 			that._initLayerInfo(json.layers);
 
 			// Load it in.
-			that.setMapDataSource(json); 
+			that.setMapDataSource(json);
 			that.createWorld(function(map) {
 				that._arrangeTileLayers();
 				that.collisionize();
 				// Spawn Tiled-made objects.
 				that._spawnMapObjects(json.layers);
-				
+
 				that._loaded = true;
 				console.log("Done creating world.");
-				
+
 				if(loaded)
 					loaded();
 			});
@@ -71,7 +71,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-	
+
 	_collisionizeEntity:
 	function(ent) {
 		// Can only collisionize an entity if it has a gid.
@@ -79,13 +79,13 @@ Crafty.c("TiledMap", {
 			ent.addComponent("Collision");
 			// Mark for collision.
 			ent.addComponent("Tile");
-			
+
 			var gid = ent.gid;
 			var tileInfo = this._tileInfo[gid];
 			if(tileInfo) {
 				var tilesetInfo = this._tilesetInfo[tileInfo.tileseti];
 				var bounds = tileInfo.pts;
-				
+
 				// Make entity collidable with custom bounds.
 				if(bounds) {
 					var boundsdup = [];
@@ -98,11 +98,16 @@ Crafty.c("TiledMap", {
 					var poly = new Crafty.polygon(boundsdup);
 					ent.collision(poly);
 				}
-				
+
 				// Set whether the entity is one-way collidable.
 				if(tileInfo.oneway) {
 					ent.addComponent("OneWay");
 				}
+
+                // Set whether the entity is unstable.
+                if(tileInfo.unstable) {
+                    ent.addComponent("Unstable");
+                }
 			}
 		}
 	},
@@ -151,14 +156,14 @@ Crafty.c("TiledMap", {
 				var pts = properties.bounds
 					? $.parseJSON(properties.bounds)
 					: undefined;
-				var oneway = !!properties.oneway;
 
-				// Store the bounds points and the tileset index of each tile.
-				this._tileInfo[gid] = {
-					oneway: oneway,
-					pts: pts,
-					tileseti: tileseti
-				};
+                // Store the bounds points and the tileset index of each tile.
+                var tileInfo = properties;
+                tileInfo.oneway = !!tileInfo.oneway;
+                tileInfo.unstable = !!tileInfo.unstable;
+                tileInfo.pts = pts;
+                tileInfo.tileseti = tileseti;
+				this._tileInfo[gid] = tileInfo;
 			}
 		}
 	},
@@ -170,7 +175,7 @@ Crafty.c("TiledMap", {
 	_initLayerInfo:
 	function(layers) {
 		this._layerInfo = {};
-		
+
 		// Find the first solid tile layer, and use that for the Z-index of 0.
 		var solidLayer = 0;
 		for(var layeri in layers) {
@@ -180,7 +185,7 @@ Crafty.c("TiledMap", {
 				break;
 			}
 		}
-		
+
 		for(var layeri in layers) {
 			var layer = layers[layeri];
 			layer.properties = layer.properties || {};
@@ -188,7 +193,7 @@ Crafty.c("TiledMap", {
 			this._layerInfo[layer.name] = layer;
 		}
 	},
-	
+
 	/**
 	 * Initializes tiles' z-indices based on the layers' z-indices.
 	 */
@@ -248,4 +253,3 @@ Crafty.c("TiledMap", {
 		}
 	}
 });
-
