@@ -24,7 +24,6 @@ Crafty.c("PhysicsTicker", {
 			Crafty.trigger("UpdateViewport");
 		});
 	}
-
 });
 
 /**
@@ -219,8 +218,11 @@ Crafty.c("TileConstraint", {
                 var norm = hit.normal;
                 var overlap = scale([norm.x, norm.y], -hit.overlap);
                 var prevDisplacement = this.getDisplacement();
-                if(!ob.has("OneWay")
-                || this._oneWayCollides(overlap, prevDisplacement)) {
+                if(ob.has("OneWay")) {
+                    if(this._oneWayCollides(overlap, prevDisplacement)) {
+                        return hit;
+                    }
+                } else {
                     return hit;
                 }
             }

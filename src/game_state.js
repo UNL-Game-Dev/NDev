@@ -98,4 +98,3 @@ Crafty.c("GameState", {
 		return slot;
 	}
 });
-

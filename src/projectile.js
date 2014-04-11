@@ -2,7 +2,7 @@
  * Includes base components for projectiles.
  */
 Crafty.c("Projectile", {
-
+    
 	init:
 	function() {
 		this

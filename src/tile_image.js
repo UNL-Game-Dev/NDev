@@ -6,7 +6,7 @@ Crafty.c("TileImage", {
 	function() {
 		this.requires("2D");
 	},
-
+    
 	tile:
 	function(gid) {
 		// If the object has a gid property, then display its image

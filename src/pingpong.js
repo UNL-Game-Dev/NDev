@@ -25,7 +25,7 @@ Crafty.c("PingPong", {
 			this._phY += backForth * this._dir[1] * this.speed / fps;
 		});
 	},
-	
+    
 	direction:
 	function(angle) {
 		this._dir = [Math.cos(angle*Math.PI/180), -Math.sin(angle*Math.PI/180)];

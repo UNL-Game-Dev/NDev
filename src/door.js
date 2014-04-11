@@ -9,7 +9,7 @@ Crafty.c("Door", {
 		this.requires("ZoneEnterTrigger")
 			.setOnZoneEnter(this.moveToTarget);
 	},
-
+    
 	/**
 	 * Execute the door transition.
 	 */

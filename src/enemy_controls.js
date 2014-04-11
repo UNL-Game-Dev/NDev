@@ -3,12 +3,12 @@
  * Controls basic walking enemies.
  */
 Crafty.c("EnemyGroundControls", {
-
+    
 	airControlFactor: 0.6,
 	accelerateDV: 0.2,
 	slowToStopDV: 0.3,
 	activeBrakeDV: 0.5,
-
+    
 	init:
 	function() {
 		this.grounded = false;

@@ -2,7 +2,7 @@
  * Includes base components for enemies.
  */
 Crafty.c("Enemy", {
-
+    
 	init:
 	function() {
 
@@ -14,7 +14,7 @@ Crafty.c("Enemy", {
 			.requires("DefaultPhysicsDraw")
       .requires("Hazard");
 	},
-
+    
 	setType:
 	function(type) {
 		if(type == "e1") {

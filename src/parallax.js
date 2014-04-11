@@ -27,4 +27,3 @@ Crafty.c("Parallax", {
 	}
 
 });
-

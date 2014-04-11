@@ -18,12 +18,12 @@ Crafty.c("ZoneEnterTrigger", {
 			this._triggerCollidingLast = false;
 		});
 	},
-
+    
 	setCollidingLast:
 	function(collidingLast) {
 		this._triggerCollidingLast = collidingLast;
 	},
-
+    
 	setOnZoneEnter:
 	function(callback) {
 		this.onZoneEnterTrigger = callback;

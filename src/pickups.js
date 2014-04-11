@@ -14,7 +14,7 @@ function addPistol() {
  * Keeps track of pickups that the player encounters and uses.
  */
 Crafty.c("PickupState", {
-
+	
 	/**
 	 * A list of pickups available. Contains the name of the pickup and its bounds.
 	 */
@@ -27,12 +27,12 @@ Crafty.c("PickupState", {
 		shield: new PickupEntry("Shield"),
 		boomstick: new PickupEntry("Boomstick"),
 	},
-
+	
 	init:
 	function() {
 		this.requires("GameState");
 	},
-
+	
 	/**
 	 * Returns the number of the specified pickup the player has. Checks for key
 	 * validity, throwing if not. (Don't catch, let it surface: easier to fix.)
@@ -44,7 +44,7 @@ Crafty.c("PickupState", {
 		this._pickupEntryByName(pickupName);
 		return pickups[pickupName] || 0;
 	},
-
+	
 	/**
 	 * Adds pickups of the given name (see the pickup object for valid names)
 	 * with the given count. Count's default is 1. Negatives work.
@@ -69,7 +69,7 @@ Crafty.c("PickupState", {
 		// Return actual applied difference for potential gameplay usage.
 		return current - old;
 	},
-
+	
 	_pickupEntryByName:
 	function(pickupName) {
 		this._ensureInit();
@@ -80,7 +80,7 @@ Crafty.c("PickupState", {
 		}
 		throw "Invalid pickup: " + pickupName;
 	},
-
+	
 	_ensureInit:
 	function() {
 		// Set up pickups object if it doesn't already exist.

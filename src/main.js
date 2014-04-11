@@ -20,7 +20,7 @@ Crafty.scene("testMap", function() {
 				Crafty.trigger("SpawnPlayer");
 			}
 		});
-        
+    
 	Crafty.sprite(32, "assets/sprites/player.png", {
 		player: [0, 0]
 	}, 0);

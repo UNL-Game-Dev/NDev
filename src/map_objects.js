@@ -25,10 +25,10 @@ Crafty.c("DefaultMapObject", {
 
 	mapObjectInit:
 	function(object) {
-		this.tile(object.gid);
-		this.x = object.x;
-		this.y = object.y - this.h;
-	}
+        this.tile(object.gid);
+        this.x = object.x;
+        this.y = object.y - this.h;
+    }
 });
 
 /**
