@@ -3,10 +3,10 @@
  * Main entry point to game. Called in html.
  */
 Crafty.scene("testMap", function() {
-    
+	
 	// Use pixel art mode so canvas doesn't show fractional seams.
 	Crafty.pixelart(true);
-    
+	
 	var map = Crafty.e("2D, Canvas, TiledMap, Persistent")
 		// Temporary level loading using 1, 2, 3, etc.
 		.bind('KeyDown', function(e) {
@@ -20,26 +20,26 @@ Crafty.scene("testMap", function() {
 				Crafty.trigger("SpawnPlayer");
 			}
 		});
-    
+	
 	Crafty.sprite(32, "assets/sprites/player.png", {
 		player: [0, 0]
 	}, 0);
-    
+	
 	Crafty.sprite("assets/sprites/projectile.png", {projectile: [0, 0, 8, 8]});
-    
+	
 	Crafty.sprite("assets/sprites/test_enemy_1.png", {test_enemy_1: [0, 0, 32, 32]});
 	Crafty.sprite("assets/sprites/test_enemy_2.png", {test_enemy_2: [0, 0, 32, 32]});
-    
+	
 	// Create the physics ticker.
 	// This triggers physics ticks, which are used to more precisely control
 	// when entities are updated.
 	var ticker = Crafty.e("PhysicsTicker, Persistent");
-    
+	
 	// Create the global game state object, which saves and loads data.
 	var gs = Crafty.e("GameState, PickupState, Persistent");
 	gs.setSaveSlot("defaultSaveSlot");
 	gs.load();
-    
+	
 	// Load up the starting info if the player hasn't made a save state yet.
 	var savedLocation = gs.data.lastSavedLocation;
 	if(savedLocation == undefined) {

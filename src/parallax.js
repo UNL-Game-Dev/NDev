@@ -4,7 +4,7 @@
  * viewport scrolls.
  */
 Crafty.c("Parallax", {
-    
+	
 	init:
 	function() {
 		this.bind("ViewportScroll", function() {
@@ -15,7 +15,7 @@ Crafty.c("Parallax", {
 			this.y += 300 * this.factor;
 		});
 	},
-    
+	
 	/**
 	 * Sets the factor of camera movement to apply to this entity. 0.0 means
 	 * there is no movement along with camera, 1.0 means it is normal.

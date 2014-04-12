@@ -5,18 +5,18 @@ var _mapFolder = "assets/maps/";
  * Crafty component for loading a tiled map.
  */
 Crafty.c("TiledMap", {
-    
+	
 	init:
 	function() {
 		this.requires("TiledMapBuilder");
 	},
-    
+	
 	loadMap:
 	function(mapName, loaded) {
 		var that = this;
-        
+		
 		this.mapName = mapName;
-        
+		
 		// Remove all entities that have 2D but don't have Persistent.
 		var old2D = Crafty("2D");
 		var i = old2D.length - 1;
@@ -36,10 +36,10 @@ Crafty.c("TiledMap", {
 			}
 			// Extract tile bounds information.
 			that._initTileInfo(json.tilesets);
-            
+			
 			// Extract layer information.
 			that._initLayerInfo(json.layers);
-            
+			
 			// Load it in.
 			that.setMapDataSource(json);
 			that.createWorld(function(map) {
@@ -47,17 +47,17 @@ Crafty.c("TiledMap", {
 				that.collisionize();
 				// Spawn Tiled-made objects.
 				that._spawnMapObjects(json.layers);
-                
+				
 				that._loaded = true;
 				console.log("Done creating world.");
-                
+				
 				if(loaded)
 					loaded();
 			});
 		});
-        return this;
+		return this;
 	},
-    
+	
 	collisionize:
 	function() {
 		// Add tile bounds information.
@@ -72,7 +72,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-    
+	
 	_collisionizeEntity:
 	function(ent) {
 		// Can only collisionize an entity if it has a gid.
@@ -80,13 +80,13 @@ Crafty.c("TiledMap", {
 			ent.addComponent("Collision");
 			// Mark for collision.
 			ent.addComponent("Tile");
-            
+			
 			var gid = ent.gid;
 			var tileInfo = this._tileInfo[gid];
 			if(tileInfo) {
 				var tilesetInfo = this._tilesetInfo[tileInfo.tileseti];
 				var bounds = tileInfo.pts;
-                
+				
 				// Make entity collidable with custom bounds.
 				if(bounds) {
 					var boundsdup = [];
@@ -99,15 +99,15 @@ Crafty.c("TiledMap", {
 					var poly = new Crafty.polygon(boundsdup);
 					ent.collision(poly);
 				}
-                
-                // Set whether the entity is one-way collidable.
-                if(tileInfo.oneway) {
-                    ent.addComponent("OneWay");
-                }
+				
+				// Set whether the entity is one-way collidable.
+				if(tileInfo.oneway) {
+					ent.addComponent("OneWay");
+				}
 			}
 		}
 	},
-    
+	
 	/**
 	 * Initializes two dictionaries: tile info and tileset info.
 	 *
@@ -135,17 +135,17 @@ Crafty.c("TiledMap", {
 	function(tilesets) {
 		this._tileInfo = {};
 		this._tilesetInfo = {};
-        
+		
 		for(var tileseti in tilesets) {
 			var tileset = tilesets[tileseti];
-            
+			
 			this._tilesetInfo[tileseti] = {
 				width: tileset.tilewidth,
 				height: tileset.tileheight
 			};
 			this._tilesetInfo[tileseti].width = tileset.tilewidth;
 			this._tilesetInfo[tileseti].height = tileset.tileheight;
-            
+			
 			for(var tilei in tileset.tileproperties) {
 				var gid = parseInt(tilei) + parseInt(tileset.firstgid);
 				var properties = tileset.tileproperties[tilei];
@@ -153,7 +153,7 @@ Crafty.c("TiledMap", {
 					? $.parseJSON(properties.bounds)
 					: undefined;
 				var oneway = !!properties.oneway;
-                
+				
 				// Store the bounds points and the tileset index of each tile.
 				this._tileInfo[gid] = {
 					oneway: oneway,
@@ -163,7 +163,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-    
+	
 	/**
 	 * Initializes _layerInfo, which lists layers' property dicts, types,
 	 * z-indices, and object info by the layer's name.
@@ -171,7 +171,7 @@ Crafty.c("TiledMap", {
 	_initLayerInfo:
 	function(layers) {
 		this._layerInfo = {};
-        
+		
 		// Find the first solid tile layer, and use that for the Z-index of 0.
 		var solidLayer = 0;
 		for(var layeri in layers) {
@@ -181,7 +181,7 @@ Crafty.c("TiledMap", {
 				break;
 			}
 		}
-        
+		
 		for(var layeri in layers) {
 			var layer = layers[layeri];
 			layer.properties = layer.properties || {};
@@ -189,7 +189,7 @@ Crafty.c("TiledMap", {
 			this._layerInfo[layer.name] = layer;
 		}
 	},
-    
+	
 	/**
 	 * Initializes tiles' z-indices based on the layers' z-indices.
 	 */
@@ -205,7 +205,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-    
+	
 	/**
 	 * Spawns map objects. See map_objects.js for more on what it does.
 	 */

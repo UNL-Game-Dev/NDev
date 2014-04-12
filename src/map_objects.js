@@ -22,13 +22,13 @@ Crafty.c("DefaultMapObject", {
 	function() {
 		this.requires("TileImage");
 	},
-    
+	
 	mapObjectInit:
 	function(object) {
-        this.tile(object.gid);
-        this.x = object.x;
-        this.y = object.y - this.h;
-    }
+		this.tile(object.gid);
+		this.x = object.x;
+		this.y = object.y - this.h;
+	}
 });
 
 /**
@@ -43,12 +43,12 @@ Crafty.c("PlayerSpawn", {
 	function() {
 		this.requires("2D");
 	},
-    
+	
 	mapObjectInit:
 	function(object) {
 		this.x = object.x;
 		this.y = object.y;
-        
+		
 		this.bind("SpawnPlayer", function() {
 			var player = Crafty.e("Player");
 			player.setPhysPos(this.x, this.y);
@@ -66,7 +66,7 @@ Crafty.c("EnemySpawn", {
 	function() {
 		this.requires("2D");
 	},
-    
+	
 	mapObjectInit:
 	function(object) {
 		var enemy = Crafty.e("Enemy");
@@ -89,7 +89,7 @@ Crafty.c("MapDoor", {
 		// down this file.
 		this.requires("Door");
 	},
-    
+	
 	mapObjectInit:
 	function(object) {
 		this.x = object.x;
@@ -111,7 +111,7 @@ Crafty.c("MapSaveZone", {
 		this.requires("2D")
 			.requires("SaveZone");
 	},
-    
+	
 	mapObjectInit:
 	function(object) {
 		this.x = object.x;
@@ -132,21 +132,21 @@ Crafty.c("MovingPlatform", {
 	init:
 	function() {
 		this.requires("2D, Canvas, Tween, Physical, Collision, Tile,"
-            + "FakeInertia, DefaultPhysicsDraw");
+			+ "FakeInertia, DefaultPhysicsDraw");
 	},
-    
+	
 	mapObjectInit:
 	function(object) {
 		// Give it the right tile sprite.
-        if(object.gid) {
-            this.gid = object.gid;
-		    this.addComponent("Tile" + object.gid);
-        }
+		if(object.gid) {
+			this.gid = object.gid;
+			this.addComponent("Tile" + object.gid);
+		}
 		this.setPhysPos(object.x, object.y);
 		this._name = object.name;
 		this._pathName = object.properties.path;
 		this._destVertIndex = 0;
-        
+		
 		// See if path exists yet, or attach it when it exists.
 		var paths = Crafty("MapPath");
 		for(var i in paths) {
@@ -167,7 +167,7 @@ Crafty.c("MovingPlatform", {
 			});
 		}
 	},
-    
+	
 	/*
 	 * Move the platform along the next segment.
 	 */
@@ -176,19 +176,19 @@ Crafty.c("MovingPlatform", {
 		var path = this.path;
 		var pathVertices = path.vertices;
 		var durations = path.segmentDurations;
-        
+		
 		// Get the duration of this segment, in milliseconds.
 		var time = durations[this._destVertIndex] * 1000;
-        
+		
 		// Get the path's start and end vertices.
 		var pos1 = pathVertices[this._destVertIndex];
 		this._destVertIndex = (this._destVertIndex + 1) % pathVertices.length;
 		var pos2 = pathVertices[this._destVertIndex];
-        
+		
 		// Start at the beginning vertex.
 		this.attr({ _phX: pos1.x + path.x, _phY: pos1.y + path.y })
 		// Move to the destination.
-		    .tween({ _phX: pos2.x + path.x, _phY: pos2.y + path.y }, time)
+			.tween({ _phX: pos2.x + path.x, _phY: pos2.y + path.y }, time)
 		// Advance again when done.
 			.timeout(this._advance, time);
 	}
@@ -216,12 +216,12 @@ Crafty.c("MovingPlatform", {
  */
 Crafty.c("MapPath", {
 	_defaultSpeed: 50.0,
-    
+	
 	init:
 	function() {
 		this.requires("2D");
 	},
-    
+	
 	mapObjectInit:
 	function(object) {
 		this.x = object.x;
@@ -236,7 +236,7 @@ Crafty.c("MapPath", {
 		}
 		this.vertices = vertices;
 		this.pathType = object.polygon ? "polygon" : "polyline";
-        
+		
 		// Set the duration of each segment.
 		var time, durations = [];
 		if(object.properties && object.properties.time != undefined) {
@@ -246,7 +246,7 @@ Crafty.c("MapPath", {
 		if(typeof time == typeof []) {
 			// Set path segment durations to the list given.
 			durations = time;
-            
+			
 			if(this.pathType === "polyline") {
 				// If durations are only given going in one direction,
 				// assign those durations in the opposite direction as well.
@@ -298,7 +298,7 @@ Crafty.c("PingPongHazard", {
 	function() {
 		this.requires("PingPong, 2D, Canvas, Hazard, Tile");
 	},
-    
+	
 	mapObjectInit:
 	function(object) {
 		if(object.gid) {
