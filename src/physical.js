@@ -181,9 +181,18 @@ Crafty.c("TileConstraint", {
 	/**
 	 * Check for valid collision with tile.
 	 * Parameters:
-	 *     component: string (optional) - component to check for
+	 *     component: string (optional) - component to check for, in addition to
+     *         Tile component
 	 *     sensor: object (optional) - alternate object to use as a sensor
 	 * Returns hit info if there was a collision, false otherwise.
+     * Examples:
+     *  // check for hits against Tiles with the Wood component
+     *  hitTile("Wood")
+     *  // check for hits against Tiles with the object sensor1
+     *  hitTile(sensor1)
+     *  // checks for hits against Tiles with the Wood component with the object
+     *  // sensor1
+     *  hitTile("Wood", sensor1)
 	 */
 	hitTile:
 	function() {
