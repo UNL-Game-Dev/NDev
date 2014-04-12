@@ -24,10 +24,10 @@ Crafty.c("PlatformControls", {
 	init:
 	function() {
         this.requires("TileConstraint");
-
+        
 		this.grounded = false;
 		this.direction = "right";
-
+        
 		// A sensor that is exactly the same as the platforming character.
 		this._sensor = Crafty.e("2D");
 		this._sensor.w = this.w;
@@ -96,7 +96,7 @@ Crafty.c("PlatformControls", {
 			var kx =
 				(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
 				(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
-
+            
 			var lastGrounded = this.grounded;
 			this.grounded = false;
 			// Search through all normals for a ground normal.
@@ -152,7 +152,7 @@ Crafty.c("PlatformControls", {
             
 			var avx = Math.abs(this._vx);
 			var adesvx = Math.abs(desvx);
-
+            
 			if(iSign(this._vx) == iSign(desvx)) {
 				// Player's attempting to increase velocity.
 				if(adesvx > avx) {
@@ -216,7 +216,7 @@ Crafty.c("PlatformControls", {
 			}
 		});
 	},
-
+    
 	/**
 	 * Keeps the player moving along a slope, up to 45 degrees either way.
 	 */

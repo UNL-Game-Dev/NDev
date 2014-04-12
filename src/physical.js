@@ -6,9 +6,9 @@
  * upon to execute in a specific order.
  */
 Crafty.c("PhysicsTicker", {
-
+    
 	enabled: true,
-
+    
 	init:
 	function() {
 		this.bind("EnterFrame", function() {
@@ -44,7 +44,7 @@ Crafty.c("PhysicsTicker", {
  *          accelerations probably won't be much use.
  */
 Crafty.c("Physical", {
-
+    
 	init:
 	function() {
 		this._phX = this._x;
@@ -66,7 +66,7 @@ Crafty.c("Physical", {
 			this._phAY = 0.0;
 		});
 	},
-
+    
 	setPhysPos:
 	function(x, y) {
 		this._phX = x;
@@ -74,17 +74,17 @@ Crafty.c("Physical", {
 		this._phPX = x;
 		this._phPY = y;
 	},
-
+    
 	getDX:
 	function() {
 		return this._phX - this._phPX;
 	},
-
+    
 	getDY:
 	function() {
 		return this._phY - this._phPY;
 	},
-
+    
 	getDisplacement:
 	function() {
 		return [this.getDX(), this.getDY()];
@@ -116,17 +116,6 @@ Crafty.c("DefaultPhysicsDraw", {
 });
 
 /**
- * General constraint for responding to physical events including tile collision
- * and platform movement.
- */
-/*Crafty.c("PhysicalConstraint", {
-	init:
-	function() {
-		this.requires("TileConstraint, PlatformConstraint");
-	}
-});*/
-
-/**
  * Applies a hazard response, such that the entity will be notified upon
  * collision with hazardous objects.
  */
@@ -153,9 +142,9 @@ Crafty.c("TileConstraint", {
 	init:
 	function() {
 		this.requires("Physical");
-
+        
 		this.currentNormals = [];
-
+        
 		this.bind("ResolveConstraint", function() {
 			this.currentNormals = [];
 			/*
@@ -173,10 +162,10 @@ Crafty.c("TileConstraint", {
 				this.y = this._phY;
 				// Find the first hit, process that.
                 var hit = this.hitTile();
-
+                
                 if(!hit)
                     break;
-
+                
                 // Just resolve it lazily, yay verlet integration.
                 var norm = hit.normal;
                 var overlap = scale([norm.x, norm.y], -hit.overlap);
@@ -229,7 +218,7 @@ Crafty.c("TileConstraint", {
         }
         return false;
     },
-
+    
 	_oneWayCollides:
 	function(overlap, prevDisplacement) {
 		return -overlap[1] >= Math.abs(overlap[0])
@@ -255,7 +244,7 @@ Crafty.c("PlatformConstraint", {
 				var platform = hit.obj;
 				this._phX += platform.getDX();
 				this._phY += platform.getDY();
-
+                
 				this._override = true;
 				this._overrideX = platform._phX + Math.round(this._phX - platform._phX);
 				this._overrideY = platform._phY + Math.round(this._phY - platform._phY);

@@ -36,10 +36,10 @@ Crafty.c("TiledMap", {
 			}
 			// Extract tile bounds information.
 			that._initTileInfo(json.tilesets);
-
+            
 			// Extract layer information.
 			that._initLayerInfo(json.layers);
-
+            
 			// Load it in.
 			that.setMapDataSource(json);
 			that.createWorld(function(map) {
@@ -47,10 +47,10 @@ Crafty.c("TiledMap", {
 				that.collisionize();
 				// Spawn Tiled-made objects.
 				that._spawnMapObjects(json.layers);
-
+                
 				that._loaded = true;
 				console.log("Done creating world.");
-
+                
 				if(loaded)
 					loaded();
 			});
@@ -107,7 +107,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-
+    
 	/**
 	 * Initializes two dictionaries: tile info and tileset info.
 	 *
@@ -153,7 +153,7 @@ Crafty.c("TiledMap", {
 					? $.parseJSON(properties.bounds)
 					: undefined;
 				var oneway = !!properties.oneway;
-
+                
 				// Store the bounds points and the tileset index of each tile.
 				this._tileInfo[gid] = {
 					oneway: oneway,
@@ -163,7 +163,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-
+    
 	/**
 	 * Initializes _layerInfo, which lists layers' property dicts, types,
 	 * z-indices, and object info by the layer's name.
@@ -189,7 +189,7 @@ Crafty.c("TiledMap", {
 			this._layerInfo[layer.name] = layer;
 		}
 	},
-
+    
 	/**
 	 * Initializes tiles' z-indices based on the layers' z-indices.
 	 */
