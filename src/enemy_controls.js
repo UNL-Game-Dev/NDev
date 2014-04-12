@@ -197,7 +197,7 @@ Crafty.c("EnemyGroundControls", {
 /**
  * Controls basic flying enemies.
  */
- Crafty.c("EnemyAirControls", {
+Crafty.c("EnemyAirControls", {
     
 	vx: 0.0,		// x velocity
 	vy: 0.0,		// y velocity

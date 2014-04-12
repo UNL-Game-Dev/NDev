@@ -53,7 +53,7 @@ Crafty.c("Physical", {
 		this._phPY = this._phY;
 		this._phAX = 0.0;
 		this._phAY = 0.0;
-
+        
 		this.bind("EvaluateAccel", function() {
 			// Seconds per frame.
 			var sPerF = 1.0 / Crafty.timer.FPS();
@@ -177,7 +177,7 @@ Crafty.c("TileConstraint", {
 			}
 		});
 	},
-
+    
     /**
      * Check for valid collision with tile.
      * Parameters:
@@ -243,7 +243,7 @@ Crafty.c("PlatformConstraint", {
 			if(hit) {
 				var platform = hit.obj;
 				this._phX += platform.getDX();
-				this._phY += platform.getDY();
+				this._phY += platform.getDY
                 
 				this._override = true;
 				this._overrideX = platform._phX + Math.round(this._phX - platform._phX);
@@ -281,7 +281,7 @@ Crafty.c("Inertia", {
 			this._phY += this._phY - py;
 		});
 	},
-
+    
 	applyImpulse:
 	function(px, py) {
 		this._phX = this._phPX + px;

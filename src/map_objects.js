@@ -236,7 +236,7 @@ Crafty.c("MapPath", {
 		}
 		this.vertices = vertices;
 		this.pathType = object.polygon ? "polygon" : "polyline";
-
+        
 		// Set the duration of each segment.
 		var time, durations = [];
 		if(object.properties && object.properties.time != undefined) {

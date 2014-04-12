@@ -5,14 +5,14 @@ Crafty.c("Enemy", {
     
 	init:
 	function() {
-
+        
 		this.requires("2D")
-			.requires("Canvas")
-			.requires("TileConstraint")
-			.requires("Collision")
-			.requires("Physical")
-			.requires("DefaultPhysicsDraw")
-      .requires("Hazard");
+            .requires("Canvas")
+            .requires("TileConstraint")
+            .requires("Collision")
+            .requires("Physical")
+            .requires("DefaultPhysicsDraw")
+            .requires("Hazard");
 	},
     
 	setType:
