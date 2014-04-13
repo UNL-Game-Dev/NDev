@@ -47,10 +47,10 @@ Crafty.c("TiledMap", {
 				that.collisionize();
 				// Spawn Tiled-made objects.
 				that._spawnMapObjects(json.layers);
-				
+
 				that._loaded = true;
 				console.log("Done creating world.");
-				
+
 				if(loaded)
 					loaded();
 			});
@@ -104,6 +104,11 @@ Crafty.c("TiledMap", {
 				if(tileInfo.oneway) {
 					ent.addComponent("OneWay");
 				}
+				
+				// Set whether the entity is unstable.
+				if(tileInfo.unstable) {
+					ent.addComponent("Unstable");
+				}
 			}
 		}
 	},
@@ -152,14 +157,14 @@ Crafty.c("TiledMap", {
 				var pts = properties.bounds
 					? $.parseJSON(properties.bounds)
 					: undefined;
-				var oneway = !!properties.oneway;
 				
 				// Store the bounds points and the tileset index of each tile.
-				this._tileInfo[gid] = {
-					oneway: oneway,
-					pts: pts,
-					tileseti: tileseti
-				};
+				var tileInfo = properties;
+				tileInfo.oneway = !!tileInfo.oneway;
+				tileInfo.unstable = !!tileInfo.unstable;
+				tileInfo.pts = pts;
+				tileInfo.tileseti = tileseti;
+				this._tileInfo[gid] = tileInfo;
 			}
 		}
 	},

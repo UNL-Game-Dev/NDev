@@ -2,6 +2,11 @@
 <map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="test2" tilewidth="32" tileheight="32">
   <image source="test2.png" width="128" height="128"/>
+  <tile id="3">
+   <properties>
+    <property name="unstable" value="true"/>
+   </properties>
+  </tile>
   <tile id="4">
    <properties>
     <property name="bounds" value="[[1,0],[1,1],[0,1]]"/>
@@ -111,7 +116,7 @@
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt11sKwjAQBdD4oXULCrr/ZWrEYChp2vFBhZ4DQUFNZW6TTFNiC3bPcVj7j/BwTK9M5LLcVL0u93G+j9Po9RqcXy5xuU7DD+cvc8tkmV3gu3Ut9ylW33qtMC1Sn1zTw3OU+z6ytobg9bam3OMROZNP9jd5TPvWuZFzLfvW3P4lj2mt/bzUs147db1bv2+N3jVpK2dsXetejcc9Uqs3m+uj5NG3pP7RddDLRB6/0Tt78md1fztef6yjziWN3rOenIvn8v+ypPcCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADedwM7kgIt
+   eJzt2YFqwjAUBdAIU/cLDrb//0zNMCyGNObhSoWeAw8FNZV3mzTWlNiDw71OW38Rfn2mv0zkMm+pX9+3+rrVpXn8CY4vl7jcp/OK45exZTLnEHhv3ctjivW3nissi/Qn9/R0r3LeR+bWOXi8vSnneETO5JX1TR7L/uu6kXMt69az9Usey3rreelnPXfqfvc+36vRMekr19i616Met3uk3t7s2T5KHmMz/Y/Og1Em8ljH6NqTX6v3t+38Yxt1Lql5znZyLn6Xv5eZvReQ0segYK9m9ldr3//nUfsfVVuyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgG1cAW/pAnA=
   </data>
  </layer>
  <objectgroup name="entities" width="100" height="100">

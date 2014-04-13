@@ -2,8 +2,7 @@
  * Component that controls a physical object in a platformer style. Uses arrow
  * keys for movement at the moment.
  *
- * Also fires events indicating standing still, walking, jumping, falling, and
- * landing.
+ * Also fires events indicating standing still, walking, jumping, falling, and landing.
  */
 Crafty.c("PlatformControls", {
 	
@@ -184,6 +183,7 @@ Crafty.c("PlatformControls", {
 			if(!this.grounded) {
 				this._phAY += 580;
 			}
+			
 		}).bind("EvaluateInertia", function() {
 			if(this.grounded) {
 				// If on the ground, use simple weird physics!

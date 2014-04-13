@@ -28,7 +28,7 @@ Crafty.c("EnemyGroundControls", {
 			this.target = Crafty("Player");
 			
 			// The desired x direction.
-			var kx = (this.target.x > this.x ? 1 : 0) + (this.target.x < this.x ? -1 : 0;
+			var kx = (this.target.x > this.x ? 1 : 0) + (this.target.x < this.x ? -1 : 0);
 			
 			var lastGrounded = this.grounded;
 			this.grounded = false;
@@ -110,8 +110,9 @@ Crafty.c("EnemyGroundControls", {
 			if(!this.grounded) {
 				this._phAY += 580;
 			}
+			
 		});
-		
+
 		this.bind("EvaluateInertia", function() {
 			if(this.grounded) {
 				// If on the ground, use simple weird physics!
@@ -206,6 +207,7 @@ Crafty.c("EnemyAirControls", {
 	
 	init:
 	function() {
+		
 		this.requires("Inertia");
 		
 		this.bind("PrePhysicsTick", function() {
