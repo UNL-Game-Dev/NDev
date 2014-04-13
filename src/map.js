@@ -5,18 +5,18 @@ var _mapFolder = "assets/maps/";
  * Crafty component for loading a tiled map.
  */
 Crafty.c("TiledMap", {
-
+	
 	init:
 	function() {
 		this.requires("TiledMapBuilder");
 	},
-
+	
 	loadMap:
 	function(mapName, loaded) {
 		var that = this;
-
+		
 		this.mapName = mapName;
-
+		
 		// Remove all entities that have 2D but don't have Persistent.
 		var old2D = Crafty("2D");
 		var i = old2D.length - 1;
@@ -36,27 +36,27 @@ Crafty.c("TiledMap", {
 			}
 			// Extract tile bounds information.
 			that._initTileInfo(json.tilesets);
-
+			
 			// Extract layer information.
 			that._initLayerInfo(json.layers);
-
+			
 			// Load it in.
-			that.setMapDataSource(json); 
+			that.setMapDataSource(json);
 			that.createWorld(function(map) {
 				that._arrangeTileLayers();
 				that.collisionize();
 				// Spawn Tiled-made objects.
 				that._spawnMapObjects(json.layers);
-				
+
 				that._loaded = true;
 				console.log("Done creating world.");
-				
+
 				if(loaded)
 					loaded();
 			});
 		});
 	},
-
+	
 	collisionize:
 	function() {
 		// Add tile bounds information.
@@ -103,10 +103,15 @@ Crafty.c("TiledMap", {
 				if(tileInfo.oneway) {
 					ent.addComponent("OneWay");
 				}
+				
+				// Set whether the entity is unstable.
+				if(tileInfo.unstable) {
+					ent.addComponent("Unstable");
+				}
 			}
 		}
 	},
-
+	
 	/**
 	 * Initializes two dictionaries: tile info and tileset info.
 	 *
@@ -134,35 +139,35 @@ Crafty.c("TiledMap", {
 	function(tilesets) {
 		this._tileInfo = {};
 		this._tilesetInfo = {};
-
+		
 		for(var tileseti in tilesets) {
 			var tileset = tilesets[tileseti];
-
+			
 			this._tilesetInfo[tileseti] = {
 				width: tileset.tilewidth,
 				height: tileset.tileheight
 			};
 			this._tilesetInfo[tileseti].width = tileset.tilewidth;
 			this._tilesetInfo[tileseti].height = tileset.tileheight;
-
+			
 			for(var tilei in tileset.tileproperties) {
 				var gid = parseInt(tilei) + parseInt(tileset.firstgid);
 				var properties = tileset.tileproperties[tilei];
 				var pts = properties.bounds
 					? $.parseJSON(properties.bounds)
 					: undefined;
-				var oneway = !!properties.oneway;
-
+				
 				// Store the bounds points and the tileset index of each tile.
-				this._tileInfo[gid] = {
-					oneway: oneway,
-					pts: pts,
-					tileseti: tileseti
-				};
+				var tileInfo = properties;
+				tileInfo.oneway = !!tileInfo.oneway;
+				tileInfo.unstable = !!tileInfo.unstable;
+				tileInfo.pts = pts;
+				tileInfo.tileseti = tileseti;
+				this._tileInfo[gid] = tileInfo;
 			}
 		}
 	},
-
+	
 	/**
 	 * Initializes _layerInfo, which lists layers' property dicts, types,
 	 * z-indices, and object info by the layer's name.
@@ -204,7 +209,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-
+	
 	/**
 	 * Spawns map objects. See map_objects.js for more on what it does.
 	 */
@@ -248,4 +253,3 @@ Crafty.c("TiledMap", {
 		}
 	}
 });
-

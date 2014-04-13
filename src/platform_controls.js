@@ -1,14 +1,14 @@
 /**
- * Component that controls a physical object in a platformer style. Uses arrow 
+ * Component that controls a physical object in a platformer style. Uses arrow
  * keys for movement at the moment.
- * 
+ *
  * Also fires events indicating standing still, walking, jumping, falling, and landing.
  */
 Crafty.c("PlatformControls", {
-
+	
 	// What factor of normal control the player retains in the air.
 	airControlFactor: 0.6,
-
+	
 	// The differences in velocity to apply in certain situations:
 	// Accelerating up to max speed.
 	accelerateDV: 0.2,
@@ -19,23 +19,23 @@ Crafty.c("PlatformControls", {
 	
 	// Time to recover after being hit.
 	recoveryTime: 1.0,
-
+	
 	init:
 	function() {
 		this.grounded = false;
 		this.direction = "right";
-
+		
 		// A sensor that is exactly the same as the platforming character.
 		this._sensor = Crafty.e("2D");
 		this._sensor.w = this.w;
 		this._sensor.h = this.h;
 		this._sensor.addComponent("Collision");
-
+		
 		this._upHeld = false;
 		this._forceRemaining = 0;
 		
 		this.invincible = false;
-			
+		
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
 			if(ev.keyCode === Crafty.keys.LEFT_ARROW || ev.keyCode === Crafty.keys.RIGHT_ARROW) {
@@ -91,7 +91,7 @@ Crafty.c("PlatformControls", {
 			var kx =
 				(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
 				(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
-
+			
 			var lastGrounded = this.grounded;
 			this.grounded = false;
 			// Search through all normals for a ground normal.
@@ -113,7 +113,7 @@ Crafty.c("PlatformControls", {
 					this.trigger("Land");
 				}
 			}
-
+			
 			if(!Crafty.keydown[Crafty.keys.UP_ARROW]) {
 				this._upHeld = false;
 			}
@@ -132,7 +132,7 @@ Crafty.c("PlatformControls", {
 				this._forceRemaining -= 0.08;
 				this._phY = this._phPY - this._forceRemaining - 2;
 			}
-
+			
 			// The desired x vel.
 			var desvx = kx * 2.8;
 			// Add to the physics velocity.
@@ -141,10 +141,10 @@ Crafty.c("PlatformControls", {
 				// If not, lose a lot of control.
 				desvx *= this.airControlFactor;
 			}
-
+			
 			var avx = Math.abs(this._vx);
 			var adesvx = Math.abs(desvx);
-
+			
 			if(iSign(this._vx) == iSign(desvx)) {
 				// Player's attempting to increase velocity.
 				if(adesvx > avx) {
@@ -164,33 +164,33 @@ Crafty.c("PlatformControls", {
 				// direction, so do it a little quicker.
 				this._vx = approach(this._vx, desvx, this.activeBrakeDV);
 			}
-
+			
 			this._phX = this._phPX + this._vx;
 
 			// See if sticking makes sense now, and if it does, do so.
 			if(this.grounded || lastGrounded) {
 				this._groundStick();
 			}
-
+			
 			// If not grounded, apply gravity.
 			if(!this.grounded) {
 				this._phAY += 580;
 			}
-
+			
 		}).bind("EvaluateInertia", function() {
 			if(this.grounded) {
 				// If on the ground, use simple weird physics!
-
+				
 				// If player was just about stopped horizontally, reset _vx.
 				if(approx(this._phPX, this._phX, 0.01)) {
 					this._vx = 0;
 				}
-
+				
 				this._phPX = this._phX;
 				this._phPY = this._phY;
 				this._phX = this._phX;
 				this._phY = this._phY;
-
+				
 				this._phY += 0.01;
 				
 			} else {
@@ -199,7 +199,7 @@ Crafty.c("PlatformControls", {
 				if(approx(this._phPY, this._phY, 0.1)) {
 					this._forceRemaining = 0.0;
 				}
-
+				
 				// If in the air, use normal inertial physics.
 				var px = this._phPX;
 				var py = this._phPY;
@@ -210,7 +210,7 @@ Crafty.c("PlatformControls", {
 			}
 		});
 	},
-
+	
 	/**
 	 * Keeps the player moving along a slope, up to 45 degrees either way.
 	 */
@@ -223,11 +223,11 @@ Crafty.c("PlatformControls", {
 		
 		// Find the xvel first.
 		var xvel = Math.abs(this._phX - this._phPX)*2;
-
+		
 		// Use the sensor because changing this.x/y updates graphics.
 		this._sensor.x = this._phX;
 		this._sensor.y = this._phY;
-
+		
 		if(this._sensor.hit("Tile")) {
 			// Player can't move sideways.
 			// Iterate upwards to see if the player can stick up.

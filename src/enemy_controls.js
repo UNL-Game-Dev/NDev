@@ -3,16 +3,16 @@
  * Controls basic walking enemies.
  */
 Crafty.c("EnemyGroundControls", {
-
+	
 	airControlFactor: 0.6,
 	accelerateDV: 0.2,
 	slowToStopDV: 0.3,
 	activeBrakeDV: 0.5,
-
+	
 	init:
 	function() {
 		this.grounded = false;
-
+		
 		// A sensor that is exactly the same as the platforming character.
 		this._sensor = Crafty.e("2D");
 		this._sensor.w = this.w;
@@ -29,7 +29,7 @@ Crafty.c("EnemyGroundControls", {
 			
 			// The desired x direction.
 			var kx = (this.target.x > this.x ? 1 : 0) + (this.target.x < this.x ? -1 : 0);
-
+			
 			var lastGrounded = this.grounded;
 			this.grounded = false;
 			// Search through all normals for a ground normal.
@@ -66,7 +66,7 @@ Crafty.c("EnemyGroundControls", {
 				this._forceRemaining -= 0.08;
 				this._phY = this._phPY - this._forceRemaining - 2;
 			}
-
+			
 			// The desired x vel.
 			var desvx = kx * 2.0;
 			// Add to the physics velocity.
@@ -75,10 +75,10 @@ Crafty.c("EnemyGroundControls", {
 				// If not, lose a lot of control.
 				desvx *= this.airControlFactor;
 			}
-
+			
 			var avx = Math.abs(this._vx);
 			var adesvx = Math.abs(desvx);
-
+			
 			if(iSign(this._vx) == iSign(desvx)) {
 				// attempting to increase velocity.
 				if(adesvx > avx) {
@@ -98,35 +98,35 @@ Crafty.c("EnemyGroundControls", {
 				// direction, so do it a little quicker.
 				this._vx = approach(this._vx, desvx, this.activeBrakeDV);
 			}
-
+			
 			this._phX = this._phPX + this._vx;
-
+			
 			// See if sticking makes sense now, and if it does, do so.
 			if(this.grounded || lastGrounded) {
 				this._groundStick();
 			}
-
+			
 			// If not grounded, apply gravity.
 			if(!this.grounded) {
 				this._phAY += 580;
 			}
-
+			
 		});
-		
+
 		this.bind("EvaluateInertia", function() {
 			if(this.grounded) {
 				// If on the ground, use simple weird physics!
-
+				
 				// If just about stopped horizontally, reset _vx.
 				if(approx(this._phPX, this._phX, 0.01)) {
 					this._vx = 0;
 				}
-
+				
 				this._phPX = this._phX;
 				this._phPY = this._phY;
 				this._phX = this._phX;
 				this._phY = this._phY;
-
+				
 				this._phY += 0.01;
 				
 			} else {
@@ -135,7 +135,7 @@ Crafty.c("EnemyGroundControls", {
 				if(approx(this._phPY, this._phY, 0.1)) {
 					this._forceRemaining = 0.0;
 				}
-
+				
 				// If in the air, use normal inertial physics.
 				var px = this._phPX;
 				var py = this._phPY;
@@ -146,7 +146,7 @@ Crafty.c("EnemyGroundControls", {
 			}
 		});
 	},
-
+	
 	/**
 	 * Keeps the enemy moving along a slope, up to 45 degrees either way.
 	 */
@@ -159,11 +159,11 @@ Crafty.c("EnemyGroundControls", {
 		
 		// Find the xvel first.
 		var xvel = Math.abs(this._phX - this._phPX)*2;
-
+		
 		// Use the sensor because changing this.x/y updates graphics.
 		this._sensor.x = this._phX;
 		this._sensor.y = this._phY;
-
+		
 		if(this._sensor.hit("Tile")) {
 			// Enemy can't move sideways.
 			// Iterate upwards to see if the enemy can stick up.
@@ -199,7 +199,7 @@ Crafty.c("EnemyGroundControls", {
 /**
  * Controls basic flying enemies.
  */
- Crafty.c("EnemyAirControls", {
+Crafty.c("EnemyAirControls", {
 	
 	vx: 0.0,		// x velocity
 	vy: 0.0,		// y velocity
@@ -208,7 +208,7 @@ Crafty.c("EnemyGroundControls", {
 	
 	init:
 	function() {
-	
+		
 		this.requires("Inertia");
 		
 		this.bind("PrePhysicsTick", function() {
