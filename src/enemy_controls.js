@@ -128,7 +128,6 @@ Crafty.c("EnemyGroundControls", {
 				this._phY = this._phY;
 				
 				this._phY += 0.01;
-				
 			} else {
 				// If just about stopped vertically, stop jump
 				// prematurely if there was a jump in progress.

@@ -7,7 +7,7 @@
 var defaultRecoveryTime = 1.0;
 
 Crafty.c("Player", {
-
+    
 	init:
 	function() {
 		this
@@ -18,7 +18,7 @@ Crafty.c("Player", {
 			.requires("player")
 			.requires("Collision")
 			.requires("Physical")
-			.requires("PhysicalConstraint")
+			.requires("PlatformConstraint")
             .requires("HazardResponse")
 			.requires("PlatformControls")
 			.requires("DefaultPhysicsDraw")
@@ -72,8 +72,7 @@ Crafty.c("Player", {
 				// Whether or not player can be hit.
 				invincible: false,
 			});
-
-
+        
 		this.bind("Hurt", function(hit) {
 			if(!this.invincible) {
 				this.invincible = true;
@@ -85,7 +84,7 @@ Crafty.c("Player", {
 				}, this.recoveryTime * 1000);
 			}
 		});
-
+        
 		this.makeScrollTarget();
 	}
 });

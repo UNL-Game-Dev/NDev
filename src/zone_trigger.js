@@ -18,12 +18,12 @@ Crafty.c("ZoneEnterTrigger", {
 			this._triggerCollidingLast = false;
 		});
 	},
-
+	
 	setCollidingLast:
 	function(collidingLast) {
 		this._triggerCollidingLast = collidingLast;
 	},
-
+	
 	setOnZoneEnter:
 	function(callback) {
 		this.onZoneEnterTrigger = callback;
@@ -34,5 +34,5 @@ Crafty.c("ZoneEnterTrigger", {
  * A zone that continuously responds to the player's presence.
  */
  Crafty.c("ZoneInsideTrigger", {
- 	// TODO: Implement when needed.
+	// TODO: Implement when needed.
  });

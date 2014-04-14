@@ -55,6 +55,7 @@ Crafty.c("TiledMap", {
 					loaded();
 			});
 		});
+		return this;
 	},
 	
 	collisionize:
@@ -237,7 +238,6 @@ Crafty.c("TiledMap", {
 					craftyObject.z = layerInfo.z;
 				}
 			} else if(layerInfo.type === "imagelayer") {
-				console.log(layerInfo);
 				// This is probably a parallax layer.
 				var parallaxFactor = layerInfo.properties.parallaxFactor;
 				if(parallaxFactor) {

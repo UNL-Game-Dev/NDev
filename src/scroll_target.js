@@ -17,7 +17,7 @@ Crafty.c("ScrollTarget", {
 			}
 		});
 	},
-
+	
 	makeScrollTarget:
 	function() {
 		currentTarget = this;

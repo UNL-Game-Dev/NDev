@@ -11,7 +11,7 @@ Crafty.c("SaveZone", {
 		this.requires("ZoneEnterTrigger")
 			.setOnZoneEnter(this.triggerSave);
 	},
-
+	
 	triggerSave:
 	function() {
 		saveGame(this);
@@ -26,14 +26,14 @@ Crafty.c("SaveZone", {
 function saveGame(saveZone) {
 	// Save current map and position to respawn, then save.
 	var gs = Crafty("GameState");
-
+	
 	gs.data.lastSavedLocation = {
 		x: saveZone.x,
 		y: saveZone.y,
 		map: Crafty("TiledMap").mapName
 	};
-
+	
 	gs.save();
-
+	
 	saveZone._promptActive = false;
 }

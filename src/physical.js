@@ -6,9 +6,9 @@
  * upon to execute in a specific order.
  */
 Crafty.c("PhysicsTicker", {
-
+	
 	enabled: true,
-
+	
 	init:
 	function() {
 		this.bind("EnterFrame", function() {
@@ -16,7 +16,7 @@ Crafty.c("PhysicsTicker", {
 				Crafty.trigger("PrePhysicsTick");
 				Crafty.trigger("EvaluateAccel");
 				Crafty.trigger("UpdateCollisions");
-                Crafty.trigger("EvaluateHits");
+				Crafty.trigger("EvaluateHits");
 				Crafty.trigger("ResolveConstraint");
 				Crafty.trigger("EvaluateInertia");
 			}
@@ -24,7 +24,6 @@ Crafty.c("PhysicsTicker", {
 			Crafty.trigger("UpdateViewport");
 		});
 	}
-
 });
 
 /**
@@ -45,7 +44,7 @@ Crafty.c("PhysicsTicker", {
  *          accelerations probably won't be much use.
  */
 Crafty.c("Physical", {
-
+	
 	init:
 	function() {
 		this._phX = this._x;
@@ -54,7 +53,7 @@ Crafty.c("Physical", {
 		this._phPY = this._phY;
 		this._phAX = 0.0;
 		this._phAY = 0.0;
-
+		
 		this.bind("EvaluateAccel", function() {
 			// Seconds per frame.
 			var sPerF = 1.0 / Crafty.timer.FPS();
@@ -67,7 +66,7 @@ Crafty.c("Physical", {
 			this._phAY = 0.0;
 		});
 	},
-
+	
 	setPhysPos:
 	function(x, y) {
 		this._phX = x;
@@ -75,17 +74,17 @@ Crafty.c("Physical", {
 		this._phPX = x;
 		this._phPY = y;
 	},
-
+	
 	getDX:
 	function() {
 		return this._phX - this._phPX;
 	},
-
+	
 	getDY:
 	function() {
 		return this._phY - this._phPY;
 	},
-
+	
 	getDisplacement:
 	function() {
 		return [this.getDX(), this.getDY()];
@@ -100,8 +99,8 @@ Crafty.c("DefaultPhysicsDraw", {
 	init:
 	function() {
 		this.bind("UpdateCollisions", function() {
-			this.x =  this._phPX;
-			this.y =  this._phPY;
+			this.x = this._phPX;
+			this.y = this._phPY;
 		});
 		this.bind("UpdateDraw", function() {
 			if(this._override) {
@@ -117,33 +116,22 @@ Crafty.c("DefaultPhysicsDraw", {
 });
 
 /**
- * General constraint for responding to physical events including tile collision
- * and platform movement.
- */
-Crafty.c("PhysicalConstraint", {
-	init:
-	function() {
-		this.requires("TileConstraint, PlatformConstraint");
-	}
-});
-
-/**
  * Applies a hazard response, such that the entity will be notified upon
  * collision with hazardous objects.
  */
 Crafty.c("HazardResponse", {
-    init:
-    function() {
-        this.bind("EvaluateHits", function() {
-            this.x = this._phX;
-            this.y = this._phY;
-            var hits = this.hit("Hazard");
-            for(var i in hits) {
-                var hit = hits[i];
-                this.trigger("Hurt", hit);
-            }
-        });
-    }
+	init:
+	function() {
+		this.bind("EvaluateHits", function() {
+			this.x = this._phX;
+			this.y = this._phY;
+			var hits = this.hit("Hazard");
+			for(var i in hits) {
+				var hit = hits[i];
+				this.trigger("Hurt", hit);
+			}
+		});
+	}
 });
 
 /**
@@ -154,9 +142,9 @@ Crafty.c("TileConstraint", {
 	init:
 	function() {
 		this.requires("Physical");
-
+		
 		this.currentNormals = [];
-
+		
 		this.bind("ResolveConstraint", function() {
 			this.currentNormals = [];
 			/*
@@ -173,31 +161,78 @@ Crafty.c("TileConstraint", {
 				this.x = this._phX;
 				this.y = this._phY;
 				// Find the first hit, process that.
-				var hits = this.hit("Tile");
-				if(!hits)
+				var hit = this.hitTile();
+				
+				if(!hit)
 					break;
-				var hit = hits[0];
-				var norm = scale([hit.normal.x, hit.normal.y], -hit.overlap);
-				var prevDisplacement = this.getDisplacement();
-				var ob = hit.obj;
-				// See if collision should be resolved.
-				if(!ob.has("OneWay")
-				|| this._checkOneWayCollision(norm, prevDisplacement)) {
-					// Just resolve it lazily, yay verlet integration.
-					this._phX += norm[0];
-					this._phY += norm[1];
-					// Maintain a "current normals" list in case other components
-					// (such as platforming physics) are interested.
-					this.currentNormals.push(norm);
-				}
+				
+				// Just resolve it lazily, yay verlet integration.
+				var norm = hit.normal;
+				var overlap = scale([norm.x, norm.y], -hit.overlap);
+				this._phX += overlap[0];
+				this._phY += overlap[1];
+				
+				// Maintain a "current normals" list in case other components
+				// (such as platforming physics) are interested.
+				this.currentNormals.push(overlap);
 			}
 		});
 	},
-
-	_checkOneWayCollision:
-	function(norm, prevDisplacement) {
-		return -norm[1] >= Math.abs(norm[0])
-			&& dot(norm, add(norm, prevDisplacement)) <= 1.0;
+	
+	/**
+	 * Check for valid collision with tile.
+	 * Parameters:
+	 *     component: string (optional) - component to check for, in addition to
+     *         Tile component
+	 *     sensor: object (optional) - alternate object to use as a sensor
+	 * Returns hit info if there was a collision, false otherwise.
+     * Examples:
+     *  // check for hits against Tiles with the Wood component
+     *  hitTile("Wood")
+     *  // check for hits against Tiles with the object sensor1
+     *  hitTile(sensor1)
+     *  // checks for hits against Tiles with the Wood component with the object
+     *  // sensor1
+     *  hitTile("Wood", sensor1)
+	 */
+	hitTile:
+	function() {
+		var sensor = this;
+		var component = null;
+		if(arguments.length === 1) {
+			if(typeof arguments[0] === "string") {
+				component = arguments[0];
+			} else {
+				sensor = arguments[0];
+			}
+		} else if(arguments.length === 2) {
+			component = arguments[0];
+			sensor = arguments[1];
+		}
+		var hits = sensor.hit("Tile");
+		for(var j in hits) {
+			var hit = hits[j];
+			var ob = hit.obj;
+			if(!component || ob.has(component)) {
+				var norm = hit.normal;
+				var overlap = scale([norm.x, norm.y], -hit.overlap);
+				var prevDisplacement = this.getDisplacement();
+				if(ob.has("OneWay")) {
+					if(this._oneWayCollides(overlap, prevDisplacement)) {
+						return hit;
+					}
+				} else {
+					return hit;
+				}
+			}
+		}
+		return false;
+	},
+	
+	_oneWayCollides:
+	function(overlap, prevDisplacement) {
+		return -overlap[1] >= Math.abs(overlap[0])
+			&& dot(overlap, add(overlap, prevDisplacement)) <= 1.0;
 	}
 });
 
@@ -208,18 +243,18 @@ Crafty.c("TileConstraint", {
 Crafty.c("PlatformConstraint", {
 	init:
 	function() {
+		this.requires("TileConstraint");
 		this.bind("ResolveConstraint", function() {
 			this.x = this._phX;
 			this.y = this._phY;
 			this.y++;
-			var hits = this.hit("MovingPlatform");
+			var hit = this.hitTile("MovingPlatform");
 			this.y--;
-			if(hits) {
-				var hit = hits[0];
+			if(hit) {
 				var platform = hit.obj;
 				this._phX += platform.getDX();
 				this._phY += platform.getDY();
-
+				
 				this._override = true;
 				this._overrideX = platform._phX + Math.round(this._phX - platform._phX);
 				this._overrideY = platform._phY + Math.round(this._phY - platform._phY);
@@ -256,7 +291,7 @@ Crafty.c("Inertia", {
 			this._phY += this._phY - py;
 		});
 	},
-
+	
 	applyImpulse:
 	function(px, py) {
 		this._phX = this._phPX + px;
