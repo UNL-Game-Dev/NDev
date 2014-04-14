@@ -99,8 +99,8 @@ Crafty.c("DefaultPhysicsDraw", {
 	init:
 	function() {
 		this.bind("UpdateCollisions", function() {
-			this.x =  this._phPX;
-			this.y =  this._phPY;
+			this.x = this._phPX;
+			this.y = this._phPY;
 		});
 		this.bind("UpdateDraw", function() {
 			if(this._override) {
@@ -171,6 +171,7 @@ Crafty.c("TileConstraint", {
 				var overlap = scale([norm.x, norm.y], -hit.overlap);
 				this._phX += overlap[0];
 				this._phY += overlap[1];
+				
 				// Maintain a "current normals" list in case other components
 				// (such as platforming physics) are interested.
 				this.currentNormals.push(overlap);
@@ -252,7 +253,7 @@ Crafty.c("PlatformConstraint", {
 			if(hit) {
 				var platform = hit.obj;
 				this._phX += platform.getDX();
-				this._phY += platform.getDY
+				this._phY += platform.getDY();
 				
 				this._override = true;
 				this._overrideX = platform._phX + Math.round(this._phX - platform._phX);
