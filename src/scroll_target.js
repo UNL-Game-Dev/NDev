@@ -17,12 +17,12 @@ Crafty.c("ScrollTarget", {
 	function() {
 		this.bind("UpdateViewport", function() {
 			if(currentTarget == this) {
-                var offsetX = Crafty.viewport._width / Crafty.viewport._scale / 2.0;
-                var offsetY = Crafty.viewport._height / Crafty.viewport._scale / 2.0;
+				var offsetX = Crafty.viewport._width / Crafty.viewport._scale / 2.0;
+				var offsetY = Crafty.viewport._height / Crafty.viewport._scale / 2.0;
 				var targetX = -Math.floor(this.x + this.w / 2.0 - offsetX);
 				var targetY = -Math.floor(this.y + this.h / 2.0 - offsetY);
-                Crafty.viewport.x += Math.ceil((targetX - Crafty.viewport.x) * scrollSpeed);
-                Crafty.viewport.y += Math.ceil((targetY - Crafty.viewport.y) * scrollSpeed);
+				Crafty.viewport.x += Math.ceil((targetX - Crafty.viewport.x) * scrollSpeed);
+				Crafty.viewport.y += Math.ceil((targetY - Crafty.viewport.y) * scrollSpeed);
 			}
 		});
 	},
