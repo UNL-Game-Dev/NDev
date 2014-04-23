@@ -421,8 +421,10 @@ Crafty.c("SlidingBlock", {
 			var dist = Math.min(
 				Math.abs(1 / Math.cos(Math.PI / 180 * dir)),
 				Math.abs(1 / Math.cos(Math.PI / 180 * (dir - 90))));
-			this._slideOutPos[0] = this._slideInPos[0] + this.w * dist * Math.cos(Math.PI/180*dir);
-			this._slideOutPos[1] = this._slideInPos[1] - this.h * dist * Math.sin(Math.PI/180*dir);
+			this._slideOutPos[0] = this._slideInPos[0]
+					+ this.w * dist * Math.cos(Math.PI/180*dir);
+			this._slideOutPos[1] = this._slideInPos[1]
+					- this.h * dist * Math.sin(Math.PI/180*dir);
 		}
 		
 		this.timeout(function() {
@@ -432,15 +434,23 @@ Crafty.c("SlidingBlock", {
 	
 	_slide:
 	function() {
-		this.attr({ _phX: this._slideInPos[0], _phY: this._slideInPos[1] })
-			.tween({ _phX: this._slideOutPos[0], _phY: this._slideOutPos[1] }, this._slideOutTime * 1000)
+		this.attr({
+				_phX: this._slideInPos[0],
+				_phY: this._slideInPos[1]
+			})
+			.tween({
+				_phX: this._slideOutPos[0],
+				_phY: this._slideOutPos[1]
+			}, this._slideOutTime * 1000)
 			.timeout(function() {
-				this.timeout(function() {
-					this.tween({ _phX: this._slideInPos[0], _phY: this._slideInPos[1] }, this._slideInTime * 1000)
-						.timeout(function() {
-							this.timeout(this._slide, this._slideInDelay * 1000);
-						}, this._slideInTime * 1000);
-				}, this._slideOutDelay * 1000);
-			}, this._slideOutTime * 1000);
+				this.tween({
+					_phX: this._slideInPos[0],
+					_phY: this._slideInPos[1]
+				}, this._slideInTime * 1000);
+			}, (this._slideOutTime + this._slideOutDelay) * 1000)
+			.timeout(function() {
+				this._slide();
+			}, (this._slideOutTime + this._slideOutDelay
+			  + this._slideInTime + this._slideInDelay) * 1000);
 	}
 });
