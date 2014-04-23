@@ -5,7 +5,9 @@
 Crafty.scene("testMap", function() {
 	
 	// Use pixel art mode so canvas doesn't show fractional seams.
+	Crafty.canvas.init();
 	Crafty.pixelart(true);
+	Crafty.viewport.zoom(2, 400, 300, 0);
 	
 	var map = Crafty.e("2D, Canvas, TiledMap, Persistent")
 		// Temporary level loading using 1, 2, 3, etc.
