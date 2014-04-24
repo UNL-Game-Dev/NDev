@@ -195,13 +195,37 @@
     <property name="delay" value="1.75"/>
    </properties>
   </object>
+  <object name="slidingBlock17" type="SlidingBlock" gid="3" x="1344" y="384">
+   <properties>
+    <property name="direction" value="nw"/>
+    <property name="time" value="[0.1,0.5,0.5]"/>
+   </properties>
+  </object>
+  <object name="slidingBlock18" type="SlidingBlock" gid="3" x="1376" y="384">
+   <properties>
+    <property name="direction" value="ne"/>
+    <property name="time" value="[0.1,0.5,0.5]"/>
+   </properties>
+  </object>
+  <object name="slidingBlock20" type="SlidingBlock" gid="3" x="1376" y="416">
+   <properties>
+    <property name="direction" value="se"/>
+    <property name="time" value="[0.1,0.5,0.5]"/>
+   </properties>
+  </object>
+  <object name="slidingBlock19" type="SlidingBlock" gid="3" x="1344" y="416">
+   <properties>
+    <property name="direction" value="sw"/>
+    <property name="time" value="[0.1,0.5,0.5]"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="test" width="100" height="100">
   <properties>
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2YFqwjAUBdAIU/cLE7b//8yZYVgIaZqHlgo9B4JCtZV3m/S1psQRnB7jsvcP4c9n+s9ELvOW6vV9H7f7+Gpef4L7l0tcrtN1w/2Xfctkzinw2bqW5xSrbz1XWBapT67p5THKeR+ZW9fg8Y6mnOMROZNn1jd5LHvVdSPnWtattfVLHst663mpZz136nr3vt8bo2PSV66xda1HNW57pF5vttZHyWNspv7ReTDKRB7bGF178ra6v23nH/uoc0nNe/aTc3Ff/l5meq9UbY/0FWwnsp5Z+17jYzDaZ8Kjvk4e70Uez5npr8pzgZmx5f8ER7G2HqkxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7OMXLMcCow==
+   eJzt19tuwjAMANBUGmW/wKTt/z9zZCJaVHqJaasiOEeyeIBesOvETYl30N2iP/pG+POZ/muiLu2m8vV9ja9rXAafP8Hzq0tcztN5x/OXc6tJmy7w2zqXpxTLb90rTIvkJ+e0v0V57iO9dQ5e792UZzwi12TN+qYe07baN3Jdy7q1tH6px7Sx9bzks+6dOt9jx4/F3DVblT2nr+5nz9njaPX/LeZyPJyRxvKzNEdF+6O1zq+iJf/RPpirySP9UR/7yv2xxlxe8nf1fDvsv4hhPXhcXZeU7p/3JcP3e/2xjZxD7+XPpXVP7qrP1rmC/UTWM/vJNj5mYmzPmJrr1OO5qMc6LfNVeQ9vCbPWekvrkRwDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAMX4BJkUC6Q==
   </data>
  </layer>
  <objectgroup name="entities" width="100" height="100">

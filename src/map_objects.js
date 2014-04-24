@@ -427,11 +427,16 @@ Crafty.c("SlidingBlock", {
 					- this.h * dist * Math.sin(Math.PI/180*dir);
 		}
 		
-		this.timeout(function() {
-			this._slide();
-		}, this._delay * 1000);
+		// Schedule sliding
+		var that = this;
+		Crafty("Clock").schedule(function() { that._slide(); },
+					this._delay,
+					Infinity,
+					this._slideOutTime + this._slideOutDelay
+					+ this._slideInTime + this._slideInDelay);
 	},
 	
+	// Slide out and in once
 	_slide:
 	function() {
 		this.attr({
@@ -447,10 +452,6 @@ Crafty.c("SlidingBlock", {
 					_phX: this._slideInPos[0],
 					_phY: this._slideInPos[1]
 				}, this._slideInTime * 1000);
-			}, (this._slideOutTime + this._slideOutDelay) * 1000)
-			.timeout(function() {
-				this._slide();
-			}, (this._slideOutTime + this._slideOutDelay
-			  + this._slideInTime + this._slideInDelay) * 1000);
+			}, (this._slideOutTime + this._slideOutDelay) * 1000);
 	}
 });
