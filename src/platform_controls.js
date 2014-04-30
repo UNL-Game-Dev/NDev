@@ -100,7 +100,7 @@ Crafty.c("PlatformControls", {
 			this.grounded = false;
 			// Search through all normals for a ground normal.
 			for(var i = this.currentNormals.length - 1; i >= 0; --i) {
-				var n = norm(this.currentNormals[i]);
+				var n = normalize(this.currentNormals[i]);
 				if(dot(n, [0,-1]) > 0) {
 					this.grounded = true;
 					break;

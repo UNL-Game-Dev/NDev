@@ -157,6 +157,8 @@ Crafty.c("TileConstraint", {
 			 * overlaps two tiles, both emit a collision! This results in double
 			 * the force required being applied, making things bounce. No good.
 			 */
+			var totalDisplacement = [0, 0];
+			var crushed = false;
 			for(var i = 20; i >= 0; --i) {
 				this.x = this._phX;
 				this.y = this._phY;
@@ -169,12 +171,28 @@ Crafty.c("TileConstraint", {
 				// Just resolve it lazily, yay verlet integration.
 				var norm = hit.normal;
 				var overlap = scale([norm.x, norm.y], -hit.overlap);
+				
+				if(!crushed && dot(overlap, totalDisplacement) < -12) {
+					crushed = true;
+				}
+				
+				totalDisplacement[0] += overlap[0];
+				totalDisplacement[1] += overlap[1];
+				
 				this._phX += overlap[0];
 				this._phY += overlap[1];
 				
 				// Maintain a "current normals" list in case other components
 				// (such as platforming physics) are interested.
 				this.currentNormals.push(overlap);
+			}
+			if(crushed) {
+				if(!this.crushing) {
+					this.crushing = true;
+					console.log("crush", crushAmount);
+				}
+			} else {
+				this.crushing = false;
 			}
 		});
 	},
@@ -256,8 +274,10 @@ Crafty.c("PlatformConstraint", {
 				this._phY += platform.getDY();
 				
 				this._override = true;
-				this._overrideX = platform._phX + Math.round(this._phX - platform._phX);
-				this._overrideY = platform._phY + Math.round(this._phY - platform._phY);
+				this._overrideX = platform._phX
+					+ Math.round(this._phX - platform._phX);
+				this._overrideY = platform._phY
+					+ Math.round(this._phY - platform._phY);
 			}
 		});
 	}
@@ -328,7 +348,7 @@ function rNormal(v) {
 }
 
 // Returns the normalized version of the given vector.
-function norm(v) {
+function normalize(v) {
 	var x = v[0];
 	var y = v[1];
 	var d = Math.sqrt(x*x + y*y);
@@ -363,4 +383,9 @@ function scale(v, scalar) {
 // Returns angle of v w/r to x axis, in degrees
 function angle(v) {
 	return Math.atan2(-v[1], v[0]) * 180 / Math.PI;
+}
+
+// Returns smallest angle between v1 and v2, in degrees
+function angle2(v1, v2) {
+	return Math.acos(dot(normalize(v1), normalize(v2))) * 180 / Math.PI;
 }
