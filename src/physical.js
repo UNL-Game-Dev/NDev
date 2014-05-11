@@ -157,8 +157,6 @@ Crafty.c("TileConstraint", {
 			 * overlaps two tiles, both emit a collision! This results in double
 			 * the force required being applied, making things bounce. No good.
 			 */
-			var totalDisplacement = [0, 0];
-			var crushed = false;
 			for(var i = 20; i >= 0; --i) {
 				this.x = this._phX;
 				this.y = this._phY;
@@ -172,27 +170,12 @@ Crafty.c("TileConstraint", {
 				var norm = hit.normal;
 				var overlap = scale([norm.x, norm.y], -hit.overlap);
 				
-				if(!crushed && dot(overlap, totalDisplacement) < -12) {
-					crushed = true;
-				}
-				
-				totalDisplacement[0] += overlap[0];
-				totalDisplacement[1] += overlap[1];
-				
 				this._phX += overlap[0];
 				this._phY += overlap[1];
 				
 				// Maintain a "current normals" list in case other components
 				// (such as platforming physics) are interested.
 				this.currentNormals.push(overlap);
-			}
-			if(crushed) {
-				if(!this.crushing) {
-					this.crushing = true;
-					console.log("crush", crushAmount);
-				}
-			} else {
-				this.crushing = false;
 			}
 		});
 	},
