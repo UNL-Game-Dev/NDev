@@ -1,0 +1,13 @@
+#NTEVersion 6
+#BeginNodes 2
+268 202
+engine.graphics.synthesis.texture.PatternPerlinNoise
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 10 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.3478261 0.2509804 0.2509804 0.2509804 1.0 0.352657 0.2509804 0.2509804 0.2509804 1.0 0.4299517 0.5019608 0.5019608 0.5019608 1.0 0.4347826 0.5019608 0.5019608 0.5019608 1.0 0.5458937 0.7529412 0.7529412 0.7529412 1.0 0.5507246 0.7529412 0.7529412 0.7529412 1.0 0.6763285 1.0 1.0 1.0 1.0 0.68115944 1.0 1.0 1.0 1.0 1.0 ScaleX 24.0 ScaleY 24.0 ValueScale 1.0 Persistence 0.5 StartBand 1 EndBand 8 Seed 10 Periodic true endparameters
+315 331
+engine.graphics.synthesis.texture.FilterColorize
+ExportName "" Gray_to_Color_Mapping 2 0.3764706 0.5411765 0.6509804 1.0 0.0 0.7529412 0.8784314 1.0 1.0 1.0 endparameters
+#EndNodes
+#BeginConnections 1
+0 1 0
+#EndConnections
+glpreview 0 -1 -1 -1 Object 0 Spec._Power 200.0 POM_Strength 0.0 Ambient 0.0 TexScale_U 1 TexScale_V 1 CamRotX 89.0 CamRotY 0.0 CamDist 2.5 endglpreview

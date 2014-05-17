@@ -51,7 +51,7 @@
    </properties>
   </tile>
  </tileset>
- <imagelayer name="bg_parallax" width="100" height="100">
+ <imagelayer name="bg_parallax" width="100" height="100" visible="0">
   <image source="monoliths.png"/>
   <properties>
    <property name="parallaxFactor" value="0.7"/>
@@ -101,17 +101,17 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="bg2" width="100" height="100">
+ <layer name="bg2" width="100" height="100" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1TEKAzEMBED/IYELJHD5/ytPlQuDiTlwpGIG1ItFaFsDAACA+x4xz+wl6I6YV/YSdO+YT/YSdGfMN3sJOv1Ri/6oRX/Uoj9q0R+16I//WL17/bHHmP/q3euPPcb8V+9ef+wx5j/e/Sx3/bHHr78zy11/5Jjlrj9yyB0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmLkArA8FlQ==
   </data>
  </layer>
- <layer name="bg" width="100" height="100">
+ <layer name="bg" width="100" height="100" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1ssKg0AMBVB/oe9CC+3/f2WzsINkI4U6GfAcuKi7kEWu0wQAACydIufqIWhukXv1EDSPyLN6CJpX5F09xE7lrtAdfeV9567QHX3lfeeuWH5fIofIcX5+36/bj7kbef+5K3RHX3nf+qOW/hjLL/3B9tb6w73qa62v3auxuFdj8b8LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAP30AuFsGpA==
   </data>
  </layer>
- <objectgroup name="entities_behind" width="100" height="100">
+ <objectgroup name="entities_behind" width="100" height="100" visible="0">
   <object name="slidingBlock16" type="SlidingBlock" gid="3" x="1472" y="544">
    <properties>
     <property name="direction" value="s"/>
@@ -220,7 +220,7 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="test" width="100" height="100">
+ <layer name="test" width="100" height="100" visible="0">
   <properties>
    <property name="solid" value="true"/>
   </properties>
@@ -228,7 +228,7 @@
    eJzt14FOwyAUBVCWzM1f0ET//zNdzYgEoYDrbNOek5Al03Xs3T4KIXAEp/u4rD0Rvr2Gn0zk0q9Wr4/beL+Nt+z1c/D6chk31en6xOvHa8ukz2ngf9NavoSx+qa9Qt1IfaaaXu4j3vcjvXUd/L6jiff4iCmTR9Y3edQt9dyYco3rVmv9kkddaT2P9Ux7J6136fOlMfedveIz55LM55l7j7Wlvzeaq3G+RyrVp7WPGu2P3pz3Iv7OeMboyaNVn7lM/tIf6Wf33B+PmKvL9Ld0f5v334g8jyOZzuWjZ/A5aS4h/L7fW/Lz/ZH6Y+ksUlMNncu3pfeZfEpee/cVe7K1/cvIHLYw36Wla/R/rc3nmVF6ZtT2dXvMo2RrPVOz5bktqdQztYzy9+fu/XNo1zCew3vGUfZaJbV1LX+/lUdrPTpyjQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGBNXwtXBBw=
   </data>
  </layer>
- <objectgroup name="entities" width="100" height="100">
+ <objectgroup name="entities" width="100" height="100" visible="0">
   <properties>
    <property name="spawnMode" value="TiledComponents"/>
   </properties>

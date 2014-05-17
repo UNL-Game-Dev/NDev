@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="ice" tilewidth="32" tileheight="32">
+  <image source="ice.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="65" name="template" tilewidth="32" tileheight="32">
+  <image source="template.png" width="256" height="256"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztzbEJACAQBEFFjQQTe7AAC/j+y/ICA7GAF2QHlgsvBAB4K6l5lJ3/q+pHw/m/qKaisp0nuxYAAAB/WkoiAhQ=
+  </data>
+ </layer>
+</map>
