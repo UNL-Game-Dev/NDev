@@ -141,7 +141,7 @@ Crafty.c("HazardResponse", {
 Crafty.c("TileConstraint", {
 	init:
 	function() {
-		this.requires("Physical");
+		this.requires("Physical, Collision");
 		
 		this.currentNormals = [];
 		
