@@ -1,6 +1,7 @@
 /**
  * Dynamite.
  */
+
 Crafty.c("Dynamite", {
 	
 	init:

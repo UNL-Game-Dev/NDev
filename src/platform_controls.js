@@ -69,18 +69,19 @@ Crafty.c("PlatformControls", {
 					}
 				} else if(Crafty("PickupState").hasPickup("dynamite")) {
 					var dynamite = Crafty.e("Dynamite");
+					var dynamiteThrowSpeed = 3;
 					dynamite.setPhysPos(this.x, this.y);
 					if(this.direction === "left") {
-						dynamite._phX = dynamite._phPX - 10;
+						dynamite._phX = dynamite._phPX - dynamiteThrowSpeed;
 					} else {
-						dynamite._phX = dynamite._phPX + 10;
+						dynamite._phX = dynamite._phPX + dynamiteThrowSpeed;
 					}
 					if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
 						dynamite._phX = dynamite._phPX;
-						dynamite._phY = dynamite._phPY - 10;
+						dynamite._phY = dynamite._phPY - dynamiteThrowSpeed;
 					} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
 						dynamite._phX = dynamite._phPX;
-						dynamite._phY = dynamite._phPY + 10;
+						dynamite._phY = dynamite._phPY + dynamiteThrowSpeed;
 					}
 				}
 			}
