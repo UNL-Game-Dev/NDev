@@ -10,6 +10,11 @@ function addPistol() {
 	throw "Debug function!";
 }
 
+function addDynamite() {
+	Crafty("PickupState").addPickup("dynamite");
+	throw "Debug function!";
+}
+
 /**
  * Keeps track of pickups that the player encounters and uses.
  */
