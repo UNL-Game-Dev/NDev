@@ -51,21 +51,38 @@ Crafty.c("PlatformControls", {
 				
 				this.trigger("Walk");
 			}
-			if(ev.keyCode == Crafty.keys.SPACE &&
-					Crafty("PickupState").hasPickup("pistol")) {
-				var bullet = Crafty.e("Projectile");
-				bullet.setPhysPos(this.x, this.y);
-				if(this.direction == "left") {
-					bullet._phX = bullet._phPX - 10;
-				} else {
-					bullet._phX = bullet._phPX + 10;
-				}
-				if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
-					bullet._phX = bullet._phPX;
-					bullet._phY = bullet._phPY - 10;
-				} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
-					bullet._phX = bullet._phPX;
-					bullet._phY = bullet._phPY + 10;
+			if(ev.keyCode == Crafty.keys.SPACE) {
+				if(Crafty("PickupState").hasPickup("pistol")) {
+					var bullet = Crafty.e("Projectile");
+					bullet.setPhysPos(this.x, this.y);
+					if(this.direction === "left") {
+						bullet._phX = bullet._phPX - 10;
+					} else {
+						bullet._phX = bullet._phPX + 10;
+					}
+					if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
+						bullet._phX = bullet._phPX;
+						bullet._phY = bullet._phPY - 10;
+					} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						bullet._phX = bullet._phPX;
+						bullet._phY = bullet._phPY + 10;
+					}
+				} else if(Crafty("PickupState").hasPickup("dynamite")) {
+					var dynamite = Crafty.e("Dynamite");
+					var dynamiteThrowSpeed = 3;
+					dynamite.setPhysPos(this.x, this.y);
+					if(this.direction === "left") {
+						dynamite._phX = dynamite._phPX - dynamiteThrowSpeed;
+					} else {
+						dynamite._phX = dynamite._phPX + dynamiteThrowSpeed;
+					}
+					if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
+						dynamite._phX = dynamite._phPX;
+						dynamite._phY = dynamite._phPY - dynamiteThrowSpeed;
+					} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						dynamite._phX = dynamite._phPX;
+						dynamite._phY = dynamite._phPY + dynamiteThrowSpeed;
+					}
 				}
 			}
 		});

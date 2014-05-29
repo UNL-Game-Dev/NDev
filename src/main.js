@@ -34,6 +34,7 @@ Crafty.scene("testMap", function() {
 	
 	// Create the clock.
 	var clock = Crafty.e("Clock, Persistent");
+	Crafty.sprite(16, "assets/sprites/dynamite.png", { dynamite: [0, 0] });
 	
 	// Create the physics ticker.
 	// This triggers physics ticks, which are used to more precisely control
