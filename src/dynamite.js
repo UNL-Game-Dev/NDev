@@ -36,6 +36,7 @@ Crafty.c("Explosion", {
 	function() {
 		var amt = 60;
 		var time = 300;
+		var strength = 30.0;
 		this.tween({
 				x: this.x - amt,
 				y: this.y - amt,
@@ -43,7 +44,16 @@ Crafty.c("Explosion", {
 				h: this.h + amt * 2,
 				alpha: 0
 			}, time)
-			.delay(this.destroy, time);
+			.delay(this.destroy, time)
+			.onHit("Inertia", function(hits) {
+				for(var i = 0; i < hits.length; i++) {
+					var hit = hits[i];
+					var ob = hit.obj;
+					var px = ob.x - this.x, py = ob.y - this.y;
+					var fac = strength / dist2([px, py]);
+					ob.applyImpulse(px * fac, py * fac);
+				}
+			});
 		return this;
 	}
 });
