@@ -27,7 +27,7 @@ Crafty.c("Explosion", {
 	init:
 	function() {
 		this
-			.requires("2D, Canvas, Color, Tween, Delay")
+			.requires("2D, Canvas, Color, Tween, Delay, Collision")
 			.attr({ w: 10, h: 10})
 			.color("#ff8800");
 	},
