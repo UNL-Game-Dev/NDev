@@ -88,6 +88,12 @@ Crafty.c("Physical", {
 	getDisplacement:
 	function() {
 		return [this.getDX(), this.getDY()];
+	},
+	
+	applyImpulse:
+	function(px, py) {
+		this._phX = this._phPX + px;
+		this._phY = this._phPY + py;
 	}
 });
 
@@ -290,12 +296,6 @@ Crafty.c("Inertia", {
 			this._phX += this._phX - px;
 			this._phY += this._phY - py;
 		});
-	},
-	
-	applyImpulse:
-	function(px, py) {
-		this._phX = this._phPX + px;
-		this._phY = this._phPY + py;
 	}
 });
 

@@ -45,7 +45,7 @@ Crafty.c("Explosion", {
 				alpha: 0
 			}, time)
 			.delay(this.destroy, time)
-			.onHit("Inertia", function(hits) {
+			.onHit("Physical", function(hits) {
 				for(var i = 0; i < hits.length; i++) {
 					var hit = hits[i];
 					var ob = hit.obj;

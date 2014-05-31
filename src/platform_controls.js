@@ -278,12 +278,6 @@ Crafty.c("PlatformControls", {
 				}
 			}
 		}
-	},
-	
-	applyImpulse:
-	function(px, py) {
-		this._phX = this._phPX + px;
-		this._phY = this._phPY + py;
 	}
 });
 
