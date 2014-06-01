@@ -104,6 +104,11 @@ Crafty.c("TiledMap", {
 				if(tileInfo.oneway) {
 					ent.addComponent("OneWay");
 				}
+
+				// Set whether the entity is phaseable.
+				if(tileInfo.phaseable) {
+					ent.addComponent("Phaseable");
+				}
 				
 				// Set whether the entity is unstable.
 				if(tileInfo.unstable) {
@@ -161,6 +166,7 @@ Crafty.c("TiledMap", {
 				// Store the bounds points and the tileset index of each tile.
 				var tileInfo = properties;
 				tileInfo.oneway = !!tileInfo.oneway;
+				tileInfo.phaseable = !!tileInfo.phaseable;
 				tileInfo.unstable = !!tileInfo.unstable;
 				tileInfo.pts = pts;
 				tileInfo.tileseti = tileseti;

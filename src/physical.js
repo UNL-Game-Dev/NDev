@@ -144,7 +144,13 @@ Crafty.c("TileConstraint", {
 		this.requires("Physical");
 		
 		this.currentNormals = [];
-		
+
+		// Tracks phaseable component that this is in the process of dropping through
+		this._phaseableInProgress;
+
+		// Boolean set to true when object wants to phase through a phaseable beneath it
+		this.attemptPhase = false;
+
 		this.bind("ResolveConstraint", function() {
 			this.currentNormals = [];
 			/*
@@ -175,6 +181,42 @@ Crafty.c("TileConstraint", {
 				// Maintain a "current normals" list in case other components
 				// (such as platforming physics) are interested.
 				this.currentNormals.push(overlap);
+			}
+
+			if (this._phaseableInProgress) {
+				this.y = this._phY;
+				this.y++;
+				var hits = this.hit("Tile");
+				this.y--;
+
+				var stillPhasing = false;
+				for(var j in hits) {
+					var hit = hits[j];
+					var ob = hit.obj;
+					if (this._phaseableInProgress === ob) {
+						stillPhasing = true;
+						break;
+					}
+				}
+				if (!stillPhasing) {
+					this._phaseableInProgress = null;
+				} else {
+					// This catches the case that we are halfway between a phaseable and
+					// non-phaseable tile, in which case the phase needs to be cancelled
+					// or else the object could drop through the phaseable platform after
+					// moving onto it long after the double-press
+					var grounded = false;
+					for(var i = this.currentNormals.length - 1; i >= 0; --i) {
+						var n = normalize(this.currentNormals[i]);
+						if(dot(n, [0,-1]) > 0) {
+							grounded = true;
+							break;
+						}
+					}
+					if (grounded) {
+						this._phaseableInProgress = null;
+					}
+				}
 			}
 		});
 	},
@@ -213,19 +255,23 @@ Crafty.c("TileConstraint", {
 		for(var j in hits) {
 			var hit = hits[j];
 			var ob = hit.obj;
-			if(!component || ob.has(component)) {
+			if((!component || ob.has(component)) && !(ob.has("Phaseable") && this._phaseableInProgress === ob)) {
 				var norm = hit.normal;
 				var overlap = scale([norm.x, norm.y], -hit.overlap);
 				var prevDisplacement = this.getDisplacement();
-				if(ob.has("OneWay")) {
+				if(ob.has("Phaseable") && this.attemptPhase) {
+					this._phaseableInProgress = ob;
+				} else if(ob.has("OneWay")) {
 					if(this._oneWayCollides(overlap, prevDisplacement)) {
 						return hit;
 					}
+
 				} else {
 					return hit;
 				}
 			}
 		}
+		this.attemptPhase = false;
 		return false;
 	},
 	
