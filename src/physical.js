@@ -92,8 +92,11 @@ Crafty.c("Physical", {
 	
 	applyImpulse:
 	function(px, py) {
-		this._phX = this._phPX + px;
-		this._phY = this._phPY + py;
+		// Only apply impulse to free bodies.
+		if(!this.has("Fixed")) {
+			this._phX += px;
+			this._phY += py;
+		}
 	}
 });
 
@@ -306,10 +309,11 @@ Crafty.c("Inertia", {
 Crafty.c("FakeInertia", {
 	init:
 	function() {
-		this.bind("EvaluateInertia", function() {
-			this._phPX = this._phX;
-			this._phPY = this._phY;
-		});
+		this.requires("Fixed")
+			.bind("EvaluateInertia", function() {
+				this._phPX = this._phX;
+				this._phPY = this._phY;
+			});
 	}
 });
 
