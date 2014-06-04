@@ -207,7 +207,10 @@ Crafty.c("TileConstraint", {
 					// moving onto it long after the double-press
 					var grounded = false;
 					for(var i = this.currentNormals.length - 1; i >= 0; --i) {
-						var n = normalize(this.currentNormals[i]);
+						var x = this.currentNormals[i][0];
+						var y = this.currentNormals[i][1];
+						var d = Math.sqrt(x*x + y*y);
+						var n = [x/d, y/d]
 						if(dot(n, [0,-1]) > 0) {
 							grounded = true;
 							break;
