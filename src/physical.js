@@ -73,6 +73,8 @@ Crafty.c("Physical", {
 		this._phY = y;
 		this._phPX = x;
 		this._phPY = y;
+		
+		return this;
 	},
 	
 	getDX:

@@ -1,20 +1,30 @@
 /**
- * Dynamite.
+ * Dynamite that can be thrown. Generates an Explosion entity.
  */
 
 Crafty.c("Dynamite", {
 	
 	init:
 	function() {
-		var explodeDelay = 1000;
+		
+		// Time, in seconds, before dynamte explodes.
+		this.fuseDelay = 1.0;
+		
 		this
 		// Base components
 			.requires("2D, Canvas, Physical, Inertia, PhysicsGravity, dynamite,"
-					  + "TileConstraint, Delay")
-			.delay(function() {
-				Crafty.e("Explosion").attr({ x: this.x, y: this.y }).explode();
-				this.destroy();
-			}, explodeDelay);
+					  + "TileConstraint, Delay");
+	},
+	
+	/**
+	 * Ignite the dynamite. Will explode after the fuse delay.
+	 */
+	ignite:
+	function() {
+		this.delay(function() {
+			Crafty.e("Explosion").attr({ x: this.x, y: this.y }).explode();
+			this.destroy();
+		}, this.fuseDelay * 1000);
 	}
 });
 
@@ -26,31 +36,47 @@ Crafty.c("Explosion", {
 	
 	init:
 	function() {
-		this
-			.requires("2D, Canvas, Color, Tween, Delay, Collision")
-			.attr({ w: 10, h: 10})
+		
+		// Relative strength of the explosion. Adjust if needed.
+		this.strength = 0.5;
+		
+		// Duration of the explosion, in seconds.
+		this.time = 0.3;
+		
+		// Size of the explosion, in pixels.
+		this.size = 200;
+		
+		this.requires("2D, Canvas, Color, Tween, Delay, Collision, Hazard")
+			.attr({ w: 0, h: 0 })
 			.color("#ff8800");
 	},
 	
+	/**
+	 * This actually sets the explosion off.
+	 */
 	explode:
 	function() {
-		var amt = 60;
-		var time = 300;
-		var strength = 30.0;
-		this.tween({
-				x: this.x - amt,
-				y: this.y - amt,
-				w: this.w + amt * 2,
-				h: this.h + amt * 2,
+		
+		this.attr({
+				w: 0,
+				h: 0,
+				alpha: 1
+			})
+			.tween({
+				x: this.x - this.size / 2,
+				y: this.y - this.size / 2,
+				w: this.size,
+				h: this.size,
 				alpha: 0
-			}, time)
-			.delay(this.destroy, time)
+			}, this.time * 1000)
+			.delay(this.destroy, this.time * 1000)
 			.onHit("Physical", function(hits) {
 				for(var i = 0; i < hits.length; i++) {
 					var hit = hits[i];
 					var ob = hit.obj;
-					var px = ob.x - this.x, py = ob.y - this.y;
-					var fac = strength / dist2([px, py]);
+					var px = ob.x - (this.x + this.w / 2),
+						py = ob.y - (this.y + this.h / 2);
+					var fac = this.strength / (dist([px, py]));
 					ob.applyImpulse(px * fac, py * fac);
 				}
 			});

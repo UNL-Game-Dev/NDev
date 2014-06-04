@@ -70,7 +70,7 @@ Crafty.c("PlatformControls", {
 				} else if(Crafty("PickupState").hasPickup("dynamite")) {
 					var dynamite = Crafty.e("Dynamite");
 					var dynamiteThrowSpeed = 3;
-					dynamite.setPhysPos(this.x, this.y);
+					dynamite.setPhysPos(this.x, this.y).ignite();
 					if(this.direction === "left") {
 						dynamite._phX = dynamite._phPX - dynamiteThrowSpeed;
 					} else {
