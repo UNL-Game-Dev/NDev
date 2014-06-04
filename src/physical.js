@@ -280,7 +280,7 @@ Crafty.c("TileConstraint", {
 					this._phY += ob.getDY()*2;
 				}
 				this._phaseableInProgress = ob;
-				continue
+				continue;
 			}
 
 			// If object is going up through one-way, don't register hit
