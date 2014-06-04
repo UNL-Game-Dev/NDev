@@ -73,6 +73,8 @@ Crafty.c("Physical", {
 		this._phY = y;
 		this._phPX = x;
 		this._phPY = y;
+		
+		return this;
 	},
 	
 	getDX:
@@ -88,6 +90,15 @@ Crafty.c("Physical", {
 	getDisplacement:
 	function() {
 		return [this.getDX(), this.getDY()];
+	},
+	
+	applyImpulse:
+	function(px, py) {
+		// Only apply impulse to free bodies.
+		if(!this.has("Fixed")) {
+			this._phX += px;
+			this._phY += py;
+		}
 	}
 });
 
@@ -293,12 +304,6 @@ Crafty.c("Inertia", {
 			this._phX += this._phX - px;
 			this._phY += this._phY - py;
 		});
-	},
-	
-	applyImpulse:
-	function(px, py) {
-		this._phX = this._phPX + px;
-		this._phY = this._phPY + py;
 	}
 });
 
@@ -309,10 +314,11 @@ Crafty.c("Inertia", {
 Crafty.c("FakeInertia", {
 	init:
 	function() {
-		this.bind("EvaluateInertia", function() {
-			this._phPX = this._phX;
-			this._phPY = this._phY;
-		});
+		this.requires("Fixed")
+			.bind("EvaluateInertia", function() {
+				this._phPX = this._phX;
+				this._phPY = this._phY;
+			});
 	}
 });
 
