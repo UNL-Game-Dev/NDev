@@ -276,6 +276,10 @@ Crafty.c("TileConstraint", {
 
 			// If phaseable tile and object is attempting phase, don't register hit 
 			if (ob.has("Phaseable") && this.attemptPhase) {
+				if (ob.has("MovingPlatform")) {
+					this._phX += ob.getDX()*2;
+					this._phY += ob.getDY()*2;
+				}
 				this._phaseableInProgress = ob;
 				continue
 			}
