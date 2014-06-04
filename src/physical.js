@@ -1,4 +1,3 @@
-
 /**
  * Crafty component that carries out physics ticks in order.
  *
@@ -194,7 +193,7 @@ Crafty.c("TileConstraint", {
 					var ob = hit.obj;
 					// If object hits the phaseable we are probably still phasing
 					// (unless we are in contact with a phaseable and non-phaseable
-					// as checked below
+					// as checked below)
 					if (this._phaseableInProgress === ob) {
 						stillPhasing = true;
 						break;
