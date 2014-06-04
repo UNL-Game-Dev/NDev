@@ -6,11 +6,13 @@
    <properties>
     <property name="bounds" value="[[0,0],[1,0],[0.84,0.33],[0.16,0.33]]"/>
     <property name="oneway" value="true"/>
+    <property name="phaseable" value="true"/>
    </properties>
   </tile>
   <tile id="11">
    <properties>
     <property name="oneway" value="true"/>
+    <property name="phaseable" value="true"/>
    </properties>
   </tile>
   <tile id="12">

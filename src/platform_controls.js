@@ -19,6 +19,17 @@ Crafty.c("PlatformControls", {
 	
 	// Time to recover after being hit.
 	recoveryTime: 1.0,
+
+	// Double Press Key States
+	doubleKeysState:  {
+		NO_PRESS: 0,
+		INITIAL: 1,
+		RELEASE: 2,
+		DOUBLE: 3
+	},
+
+	// Double-key press timeout in ms
+	doubleKeysTimeout: 250, 
 	
 	init:
 	function() {
@@ -37,6 +48,10 @@ Crafty.c("PlatformControls", {
 		this._forceRemaining = 0;
 		
 		this.invincible = false;
+
+		// Double-press of DOWN_ARROW
+		this.doubleDownKey = this.doubleKeysState.NO_PRESS;
+		this.lastKeyPress = new Date().getTime();
 		
 		// Fire walk and stand events.
 		this.bind("KeyDown", function(ev) {
@@ -68,6 +83,21 @@ Crafty.c("PlatformControls", {
 					bullet._phY = bullet._phPY + 10;
 				}
 			}
+
+			// Check for a double press of the down arrow
+			if (this.doubleDownKey != this.doubleKeysState.DOUBLE) {
+				var timePassed = new Date().getTime() - this.lastKeyPress;
+				if(ev.keyCode != Crafty.keys.DOWN_ARROW) {
+					this.doubleDownKey = this.doubleKeysState.NO_PRESS;
+				} else if (this.doubleDownKey === this.doubleKeysState.NO_PRESS
+				|| timePassed > this.doubleKeysTimeout) {
+					this.doubleDownKey = this.doubleKeysState.INITIAL;
+				} else if (this.doubleDownKey === this.doubleKeysState.RELEASE) {
+					this.doubleDownKey = this.doubleKeysState.DOUBLE;
+				}
+			}
+
+			this.lastKeyPress = new Date().getTime();
 		});
 		this.bind("KeyUp", function(ev) {
 			if(ev.keyCode === Crafty.keys.LEFT_ARROW
@@ -83,6 +113,11 @@ Crafty.c("PlatformControls", {
 						this.trigger("Stand");
 					}
 				}
+			}
+
+			if(ev.keyCode === Crafty.keys.DOWN_ARROW
+			&& this.doubleDownKey === this.doubleKeysState.INITIAL) {
+				this.doubleDownKey = this.doubleKeysState.RELEASE;
 			}
 		});
 		
@@ -182,6 +217,14 @@ Crafty.c("PlatformControls", {
 			// If not grounded, apply gravity.
 			if(!this.grounded) {
 				this._phAY += 580;
+			}
+
+
+			// Update double-key tracking
+			// Phaseable Platforms
+			if (this.doubleDownKey === this.doubleKeysState.DOUBLE) {
+				this.attemptPhase = true;
+				this.doubleDownKey = this.doubleKeysState.NO_PRESS;
 			}
 			
 		}).bind("EvaluateInertia", function() {
