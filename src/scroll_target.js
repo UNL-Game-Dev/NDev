@@ -5,6 +5,11 @@
 var currentTarget = null;
 
 /**
+ * Speed at which view follows player.
+ */
+var scrollSpeed = 0.15;
+
+/**
  * Scrolls on the 2D entity that has this component, if it is the target.
  */
 Crafty.c("ScrollTarget", {
@@ -12,8 +17,12 @@ Crafty.c("ScrollTarget", {
 	function() {
 		this.bind("UpdateViewport", function() {
 			if(currentTarget == this) {
-				Crafty.viewport.x = -Math.floor(this.x - 400 + currentTarget.w/2.0);
-				Crafty.viewport.y = -Math.floor(this.y - 300 + currentTarget.h/2.0);
+				var offsetX = Crafty.viewport._width / Crafty.viewport._scale / 2.0;
+				var offsetY = Crafty.viewport._height / Crafty.viewport._scale / 2.0;
+				var targetX = -Math.floor(this.x + this.w / 2.0 - offsetX);
+				var targetY = -Math.floor(this.y + this.h / 2.0 - offsetY);
+				Crafty.viewport.x += Math.ceil((targetX - Crafty.viewport.x) * scrollSpeed);
+				Crafty.viewport.y += Math.ceil((targetY - Crafty.viewport.y) * scrollSpeed);
 			}
 		});
 	},

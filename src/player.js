@@ -78,7 +78,7 @@ Crafty.c("Player", {
 				this.invincible = true;
 				var norm = hit.normal;
 				// TODO: Respond to this hazardous collision somehow.
-				console.error('Ouch. You just came into contact with a dangerous object. Watch out next time.');
+				//console.error('Ouch. You just came into contact with a dangerous object. Watch out next time.');
 				this.timeout(function() {
 					this.invincible = false;
 				}, this.recoveryTime * 1000);

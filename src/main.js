@@ -5,7 +5,9 @@
 Crafty.scene("testMap", function() {
 	
 	// Use pixel art mode so canvas doesn't show fractional seams.
+	Crafty.canvas.init();
 	Crafty.pixelart(true);
+	Crafty.viewport.zoom(2, 400, 300, 0);
 	
 	var map = Crafty.e("2D, Canvas, TiledMap, Persistent")
 		// Temporary level loading using 1, 2, 3, etc.
@@ -29,6 +31,9 @@ Crafty.scene("testMap", function() {
 	
 	Crafty.sprite("assets/sprites/test_enemy_1.png", {test_enemy_1: [0, 0, 32, 32]});
 	Crafty.sprite("assets/sprites/test_enemy_2.png", {test_enemy_2: [0, 0, 32, 32]});
+	
+	// Create the clock.
+	var clock = Crafty.e("Clock, Persistent");
 	
 	// Create the physics ticker.
 	// This triggers physics ticks, which are used to more precisely control
