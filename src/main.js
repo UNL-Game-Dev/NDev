@@ -32,9 +32,10 @@ Crafty.scene("testMap", function() {
 	Crafty.sprite("assets/sprites/test_enemy_1.png", {test_enemy_1: [0, 0, 32, 32]});
 	Crafty.sprite("assets/sprites/test_enemy_2.png", {test_enemy_2: [0, 0, 32, 32]});
 	
+	Crafty.sprite(16, "assets/sprites/dynamite.png", { dynamite: [0, 0] });
+	
 	// Create the clock.
 	var clock = Crafty.e("Clock, Persistent");
-	Crafty.sprite(16, "assets/sprites/dynamite.png", { dynamite: [0, 0] });
 	
 	// Create the physics ticker.
 	// This triggers physics ticks, which are used to more precisely control
