@@ -1,4 +1,3 @@
-
 /**
  * Crafty component that carries out physics ticks in order.
  *
@@ -155,7 +154,13 @@ Crafty.c("TileConstraint", {
 		this.requires("Physical, Collision");
 		
 		this.currentNormals = [];
-		
+
+		// Tracks phaseable component that this is in the process of dropping through
+		this._phaseableInProgress;
+
+		// Boolean set to true when object wants to phase through a phaseable beneath it
+		this.attemptPhase = false;
+
 		this.bind("ResolveConstraint", function() {
 			this.currentNormals = [];
 			/*
@@ -186,6 +191,50 @@ Crafty.c("TileConstraint", {
 				// Maintain a "current normals" list in case other components
 				// (such as platforming physics) are interested.
 				this.currentNormals.push(overlap);
+			}
+
+			// If object is in the process of phasing through an object,
+			// check if they're all the way through
+			if (this._phaseableInProgress) {
+				var hits = this.hit("Tile");
+
+				var stillPhasing = false;
+				for(var j in hits) {
+					var hit = hits[j];
+					var ob = hit.obj;
+					// If object hits the phaseable we are probably still phasing
+					// (unless we are in contact with a phaseable and non-phaseable
+					// as checked below)
+					if (this._phaseableInProgress === ob) {
+						stillPhasing = true;
+						break;
+					}
+				}
+				if (!stillPhasing) {
+					// no longer phasing cancel effect
+					this._phaseableInProgress = null;
+				} else {
+					// This catches the case that we are halfway between a phaseable and
+					// non-phaseable tile, in which case the phase needs to be cancelled
+					// or else the object could drop through the phaseable platform after
+					// moving onto it long after the double-press
+					var grounded = false;
+					for(var i = this.currentNormals.length - 1; i >= 0; --i) {
+						var x = this.currentNormals[i][0];
+						var y = this.currentNormals[i][1];
+						var d = Math.sqrt(x*x + y*y);
+						var n = [x/d, y/d]
+						if(dot(n, [0,-1]) > 0) {
+							grounded = true;
+							break;
+						}
+					}
+					if (grounded) {
+						// Another non-phaseable tile is keeping us from phasing
+						// Cancel the phase.
+						this._phaseableInProgress = null;
+					}
+				}
 			}
 		});
 	},
@@ -224,19 +273,40 @@ Crafty.c("TileConstraint", {
 		for(var j in hits) {
 			var hit = hits[j];
 			var ob = hit.obj;
-			if(!component || ob.has(component)) {
+
+			// If we're phasing through the tile, don't register hit
+			if (this._phaseableInProgress === ob) {
+				continue;
+			}
+
+			// If we're filtering by component and this tile doesn't have it, don't register hit
+			if (component && !ob.has(component)) {
+				continue;
+			}
+
+			// If phaseable tile and object is attempting phase, don't register hit 
+			if (ob.has("Phaseable") && this.attemptPhase) {
+				if (ob.has("MovingPlatform")) {
+					this._phX += ob.getDX()*2;
+					this._phY += ob.getDY()*2;
+				}
+				this._phaseableInProgress = ob;
+				continue;
+			}
+
+			// If object is going up through one-way, don't register hit
+			if(ob.has("OneWay")) {
 				var norm = hit.normal;
 				var overlap = scale([norm.x, norm.y], -hit.overlap);
 				var prevDisplacement = this.getDisplacement();
-				if(ob.has("OneWay")) {
-					if(this._oneWayCollides(overlap, prevDisplacement)) {
-						return hit;
-					}
-				} else {
-					return hit;
+				if(!this._oneWayCollides(overlap, prevDisplacement)) {
+					continue;
 				}
 			}
+
+			return hit;
 		}
+		this.attemptPhase = false;
 		return false;
 	},
 	
