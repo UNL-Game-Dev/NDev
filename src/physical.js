@@ -72,6 +72,8 @@ Crafty.c("Physical", {
 		this._phY = y;
 		this._phPX = x;
 		this._phPY = y;
+		
+		return this;
 	},
 	
 	getDX:
@@ -87,6 +89,15 @@ Crafty.c("Physical", {
 	getDisplacement:
 	function() {
 		return [this.getDX(), this.getDY()];
+	},
+	
+	applyImpulse:
+	function(px, py) {
+		// Only apply impulse to free bodies.
+		if(!this.has("Fixed")) {
+			this._phX += px;
+			this._phY += py;
+		}
 	}
 });
 
@@ -140,7 +151,7 @@ Crafty.c("HazardResponse", {
 Crafty.c("TileConstraint", {
 	init:
 	function() {
-		this.requires("Physical");
+		this.requires("Physical, Collision");
 		
 		this.currentNormals = [];
 
@@ -174,6 +185,7 @@ Crafty.c("TileConstraint", {
 				// Just resolve it lazily, yay verlet integration.
 				var norm = hit.normal;
 				var overlap = scale([norm.x, norm.y], -hit.overlap);
+				
 				this._phX += overlap[0];
 				this._phY += overlap[1];
 				
@@ -326,8 +338,10 @@ Crafty.c("PlatformConstraint", {
 				this._phY += platform.getDY();
 				
 				this._override = true;
-				this._overrideX = platform._phX + Math.round(this._phX - platform._phX);
-				this._overrideY = platform._phY + Math.round(this._phY - platform._phY);
+				this._overrideX = platform._phX
+					+ Math.round(this._phX - platform._phX);
+				this._overrideY = platform._phY
+					+ Math.round(this._phY - platform._phY);
 			}
 		});
 	}
@@ -360,12 +374,6 @@ Crafty.c("Inertia", {
 			this._phX += this._phX - px;
 			this._phY += this._phY - py;
 		});
-	},
-	
-	applyImpulse:
-	function(px, py) {
-		this._phX = this._phPX + px;
-		this._phY = this._phPY + py;
 	}
 });
 
@@ -376,10 +384,11 @@ Crafty.c("Inertia", {
 Crafty.c("FakeInertia", {
 	init:
 	function() {
-		this.bind("EvaluateInertia", function() {
-			this._phPX = this._phX;
-			this._phPY = this._phY;
-		});
+		this.requires("Fixed")
+			.bind("EvaluateInertia", function() {
+				this._phPX = this._phX;
+				this._phPY = this._phY;
+			});
 	}
 });
 
