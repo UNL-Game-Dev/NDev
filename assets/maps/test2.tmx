@@ -51,8 +51,8 @@
    </properties>
   </tile>
  </tileset>
- <imagelayer name="bg_parallax" width="100" height="100" visible="0">
-  <image source="test2full.png"/>
+ <imagelayer name="bg_parallax" width="100" height="100">
+  <image source="monoliths.png"/>
   <properties>
    <property name="parallaxFactor" value="0.7"/>
   </properties>
@@ -225,7 +225,7 @@
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt19tuwjAMANBUGmW/wKTt/z9zZCJaVHqJaasiOEeyeIBesOvETYl30N2iP/pG+POZ/muiLu2m8vV9ja9rXAafP8Hzq0tcztN5x/OXc6tJmy7w2zqXpxTLb90rTIvkJ+e0v0V57iO9dQ5e792UZzwi12TN+qYe07baN3Jdy7q1tH6px7Sx9bzks+6dOt9jx4/F3DVblT2nr+5nz9njaPX/LeZyPJyRxvKzNEdF+6O1zq+iJf/RPpirySP9UR/7yv2xxlxe8nf1fDvsv4hhPXhcXZeU7p/3JcP3e/2xjZxD7+XPpXVP7qrP1rmC/UTWM/vJNj5mYmzPmJrr1OO5qMc6LfNVeQ9vCbPWekvrkRwDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAMX4BJkUC6Q==
+   eJzt14FOwyAUBVCWzM1f0ET//zNdzYgEoYDrbNOek5Al03Xs3T4KIXAEp/u4rD0Rvr2Gn0zk0q9Wr4/beL+Nt+z1c/D6chk31en6xOvHa8ukz2ngf9NavoSx+qa9Qt1IfaaaXu4j3vcjvXUd/L6jiff4iCmTR9Y3edQt9dyYco3rVmv9kkddaT2P9Ux7J6136fOlMfedveIz55LM55l7j7Wlvzeaq3G+RyrVp7WPGu2P3pz3Iv7OeMboyaNVn7lM/tIf6Wf33B+PmKvL9Ld0f5v334g8jyOZzuWjZ/A5aS4h/L7fW/Lz/ZH6Y+ksUlMNncu3pfeZfEpee/cVe7K1/cvIHLYw36Wla/R/rc3nmVF6ZtT2dXvMo2RrPVOz5bktqdQztYzy9+fu/XNo1zCew3vGUfZaJbV1LX+/lUdrPTpyjQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGBNXwtXBBw=
   </data>
  </layer>
  <objectgroup name="entities" width="100" height="100">

@@ -185,6 +185,7 @@ Crafty.c("TileConstraint", {
 				// Just resolve it lazily, yay verlet integration.
 				var norm = hit.normal;
 				var overlap = scale([norm.x, norm.y], -hit.overlap);
+				
 				this._phX += overlap[0];
 				this._phY += overlap[1];
 				
@@ -337,8 +338,10 @@ Crafty.c("PlatformConstraint", {
 				this._phY += platform.getDY();
 				
 				this._override = true;
-				this._overrideX = platform._phX + Math.round(this._phX - platform._phX);
-				this._overrideY = platform._phY + Math.round(this._phY - platform._phY);
+				this._overrideX = platform._phX
+					+ Math.round(this._phX - platform._phX);
+				this._overrideY = platform._phY
+					+ Math.round(this._phY - platform._phY);
 			}
 		});
 	}
