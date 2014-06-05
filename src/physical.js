@@ -407,7 +407,7 @@ function rNormal(v) {
 }
 
 // Returns the normalized version of the given vector.
-function normalize(v) {
+function norm(v) {
 	var x = v[0];
 	var y = v[1];
 	var d = Math.sqrt(x*x + y*y);
@@ -442,9 +442,4 @@ function scale(v, scalar) {
 // Returns angle of v w/r to x axis, in degrees
 function angle(v) {
 	return Math.atan2(-v[1], v[0]) * 180 / Math.PI;
-}
-
-// Returns smallest angle between v1 and v2, in degrees
-function angle2(v1, v2) {
-	return Math.acos(dot(normalize(v1), normalize(v2))) * 180 / Math.PI;
 }
