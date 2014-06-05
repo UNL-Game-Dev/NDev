@@ -40,11 +40,17 @@ Crafty.c("Player", {
 			.reel("PlayerCrawlRight", 1000, 0, 8, 8)
 		// Bind animations
 			.bind("Stand", function() {
-				this._setCollisionNormal();
+				if (!this._setCollisionNormal()) {
+					this.trigger("Crouch");
+					return;
+				}
 				this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
 			})
 			.bind("Walk", function(ev) {
-				this._setCollisionNormal();
+				if (!this._setCollisionNormal()) {
+					this.trigger("Crawl");
+					return;
+				}
 				if(this.grounded) {
 					this.animate(this.direction === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", -1);
 				} else {
@@ -112,10 +118,14 @@ Crafty.c("Player", {
 	_setCollisionNormal:
 	function() {
 		this.collision([0,0], [32,0], [32,32], [0,32]);
+		if( this.hitTile() )
+			return false;
+		return true;
 	},
 	
 	_setCollisionCrouch:
 	function() {
 		this.collision([0,16], [32,16], [32,32], [0,32]);
+		return true;
 	}
 });
