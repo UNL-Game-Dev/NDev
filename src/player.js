@@ -34,11 +34,17 @@ Crafty.c("Player", {
 			.reel("PlayerFallRight", 1000, [[4, 4], [5, 4], [6, 4], [7, 4], [7, 4], [6, 4], [5, 4], [4, 4]])
 			.reel("PlayerLandLeft", 500, 0, 5, 4)
 			.reel("PlayerLandRight", 500, 4, 5, 4)
+			.reel("PlayerCrouchLeft", 1000, [[0, 6], [1, 6], [2, 6], [3, 6], [3, 6], [2, 6], [1, 6], [0, 6]])
+			.reel("PlayerCrouchRight", 1000, [[4, 6], [5, 6], [6, 6], [7, 6], [7, 6], [6, 6], [5, 6], [4, 6]])
+			.reel("PlayerCrawlLeft", 1000, 0, 7, 8)
+			.reel("PlayerCrawlRight", 1000, 0, 8, 8)
 		// Bind animations
 			.bind("Stand", function() {
+				this._setCollisionNormal();
 				this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
 			})
 			.bind("Walk", function(ev) {
+				this._setCollisionNormal();
 				if(this.grounded) {
 					this.animate(this.direction === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", -1);
 				} else {
@@ -46,6 +52,7 @@ Crafty.c("Player", {
 				}
 			})
 			.bind("Jump", function() {
+				this._setCollisionNormal();
 				this.animate(this.direction === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 0);
 				this.timeout(function() {
 					if(!this.grounded) {
@@ -54,15 +61,29 @@ Crafty.c("Player", {
 				}, 500);
 			})
 			.bind("Fall", function() {
+				this._setCollisionNormal();
 				this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
 			})
 			.bind("Land", function() {
+				this._setCollisionNormal();
 				this.animate(this.direction === "left" ? "PlayerLandLeft" : "PlayerLandRight", 0);
 				this.timeout(function() {
 					if(this.grounded) {
 						this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
 					}
 				}, 500);
+			})
+			.bind("Crouch", function() {
+				this._setCollisionCrouch();
+				this.animate(this.direction === "left" ? "PlayerCrouchLeft" : "PlayerCrouchRight", -1);
+			})
+			.bind("Crawl", function(ev) {
+				this._setCollisionCrouch();
+				if (this.grounded) {
+					this.animate(this.direction === "left" ? "PlayerCrouchLeft" : "PlayerCrouchRight", -1);
+				} else {
+					this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
+				}
 			})
 		// Player attributes
 			.attr({
@@ -86,5 +107,15 @@ Crafty.c("Player", {
 		});
         
 		this.makeScrollTarget();
+	},
+	
+	_setCollisionNormal:
+	function() {
+		this.collision([0,0], [32,0], [32,32], [0,32]);
+	},
+	
+	_setCollisionCrouch:
+	function() {
+		this.collision([0,16], [32,16], [32,32], [0,32]);
 	}
 });

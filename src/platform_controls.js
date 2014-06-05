@@ -63,9 +63,25 @@ Crafty.c("PlatformControls", {
 				} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 					this.direction = "right";
 				}
-				
-				this.trigger("Walk");
+
+				if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+					this.trigger("Crawl");
+				} else {
+					this.trigger("Walk");
+				}
 			}
+			if(ev.keyCode == Crafty.keys.DOWN_ARROW) {
+				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]
+				|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					this.trigger("Crawl");
+				}
+				else {
+					if (this.grounded) {
+						this.trigger("Crouch");
+					}
+				}
+			}
+
 			if(ev.keyCode == Crafty.keys.SPACE &&
 					Crafty("PickupState").hasPickup("pistol")) {
 				var bullet = Crafty.e("Projectile");
@@ -104,9 +120,32 @@ Crafty.c("PlatformControls", {
 			|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
 					this.direction = "left";
-					this.trigger("Walk");
+					if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						this.trigger("Crawl");
+					} else {
+						this.trigger("Walk");
+					}
 				} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
 					this.direction = "right";
+					if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						this.trigger("Crawl");
+					} else {
+						this.trigger("Walk");
+					}
+				} else {
+					if(this.grounded) {
+						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+							this.trigger("Crouch");
+						} else {
+							this.trigger("Stand");
+						}
+					}
+				}
+			}
+
+			if(ev.keyCode === Crafty.keys.DOWN_ARROW) {
+				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]
+				|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
 					this.trigger("Walk");
 				} else {
 					if(this.grounded) {
@@ -150,9 +189,17 @@ Crafty.c("PlatformControls", {
 				&& !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
 				|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW]
 				&& !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
-					this.trigger("Walk");
+					if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						this.trigger("Crawl");
+					} else {
+						this.trigger("Walk");
+					}
 				} else {
-					this.trigger("Land");
+					if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						this.trigger("Crouch");
+					} else {
+						this.trigger("Land");
+					}
 				}
 			}
 			
