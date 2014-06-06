@@ -2,7 +2,8 @@
  * Component that controls a physical object in a platformer style. Uses arrow
  * keys for movement at the moment.
  *
- * Also fires events indicating standing still, walking, jumping, falling, and landing.
+ * Also fires events indicating standing still, walking, jumping, falling, and
+ * landing.
  */
 Crafty.c("PlatformControls", {
 	
@@ -33,7 +34,6 @@ Crafty.c("PlatformControls", {
 	
 	init:
 	function() {
-		this.requires("TileConstraint");
 		
 		this.grounded = false;
 		this.direction = "right";
@@ -48,229 +48,236 @@ Crafty.c("PlatformControls", {
 		this._forceRemaining = 0;
 		
 		this.invincible = false;
+		
+		// A strange, non-physical x velocity. (Does not get affected as player
+		// goes up and down slopes, like it normally would if phAX/phX used!)
+		this._vx = 0;
 
 		// Double-press of DOWN_ARROW
 		this.doubleDownKey = this.doubleKeysState.NO_PRESS;
 		this.lastKeyPress = new Date().getTime();
 		
-		// Fire walk and stand events.
-		this.bind("KeyDown", function(ev) {
-			if(ev.keyCode === Crafty.keys.LEFT_ARROW
-			|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
-				// Update direction based on which key was pressed.
-				if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
-					this.direction = "left";
-				} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
-					this.direction = "right";
+		// Bind event handlers.
+		this.requires("StateMachine").initState("PlatformControls", {
+			KeyDown:
+			function(ev) {
+				if(ev.keyCode === Crafty.keys.LEFT_ARROW
+				|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+					// Update direction based on which key was pressed.
+					if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
+						this.direction = "left";
+					} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+						this.direction = "right";
+					}
+
+					this.trigger("Walk");
 				}
-				
-				this.trigger("Walk");
-			}
-			if(ev.keyCode == Crafty.keys.SPACE) {
-				if(Crafty("PickupState").hasPickup("pistol")) {
-					var bullet = Crafty.e("Projectile");
-					bullet.setPhysPos(this.x, this.y);
-					if(this.direction === "left") {
-						bullet._phX = bullet._phPX - 10;
+				if(ev.keyCode == Crafty.keys.SPACE) {
+					if(Crafty("PickupState").hasPickup("pistol")) {
+						var bullet = Crafty.e("Projectile");
+						bullet.setPhysPos(this.x, this.y);
+						if(this.direction === "left") {
+							bullet._phX = bullet._phPX - 10;
+						} else {
+							bullet._phX = bullet._phPX + 10;
+						}
+						if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
+							bullet._phX = bullet._phPX;
+							bullet._phY = bullet._phPY - 10;
+						} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+							bullet._phX = bullet._phPX;
+							bullet._phY = bullet._phPY + 10;
+						}
+					} else if(Crafty("PickupState").hasPickup("dynamite")) {
+						var dynamite = Crafty.e("Dynamite");
+						var dynamiteThrowSpeed = 3;
+						dynamite.setPhysPos(this.x, this.y).ignite();
+						if(this.direction === "left") {
+							dynamite._phX = dynamite._phPX - dynamiteThrowSpeed;
+						} else {
+							dynamite._phX = dynamite._phPX + dynamiteThrowSpeed;
+						}
+						if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
+							dynamite._phX = dynamite._phPX;
+							dynamite._phY = dynamite._phPY - dynamiteThrowSpeed;
+						} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+							dynamite._phX = dynamite._phPX;
+							dynamite._phY = dynamite._phPY + dynamiteThrowSpeed;
+						}
+					}
+				}
+
+				// Check for a double press of the down arrow
+				if (this.doubleDownKey != this.doubleKeysState.DOUBLE) {
+					var timePassed = new Date().getTime() - this.lastKeyPress;
+					if(ev.keyCode != Crafty.keys.DOWN_ARROW) {
+						this.doubleDownKey = this.doubleKeysState.NO_PRESS;
+					} else if (this.doubleDownKey === this.doubleKeysState.NO_PRESS
+					|| timePassed > this.doubleKeysTimeout) {
+						this.doubleDownKey = this.doubleKeysState.INITIAL;
+					} else if (this.doubleDownKey === this.doubleKeysState.RELEASE) {
+						this.doubleDownKey = this.doubleKeysState.DOUBLE;
+					}
+				}
+
+				this.lastKeyPress = new Date().getTime();
+			},
+			
+			KeyUp:
+			function(ev) {
+				if(ev.keyCode === Crafty.keys.LEFT_ARROW
+				|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+					if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
+						this.direction = "left";
+						this.trigger("Walk");
+					} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+						this.direction = "right";
+						this.trigger("Walk");
 					} else {
-						bullet._phX = bullet._phPX + 10;
-					}
-					if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
-						bullet._phX = bullet._phPX;
-						bullet._phY = bullet._phPY - 10;
-					} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
-						bullet._phX = bullet._phPX;
-						bullet._phY = bullet._phPY + 10;
-					}
-				} else if(Crafty("PickupState").hasPickup("dynamite")) {
-					var dynamite = Crafty.e("Dynamite");
-					var dynamiteThrowSpeed = 3;
-					dynamite.setPhysPos(this.x, this.y).ignite();
-					if(this.direction === "left") {
-						dynamite._phX = dynamite._phPX - dynamiteThrowSpeed;
-					} else {
-						dynamite._phX = dynamite._phPX + dynamiteThrowSpeed;
-					}
-					if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
-						dynamite._phX = dynamite._phPX;
-						dynamite._phY = dynamite._phPY - dynamiteThrowSpeed;
-					} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
-						dynamite._phX = dynamite._phPX;
-						dynamite._phY = dynamite._phPY + dynamiteThrowSpeed;
+						if(this.grounded) {
+							this.trigger("Stand");
+						}
 					}
 				}
-			}
 
-			// Check for a double press of the down arrow
-			if (this.doubleDownKey != this.doubleKeysState.DOUBLE) {
-				var timePassed = new Date().getTime() - this.lastKeyPress;
-				if(ev.keyCode != Crafty.keys.DOWN_ARROW) {
-					this.doubleDownKey = this.doubleKeysState.NO_PRESS;
-				} else if (this.doubleDownKey === this.doubleKeysState.NO_PRESS
-				|| timePassed > this.doubleKeysTimeout) {
-					this.doubleDownKey = this.doubleKeysState.INITIAL;
-				} else if (this.doubleDownKey === this.doubleKeysState.RELEASE) {
-					this.doubleDownKey = this.doubleKeysState.DOUBLE;
+				if(ev.keyCode === Crafty.keys.DOWN_ARROW
+				&& this.doubleDownKey === this.doubleKeysState.INITIAL) {
+					this.doubleDownKey = this.doubleKeysState.RELEASE;
 				}
-			}
+			},
+			
+			PrePhysicsTick:
+			function() {
+				// The key "x" target difference.
+				var kx =
+					(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
+					(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
 
-			this.lastKeyPress = new Date().getTime();
-		});
-		this.bind("KeyUp", function(ev) {
-			if(ev.keyCode === Crafty.keys.LEFT_ARROW
-			|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
-				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
-					this.direction = "left";
-					this.trigger("Walk");
-				} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
-					this.direction = "right";
-					this.trigger("Walk");
-				} else {
-					if(this.grounded) {
-						this.trigger("Stand");
-					}
-				}
-			}
-
-			if(ev.keyCode === Crafty.keys.DOWN_ARROW
-			&& this.doubleDownKey === this.doubleKeysState.INITIAL) {
-				this.doubleDownKey = this.doubleKeysState.RELEASE;
-			}
-		});
-		
-		// A strange, non-physical x velocity. (Does not get affected as player
-		// goes up and down slopes, like it normally would if phAX/phX used!)
-		this._vx = 0;
-		
-		this.bind("PrePhysicsTick", function() {
-			// The key "x" target difference.
-			var kx =
-				(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
-				(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
-			
-			var lastGrounded = this.grounded;
-			this.grounded = false;
-			// Search through all normals for a ground normal.
-			for(var i = this.currentNormals.length - 1; i >= 0; --i) {
-				var n = norm(this.currentNormals[i]);
-				if(dot(n, [0,-1]) > 0) {
-					this.grounded = true;
-					break;
-				}
-			}
-			
-			// Trigger falling, walking or landing animation.
-			if(!this.grounded && lastGrounded) {
-				this.trigger("Fall");
-			} else if(this.grounded && !lastGrounded) {
-				if((Crafty.keydown[Crafty.keys.LEFT_ARROW]
-				&& !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
-				|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW]
-				&& !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
-					this.trigger("Walk");
-				} else {
-					this.trigger("Land");
-				}
-			}
-			
-			if(!Crafty.keydown[Crafty.keys.UP_ARROW]) {
-				this._upHeld = false;
-			}
-			// Jump if on the ground and want to.
-			if(this.grounded && Crafty.keydown[Crafty.keys.UP_ARROW]) {
-				this.trigger("Jump");
+				var lastGrounded = this.grounded;
 				this.grounded = false;
-				// Don't try to stick.
-				lastGrounded = false;
-				this._upHeld = true;
-				this._forceRemaining = 2.0;
-			}
-			if(this._upHeld &&
-					Crafty.keydown[Crafty.keys.UP_ARROW] &&
-					this._forceRemaining > 0) {
-				this._forceRemaining -= 0.08;
-				this._phY = this._phPY - this._forceRemaining - 2;
-			}
-			
-			// The desired x vel.
-			var desvx = kx * 2.8;
-			// Add to the physics velocity.
-			// This depends on the player being in the ground or not.
-			if(!this.grounded) {
-				// If not, lose a lot of control.
-				desvx *= this.airControlFactor;
-			}
-			
-			var avx = Math.abs(this._vx);
-			var adesvx = Math.abs(desvx);
-			
-			if(iSign(this._vx) == iSign(desvx)) {
-				// Player's attempting to increase velocity.
-				if(adesvx > avx) {
-					// If their velocity's greater than the current, let them
-					// increase the velocity by a little.
-					this._vx = approach(this._vx, desvx, this.accelerateDV);
+				// Search through all normals for a ground normal.
+				for(var i = this.currentNormals.length - 1; i >= 0; --i) {
+					var n = norm(this.currentNormals[i]);
+					if(dot(n, [0,-1]) > 0) {
+						this.grounded = true;
+						break;
+					}
+				}
+
+				// Trigger falling, walking or landing animation.
+				if(!this.grounded && lastGrounded) {
+					this.trigger("Fall");
+				} else if(this.grounded && !lastGrounded) {
+					if((Crafty.keydown[Crafty.keys.LEFT_ARROW]
+					&& !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
+					|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW]
+					&& !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
+						this.trigger("Walk");
+					} else {
+						this.trigger("Land");
+					}
+				}
+
+				if(!Crafty.keydown[Crafty.keys.UP_ARROW]) {
+					this._upHeld = false;
+				}
+				// Jump if on the ground and want to.
+				if(this.grounded && Crafty.keydown[Crafty.keys.UP_ARROW]) {
+					this.trigger("Jump");
+					this.grounded = false;
+					// Don't try to stick.
+					lastGrounded = false;
+					this._upHeld = true;
+					this._forceRemaining = 2.0;
+				}
+				if(this._upHeld &&
+						Crafty.keydown[Crafty.keys.UP_ARROW] &&
+						this._forceRemaining > 0) {
+					this._forceRemaining -= 0.08;
+					this._phY = this._phPY - this._forceRemaining - 2;
+				}
+
+				// The desired x vel.
+				var desvx = kx * 2.8;
+				// Add to the physics velocity.
+				// This depends on the player being in the ground or not.
+				if(!this.grounded) {
+					// If not, lose a lot of control.
+					desvx *= this.airControlFactor;
+				}
+
+				var avx = Math.abs(this._vx);
+				var adesvx = Math.abs(desvx);
+
+				if(iSign(this._vx) == iSign(desvx)) {
+					// Player's attempting to increase velocity.
+					if(adesvx > avx) {
+						// If their velocity's greater than the current, let them
+						// increase the velocity by a little.
+						this._vx = approach(this._vx, desvx, this.accelerateDV);
+					} else {
+						// Don't make them slow down when they're attempting to keep
+						// going!
+					}
+				} else if(desvx == 0.0) {
+					// Player might want to stop.
+					this._vx = approach(this._vx, desvx, this.slowToStopDV);
 				} else {
-					// Don't make them slow down when they're attempting to keep
-					// going!
+					// The player is trying to turn around.
+					// This is like "braking" in preparation to accelerate the other
+					// direction, so do it a little quicker.
+					this._vx = approach(this._vx, desvx, this.activeBrakeDV);
 				}
-			} else if(desvx == 0.0) {
-				// Player might want to stop.
-				this._vx = approach(this._vx, desvx, this.slowToStopDV);
-			} else {
-				// The player is trying to turn around.
-				// This is like "braking" in preparation to accelerate the other
-				// direction, so do it a little quicker.
-				this._vx = approach(this._vx, desvx, this.activeBrakeDV);
-			}
-			
-			this._phX = this._phPX + this._vx;
-			
-			// See if sticking makes sense now, and if it does, do so.
-			if(this.grounded || lastGrounded) {
-				this._groundStick();
-			}
-			
-			// If not grounded, apply gravity.
-			if(!this.grounded) {
-				this._phAY += 580;
-			}
 
+				this._phX = this._phPX + this._vx;
 
-			// Update double-key tracking
-			// Phaseable Platforms
-			if (this.doubleDownKey === this.doubleKeysState.DOUBLE) {
-				this.attemptPhase = true;
-				this.doubleDownKey = this.doubleKeysState.NO_PRESS;
-			}
+				// See if sticking makes sense now, and if it does, do so.
+				if(this.grounded || lastGrounded) {
+					this._groundStick();
+				}
+
+				// If not grounded, apply gravity.
+				if(!this.grounded) {
+					this._phAY += 580;
+				}
+
+				// Update double-key tracking
+				// Phaseable Platforms
+				if (this.doubleDownKey === this.doubleKeysState.DOUBLE) {
+					this.attemptPhase = true;
+					this.doubleDownKey = this.doubleKeysState.NO_PRESS;
+				}
+			},
 			
-		}).bind("EvaluateInertia", function() {
-			if(this.grounded) {
-				// If on the ground, use simple weird physics!
-				
-				// If player was just about stopped horizontally, reset _vx.
-				if(approx(this._phPX, this._phX, 0.01)) {
-					this._vx = 0;
+			EvaluateInertia:
+			function() {
+				if(this.grounded) {
+					// If on the ground, use simple weird physics!
+
+					// If player was just about stopped horizontally, reset _vx.
+					if(approx(this._phPX, this._phX, 0.01)) {
+						this._vx = 0;
+					}
+
+					this._phPX = this._phX;
+					this._phPY = this._phY;
+
+					this._phY += 0.01;
+				} else {
+					// If player was just about stopped vertically, stop jump
+					// prematurely if there was a jump in progress.
+					if(approx(this._phPY, this._phY, 0.1)) {
+						this._forceRemaining = 0.0;
+					}
+
+					// If in the air, use normal inertial physics.
+					var px = this._phPX;
+					var py = this._phPY;
+					this._phPX = this._phX;
+					this._phPY = this._phY;
+					this._phX += this._phX - px;
+					this._phY += this._phY - py;
 				}
-				
-				this._phPX = this._phX;
-				this._phPY = this._phY;
-				
-				this._phY += 0.01;
-			} else {
-				// If player was just about stopped vertically, stop jump
-				// prematurely if there was a jump in progress.
-				if(approx(this._phPY, this._phY, 0.1)) {
-					this._forceRemaining = 0.0;
-				}
-				
-				// If in the air, use normal inertial physics.
-				var px = this._phPX;
-				var py = this._phPY;
-				this._phPX = this._phX;
-				this._phPY = this._phY;
-				this._phX += this._phX - px;
-				this._phY += this._phY - py;
 			}
 		});
 	},
