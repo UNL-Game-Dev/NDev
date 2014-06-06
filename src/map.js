@@ -114,6 +114,16 @@ Crafty.c("TiledMap", {
 				if(tileInfo.unstable) {
 					ent.addComponent("Unstable");
 				}
+				
+				// Set whether the tile is climbable
+				if(tileInfo.climbable) {
+					if(tileInfo.climbable.indexOf('l') >= 0) {
+						ent.addComponent("ClimbableLeft");
+					}
+					if(tileInfo.climbable.indexOf('r') >= 0) {
+						ent.addComponent("ClimbableRight");
+					}
+				}
 			}
 		}
 	},
