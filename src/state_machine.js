@@ -9,7 +9,7 @@ Crafty.c("StateMachine", {
 		this._states = {};
 	},
 	
-	initState:
+	state:
 	function(stateName, eventHandlers) {
 		this._stateBindings[stateName] = eventHandlers;
 		this._states[stateName] = false;

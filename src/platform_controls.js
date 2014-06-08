@@ -58,7 +58,7 @@ Crafty.c("PlatformControls", {
 		this.lastKeyPress = new Date().getTime();
 		
 		// Bind event handlers.
-		this.requires("StateMachine").initState("PlatformControls", {
+		this.requires("StateMachine").state("PlatformControls", {
 			KeyDown:
 			function(ev) {
 				if(ev.keyCode === Crafty.keys.LEFT_ARROW
@@ -246,6 +246,17 @@ Crafty.c("PlatformControls", {
 				if (this.doubleDownKey === this.doubleKeysState.DOUBLE) {
 					this.attemptPhase = true;
 					this.doubleDownKey = this.doubleKeysState.NO_PRESS;
+				}
+			},
+			
+			EvaluateHits:
+			function() {
+				var climbableLeft = this.hit("ClimbableLeft");
+				var climbableRight = this.hit("ClimbableRight");
+				
+				if((climbableLeft && climbableLeft[0].obj.x > this.x)
+				|| (climbableRight && climbableRight[0].obj.x < this.x)) {
+					this.setState("ClimbingControls");
 				}
 			},
 			
