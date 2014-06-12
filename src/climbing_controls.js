@@ -7,15 +7,25 @@ Crafty.c("ClimbingControls", {
 	function() {
 		
 		// Bind event handlers.
-		this.requires("StateMachine").state("ClimbingControls", {
+		this.requires("StateMachine").state("Climb", {
+			
+			EnterState:
+			function() {
+				this._ladderX = this._phX;
+			},
 			
 			PrePhysicsTick:
 			function() {
-				if((this.direction === "left"
-				&& Crafty.keydown[Crafty.keys.RIGHT_ARROW])
-				|| (this.direction === "right"
-				&& Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
-					this.setState("PlatformControls");
+				
+				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
+					this._phX -= 1;
+				} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					this._phX += 1;
+				}
+				
+				if(!approx(this._phX, this._ladderX, 1.0)) {
+					this.setState("Platform");
+					return;
 				}
 				
 				if(Crafty.keydown[Crafty.keys.UP_ARROW]) {

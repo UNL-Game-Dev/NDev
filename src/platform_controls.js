@@ -58,7 +58,24 @@ Crafty.c("PlatformControls", {
 		this.lastKeyPress = new Date().getTime();
 		
 		// Bind event handlers.
-		this.requires("StateMachine").state("PlatformControls", {
+		this.requires("StateMachine").state("Platform", {
+			
+			EnterState:
+			function() {
+				// Ensure walking in the correct direction upon entering this
+				// state.
+				if(this.direction === "left"
+				&& Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					this.direction = "right";
+					this.trigger("Walk");
+				}
+				if(this.direction === "right"
+				&& Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
+					this.direction = "left";
+					this.trigger("Walk");
+				}
+			},
+			
 			KeyDown:
 			function(ev) {
 				if(ev.keyCode === Crafty.keys.LEFT_ARROW
@@ -254,9 +271,19 @@ Crafty.c("PlatformControls", {
 				var climbableLeft = this.hit("ClimbableLeft");
 				var climbableRight = this.hit("ClimbableRight");
 				
-				if((climbableLeft && climbableLeft[0].obj.x > this.x)
-				|| (climbableRight && climbableRight[0].obj.x < this.x)) {
-					this.setState("ClimbingControls");
+				if(climbableLeft) {
+					var norm = climbableLeft[0].normal;
+					if(dot([norm.x, norm.y], [-1, 0]) > 0.1) {
+						this.setState("Climb");
+						return;
+					}
+				}
+				if(climbableRight) {
+					var norm = climbableRight[0].normal;
+					if(dot([norm.x, norm.y], [+1, 0]) > 0.1) {
+						this.setState("Climb");
+						return;
+					}
 				}
 			},
 			
@@ -291,6 +318,8 @@ Crafty.c("PlatformControls", {
 				}
 			}
 		});
+		
+		this.setState("Platform");
 	},
 	
 	/**

@@ -25,7 +25,6 @@ Crafty.c("Player", {
 			.requires("ScrollTarget")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
-			.setState("PlatformControls")
 		// Define animations
 			.reel("PlayerStandLeft", 1000, [[0, 0], [1, 0], [2, 0], [3, 0], [3, 0], [2, 0], [1, 0], [0, 0]])
 			.reel("PlayerStandRight", 1000, [[4, 0], [5, 0], [6, 0], [7, 0], [7, 0], [6, 0], [5, 0], [4, 0]])
