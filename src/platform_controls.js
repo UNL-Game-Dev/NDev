@@ -35,14 +35,10 @@ Crafty.c("PlatformControls", {
 	init:
 	function() {
 		
+		this.requires("Sensor");
+		
 		this.grounded = false;
 		this.direction = "right";
-		
-		// A sensor that is exactly the same as the platforming character.
-		this._sensor = Crafty.e("2D");
-		this._sensor.w = this.w;
-		this._sensor.h = this.h;
-		this._sensor.addComponent("Collision");
 		
 		this._upHeld = false;
 		this._forceRemaining = 0;
@@ -165,6 +161,14 @@ Crafty.c("PlatformControls", {
 			
 			PrePhysicsTick:
 			function() {
+				
+				// See if touching ladder. If so, switch to ladder state.
+				if(this.sense("ClimbableLeft", this._phX + 5, this._phY, -4)
+				|| this.sense("ClimbableRight", this._phX - 5, this._phY, -4)) {
+					this.setState("Climb");
+					return;
+				}
+				
 				// The key "x" target difference.
 				var kx =
 					(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
@@ -266,27 +270,6 @@ Crafty.c("PlatformControls", {
 				}
 			},
 			
-			EvaluateHits:
-			function() {
-				var climbableLeft = this.hit("ClimbableLeft");
-				var climbableRight = this.hit("ClimbableRight");
-				
-				if(climbableLeft) {
-					var norm = climbableLeft[0].normal;
-					if(dot([norm.x, norm.y], [-1, 0]) > 0.1) {
-						this.setState("Climb");
-						return;
-					}
-				}
-				if(climbableRight) {
-					var norm = climbableRight[0].normal;
-					if(dot([norm.x, norm.y], [+1, 0]) > 0.1) {
-						this.setState("Climb");
-						return;
-					}
-				}
-			},
-			
 			EvaluateInertia:
 			function() {
 				if(this.grounded) {
@@ -335,20 +318,15 @@ Crafty.c("PlatformControls", {
 		// Find the xvel first.
 		var xvel = Math.abs(this._phX - this._phPX)*2;
 		
-		// Use the sensor because changing this.x/y updates graphics.
-		this._sensor.x = this._phX;
-		this._sensor.y = this._phY;
-		
-		if(this.hitTile(this._sensor)) {
+		if(this.sense("Tile", this._phX, this._phY)) {
 			// Player can't move sideways.
 			// Iterate upwards to see if the player can stick up.
-			for(var y = this._sensor.y; y >= this._phY - xvel; --y) {
-				this._sensor.y = y;
-				if(!this.hitTile(this._sensor)) {
+			for(var y = this._phY; y >= this._phY - xvel; --y) {
+				if(!this.sense("Tile", this._phX, y)) {
 					// If the player moves up to y, they can stick!
 					// Move the player to y+1, so that the player is
 					// still in the ground after sticking.
-					this._phY = this._sensor.y + 1;
+					this._phY = y + 1;
 					this.grounded = true;
 					break;
 				}
@@ -356,13 +334,12 @@ Crafty.c("PlatformControls", {
 		} else {
 			// Player can move sideways.
 			// Iterate downwards to see if the player can stick down.
-			for(var y = this._sensor.y; y <= this._phY + xvel; ++y) {
-				this._sensor.y = y;
-				if(this.hitTile(this._sensor)) {
+			for(var y = this._phY; y <= this._phY + xvel; ++y) {
+				if(this.sense("Tile", this._phX, y)) {
 					// If the player moves down to y, they can stick!
 					// Move the player to y+1, so that the player is
 					// put in the ground after sticking.
-					this._phY = this._sensor.y + 1;
+					this._phY = y + 1;
 					this.grounded = true;
 					break;
 				}
