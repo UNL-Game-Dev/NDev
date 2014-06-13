@@ -11,6 +11,11 @@ Crafty.c("ClimbingControls", {
 		// Bind event handlers.
 		this.requires("StateMachine").state("Climb", {
 			
+			EnterState:
+			function() {
+				this._ladderSide = this.direction === "left" ? -1 : +1;
+			},
+			
 			PrePhysicsTick:
 			function() {
 				
@@ -24,14 +29,15 @@ Crafty.c("ClimbingControls", {
 				
 				// Check if reaching top of ladder leading to level surface, and
 				// if so, climb up onto it.
-				if(!this.sense("Tile", this._phX + (this.direction === "left" ? -16 : +16), this._phY - 16) && !this._ledgeClimb) {
+				if(!this.sense("Tile", this._phX + this._ladderSide * 16, this._phY - 24) && !this._ledgeClimb) {
 					this._ledgeClimb = true;
 					this.tween({
-						_phY: this._phY - 16
+						_phY: this._phY - 24,
+						_phPY: this._phPY - 24
 					}, 200).timeout(function() {
-						console.log("over");
 						this.tween({
-							_phX: this._phX + (this.direction === "left" ? -160 : +160)
+							_phX: this._phX + this._ladderSide * 16,
+							_phPX: this._phPX + this._ladderSide * 16
 						}, 200).timeout(function() {
 							this._ledgeClimb = false;
 						}, 200);
@@ -39,10 +45,12 @@ Crafty.c("ClimbingControls", {
 					return;
 				}
 				
-				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
-					this._phX -= 1;
-				} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
-					this._phX += 1;
+				if(this._ladderSide == +1
+				&& Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
+					this.setState("Platform");
+				} else if(this._ladderSide == -1
+				&& Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					this.setState("Platform");
 				}
 				
 				if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
