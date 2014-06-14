@@ -648,6 +648,10 @@
          "tileheight":32,
          "tileproperties":
             {
+             "12":
+                {
+                 "destructible":"true"
+                },
              "3":
                 {
                  "unstable":"true"
