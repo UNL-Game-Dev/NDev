@@ -4,20 +4,26 @@
 
 Crafty.c("SpriteLoader", {
 	init:
-	function() {},
+	function() {
+		this._spriteAnimationDict = {};
+	},
 	
 	load:
 	function(filename) {
+		var that = this;
 		$.ajax({
 			type: "GET",
 			url: filename,
 			success: function (data) {
+				
 				data = $(data).children("spritesData");
 				
+				// Get the base URL and file extension for resolving sources.
 				var baseUrl = data.children("baseUrl").text().trim();
 				var fileExtension = data.children("fileExtension").text()
 					.trim();
 				
+				// Load each sprite sheet.
 				data.children("spriteSheet").each(function(index, spriteSheet) {
 					spriteSheet = $(spriteSheet);
 					var src = spriteSheet.attr("src");
@@ -59,9 +65,10 @@ Crafty.c("SpriteLoader", {
 										  ? true
 										  : false;
 					
-					// Get the sprites.
+					// Load each sprite.
 					var spriteDict = {};
-					spriteSheet.children("sprite").each(function(index, sprite) {
+					spriteSheet.children("sprite").each(function(index,
+																  sprite) {
 						sprite = $(sprite);
 						var name = sprite.attr("name");
 						var location = sprite.children("location").text()
@@ -92,6 +99,76 @@ Crafty.c("SpriteLoader", {
 							}
 						}
 						
+						// Load each animation.
+						var animationElements = sprite.children("reel");
+						if(animationElements.length) {
+							var animationDict = {};
+							sprite.children("reel").each(function(index, reel) {
+								reel = $(reel);
+
+								var name = reel.attr("name");
+								var duration = reel.children("duration").text()
+									.trim();
+								var from = reel.children("from").text().trim();
+								var frameCount = reel.children("frameCount")
+									.text().trim();
+								var frameElements = reel.children("frame");
+
+								if(!name) {
+									throw "Sprite animation name attribute " +
+										"missing";
+								}
+
+								if(!duration) {
+									throw "Sprite animation duration " +
+										"attribute missing";
+								}
+
+								// Data for current animation.
+								var anim = {
+									duration: parseInt(duration)
+								};
+
+								// Load animation frames.
+								if(frameElements.length) {
+									// Load explicit list of frames.
+									var frames = [];
+									frameElements.each(function(index, frame) {
+										frame = $(frame);
+										var location = frame.text().trim()
+											.split(" ");
+
+										if(location.length !== 2) {
+											throw "Frame coordinates must be " +
+												"x y: " + location.join(" ");
+										}
+
+										frames.push([
+											parseInt(location[0]),
+											parseInt(location[1])
+										]);
+									});
+									anim.frames = frames;
+								} else if(from && frameCount) {
+									// Load start frame and frame count.
+									from = from.split(" ");
+									if(from.length !== 2) {
+										throw "Frame coordinates must be " +
+											"x y: " + location.join(" ");
+									}
+									anim.from = [
+										parseInt(from[0]),
+										parseInt(from[1])
+									];
+									anim.frameCount = parseInt(frameCount);
+								} else {
+									throw "Sprite frames undefined: " + name;
+								}
+								animationDict[name] = anim;
+							});
+							that._spriteAnimationDict[name] = animationDict;
+						}
+						
 						// Create the sprite dict entry.
 						spriteDict[name] = [
 							spriteX,
@@ -101,6 +178,7 @@ Crafty.c("SpriteLoader", {
 						];
 					});
 					
+					// Determine the URL to get the image from.
 					var currLoc = getDirectory(filename);
 					var url = src;
 					if(baseUrl) {
@@ -113,9 +191,30 @@ Crafty.c("SpriteLoader", {
 						url = currLoc + "/" + url;
 					}
 					
+					// Create the sprite sheet.
 					Crafty.sprite(tileWidth, tileHeight, url, spriteDict,
 								 paddingX, paddingY, paddingAroundBorder);
 				});
+			}
+		});
+		
+		Crafty.bind("NewEntity", function(data) {
+			var ent = Crafty(data.id);
+			//console.log(ent);
+			for(var sprite in that._spriteAnimationDict) {
+				if(ent.has(sprite)) {
+					ent.addComponent("SpriteAnimation");
+					var animationDict = that._spriteAnimationDict[sprite];
+					for(var name in animationDict) {
+						var anim = animationDict[name];
+						if(anim.frames) {
+							ent.reel(name, anim.duration, anim.frames);
+						} else {
+							ent.reel(name, anim.duration, anim.from[0],
+									 anim.from[1], anim.frameCount);
+						}
+					}
+				}
 			}
 		});
 	}
