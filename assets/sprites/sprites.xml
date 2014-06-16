@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spritesData>
+	<baseUrl></baseUrl>
+	<fileExtension>png</fileExtension>
+	<spriteSheet src="player">
+		<tileSize>32</tileSize>
+		<sprite name="player"/>
+	</spriteSheet>
+	<spriteSheet src="projectile">
+		<tileSize>8</tileSize>
+		<sprite name="projectile"/>
+	</spriteSheet>
+	<spriteSheet src="test_enemy_1">
+		<tileSize>32</tileSize>
+		<sprite name="test_enemy_1"/>
+	</spriteSheet>
+	<spriteSheet src="test_enemy_2">
+		<tileSize>32</tileSize>
+		<sprite name="test_enemy_2"/>
+	</spriteSheet>
+	<spriteSheet src="dynamite">
+		<tileSize>16</tileSize>
+		<sprite name="dynamite"/>
+	</spriteSheet>
+</spritesData>
