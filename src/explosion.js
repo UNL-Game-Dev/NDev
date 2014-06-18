@@ -17,7 +17,8 @@ Crafty.c("Explosion", {
 		// Size of the explosion, in pixels.
 		this.size = 200;
 		
-		this.requires("2D, Canvas, Color, Tween, Delay, Collision, Hazard")
+		this.requires("2D, Canvas, Color, Tween, Delay, Collision, Hazard," +
+					  "Destructive")
 			.attr({ w: 0, h: 0 })
 			.color("#ff8800");
 	},
