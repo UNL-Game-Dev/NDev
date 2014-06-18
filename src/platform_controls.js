@@ -30,6 +30,9 @@ Crafty.c("PlatformControls", {
 
 	// Double-key press timeout in ms
 	doubleKeysTimeout: 250, 
+
+	// Object crouch-state
+	isCrouching: false,
 	
 	init:
 	function() {
@@ -292,20 +295,13 @@ Crafty.c("PlatformControls", {
 			
 			// Check if we should stand up
 			// This is needed for when the down arrow was released with an obstacle overhead
-			var reel = this.getReel();
-			var reelId = "";
-			if (reel) {
-				reelId = reel.id;
-			}
 			if( !Crafty.keydown[Crafty.keys.DOWN_ARROW]
-			&& (reelId === "PlayerCrouchLeft"
-			|| reelId === "PlayerCrouchRight"
-			|| reelId === "PlayerCrawlLeft"
-			|| reelId === "PlayerCrawlRight")) {
-				if (reelId === "PlayerCrouchLeft" || reelId === "PlayerCrouchRight") {
-					this.trigger("Stand");
-				} else {
+			&& this.isCrouching) {
+				if (Crafty.keydown[Crafty.keys.LEFT_ARROW]
+				|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
 					this.trigger("Walk");
+				} else {
+					this.trigger("Stand");
 				}
 			}
 

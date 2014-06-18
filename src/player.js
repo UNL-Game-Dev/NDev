@@ -45,6 +45,7 @@ Crafty.c("Player", {
 					return;
 				}
 				this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
+				this.isCrouching = false;
 			})
 			.bind("Walk", function(ev) {
 				if (!this._setCollisionNormal()) {
@@ -56,10 +57,12 @@ Crafty.c("Player", {
 				} else {
 					this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
 				}
+				this.isCrouching = false;
 			})
 			.bind("Jump", function() {
 				this._setCollisionNormal();
 				this.animate(this.direction === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 0);
+				this.isCrouching = false;
 				this.timeout(function() {
 					if(!this.grounded) {
 						this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
@@ -69,6 +72,7 @@ Crafty.c("Player", {
 			.bind("Fall", function() {
 				this._setCollisionNormal();
 				this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
+				this.isCrouching = false;
 			})
 			.bind("Land", function() {
 				this._setCollisionNormal();
@@ -78,10 +82,12 @@ Crafty.c("Player", {
 						this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
 					}
 				}, 500);
+				this.isCrouching = false;
 			})
 			.bind("Crouch", function() {
 				this._setCollisionCrouch();
 				this.animate(this.direction === "left" ? "PlayerCrouchLeft" : "PlayerCrouchRight", -1);
+				this.isCrouching = true;
 			})
 			.bind("Crawl", function(ev) {
 				this._setCollisionCrouch();
@@ -90,6 +96,7 @@ Crafty.c("Player", {
 				} else {
 					this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
 				}
+				this.isCrouching = true;
 			})
 		// Player attributes
 			.attr({
