@@ -41,16 +41,22 @@ Crafty.c("Player", {
 		// Bind animations
 			.bind("Stand", function() {
 				if (!this._setCollisionNormal()) {
-					this.trigger("Crouch");
-					return;
+					if (this._setCollisionCrouch()) {
+						this.trigger("Crouch");
+						return;
+					}
+					this._setCollisionNormal();
 				}
 				this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
 				this.isCrouching = false;
 			})
 			.bind("Walk", function(ev) {
 				if (!this._setCollisionNormal()) {
-					this.trigger("Crawl");
-					return;
+					if (this._setCollisionCrouch()) {
+						this.trigger("Crawl");
+						return;
+					}
+					this._setCollisionNormal();
 				}
 				if(this.grounded) {
 					this.animate(this.direction === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", -1);
@@ -132,6 +138,8 @@ Crafty.c("Player", {
 	_setCollisionCrouch:
 	function() {
 		this.collision([0,16], [32,16], [32,32], [0,32]);
+		if ( this.hitTile() )
+			return false;
 		return true;
 	}
 });
