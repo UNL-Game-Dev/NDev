@@ -27,6 +27,11 @@
     <property name="bounds" value="[[0,0],[1,0],[1,1]]"/>
    </properties>
   </tile>
+  <tile id="12">
+   <properties>
+    <property name="destructible" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="17" name="Backtiles" tilewidth="32" tileheight="32">
   <image source="ark.png" width="128" height="128"/>
@@ -225,7 +230,7 @@
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt14FOwyAUBVCWzM1f0ET//zNdzYgEoYDrbNOek5Al03Xs3T4KIXAEp/u4rD0Rvr2Gn0zk0q9Wr4/beL+Nt+z1c/D6chk31en6xOvHa8ukz2ngf9NavoSx+qa9Qt1IfaaaXu4j3vcjvXUd/L6jiff4iCmTR9Y3edQt9dyYco3rVmv9kkddaT2P9Ux7J6136fOlMfedveIz55LM55l7j7Wlvzeaq3G+RyrVp7WPGu2P3pz3Iv7OeMboyaNVn7lM/tIf6Wf33B+PmKvL9Ld0f5v334g8jyOZzuWjZ/A5aS4h/L7fW/Lz/ZH6Y+ksUlMNncu3pfeZfEpee/cVe7K1/cvIHLYw36Wla/R/rc3nmVF6ZtT2dXvMo2RrPVOz5bktqdQztYzy9+fu/XNo1zCew3vGUfZaJbV1LX+/lUdrPTpyjQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGBNXwtXBBw=
+   eJzt2O1uwiAUBmCaTN0fL2BLtvu/zMkiGcFCYdPZtM+TEBM/aj1vDwVDYA+m6zg++0T49hp+MpFLv1q9Pi7j/TLeisfPwePLZVys0+mBx0/HlkmfaeC9eS0PYay+ea9QN1KfWNPjdaTrfqS3ToPftzfpGh8RM6llcO74vDzq7nXfiLnGnjmH5flLHnVz83mqZ947hzBf56kxWt/ZK91zjtn5PHLt8Wz5701aNS7XSHP1WVpHjfZHb85bkX5n2mP05LFUn1Ymv+mP/LNb7o+/aNUlvpavb8v+G1HmsSdxXz66B2/Jcwnh9npfUu7v99Qf984iF2toX74uvffkKXvsXVdsydrWLyPnsIbzvbd8jv6vufmlMebuGbV13RbzmLO2nqlZ87nd01zP1DIqn29d+y/htoblf15pH94z9rLWmlOb18rnl/JYmo/2XGMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4pi8Y3gRD
   </data>
  </layer>
  <objectgroup name="entities" width="100" height="100">
