@@ -27,17 +27,17 @@
     <property name="bounds" value="[[0,0],[1,0],[1,1]]"/>
    </properties>
   </tile>
-  <tile id="9">
+  <tile id="13">
    <properties>
     <property name="climbable" value="l"/>
    </properties>
   </tile>
-  <tile id="10">
+  <tile id="14">
    <properties>
     <property name="climbable" value="lr"/>
    </properties>
   </tile>
-  <tile id="11">
+  <tile id="15">
    <properties>
     <property name="climbable" value="r"/>
    </properties>
@@ -240,7 +240,7 @@
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2O1OwjAUBuAuATXoDWii93+Z0h+Vk9ltrYLM7XmSBgI4ynnXL1O6jeHcHm50bfrlPF7u3Qm+xDyO6TJWjklOc4ZUn1vez+3t3F5Hjx+N131Kl7o/he8xbpblGj3e4Lo5h3HOMSfqho7Pxvoe0/K6XXv/ueP79qgnj3LP51bG1NzYKnNVzEQe08o93iPXuGd+K5mUv5HHtGutG3EPtXTuOKXbrVn/XdnzRHFvOoTntToPM21KzqM1izjflf5sOcfa/D5X4/H+uFafqT10cersY2vOW1F+ZzljtOSxVJ+5THryKPdLvO6Wx8dvzNUlvxfPgTGXn4yP2vM9yOfy1jN4i5hLSt/v9yXjs/2exse1s4hyDf2/d11a1+QhPLbuK7ZkbfuXnj6sob/XFufov5qbDzOttmZM7eu2mEfN2sbMlDX37ZpqY2Yqo/Hrc/f+IS3XsJzDW9pe9lo1U/Pa+PWlPJbmoz3XGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO7pE7/FBN0=
+   eJzt2F1PwjAUBuAuAfUKvdVE///PlF5UTma3tQoyt+dJGgjgKOddv0zpNoZze7jRtemX83i5dyf4EvM4pstYOSY5zRlSfW55P7e3c3sdPX40XvcpXer+FL7HuFmWa/R4g+vmHMY5x5yoGzo+G+t7TMvrdu39547v26OePMo9n1sZU3Njq8xVMRN5TCv3eI9c4575rWRS/kYe0661bsQ91NK545Rut2b9d2XPE8W96RCe1+o8zLQpOY/WLOJ8V/qz5Rxr8/tcjcf741p9pvbQxamzj605b0X5neWM0ZLHUn3mMunJo9wv8bpbHh+/MVeX/F48B8ZcfjI+as/3IJ/LW8/gLWIuKX2/35eMz/Z7Gh/XziLKNfT/3nVpXZOH8Ni6r9iSte1fevqwhv5eW5yj/2puPsy02poxta/bYh41axszU9bct2uqjZmpjMavz937h7Rcw3IOb2l72WvVTM1r49eX8liaj/ZcYwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALinT9ClBRU=
   </data>
  </layer>
  <objectgroup name="entities" width="100" height="100">
