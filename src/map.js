@@ -114,6 +114,11 @@ Crafty.c("TiledMap", {
 				if(tileInfo.unstable) {
 					ent.addComponent("Unstable");
 				}
+				
+				// Set whether the entity is destructible.
+				if(tileInfo.destructible) {
+					ent.addComponent("Destructible");
+				}
 			}
 		}
 	},
@@ -168,6 +173,7 @@ Crafty.c("TiledMap", {
 				tileInfo.oneway = !!tileInfo.oneway;
 				tileInfo.phaseable = !!tileInfo.phaseable;
 				tileInfo.unstable = !!tileInfo.unstable;
+				tileInfo.destructible = !!tileInfo.destructible;
 				tileInfo.pts = pts;
 				tileInfo.tileseti = tileseti;
 				this._tileInfo[gid] = tileInfo;

@@ -27,9 +27,9 @@
     <property name="bounds" value="[[0,0],[1,0],[1,1]]"/>
    </properties>
   </tile>
-  <tile id="9">
+  <tile id="12">
    <properties>
-    <property name="bounds" value="[[0, 0], [0.5, 0], [0.5, 0.5], [0, 0.5]]"/>
+    <property name="destructible" value="true"/>
    </properties>
   </tile>
  </tileset>
@@ -230,7 +230,7 @@
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt14FOwjAUBdCRIBj/QBP9/8+UGhqb2nYtDFm2c5KGBGWUd/e6dprYg8N1nJ49EX68Tr+ZyKVfrV6fl/FxGe/Z69fg9eUyLtTp/MDrx2vLpM9h4H/TWr5MY/VNe4W6kfqEmp6uI973I711Hvy+vYn3+IiQyT3rmzzqlnpuhFzjujW3fsmjrrSex3qmvZPWu/T50mh9Z6/4zDkl83nk3uPZ0t8btWqc75FK9ZnbR432R2/OWxF/Zzxj9OQxV59WJrf0R/rZLffHPVp1CX9L97d5/43I89iTcC4fPYO3pLlM09/7fU5+vt9TfyydRSrU8NZz+Vs2WEbvM/mQvPbuK7ZkbfuXkTmsYb5LS9fo/1qbj41RembU9nVbzKNkbT1Ts+a5LanUM7WM8vdb9/5xmq9hPIf3jL3stUpq61r+/lwec+vRnmsMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAz/QN8PMERA==
+   eJzt2O1uwiAUBmCaTN0fL2BLtvu/zMkiGcFCYdPZtM+TEBM/aj1vDwVDYA+m6zg++0T49hp+MpFLv1q9Pi7j/TLeisfPwePLZVys0+mBx0/HlkmfaeC9eS0PYay+ea9QN1KfWNPjdaTrfqS3ToPftzfpGh8RM6llcO74vDzq7nXfiLnGnjmH5flLHnVz83mqZ947hzBf56kxWt/ZK91zjtn5PHLt8Wz5701aNS7XSHP1WVpHjfZHb85bkX5n2mP05LFUn1Ymv+mP/LNb7o+/aNUlvpavb8v+G1HmsSdxXz66B2/Jcwnh9npfUu7v99Qf984iF2toX74uvffkKXvsXVdsydrWLyPnsIbzvbd8jv6vufmlMebuGbV13RbzmLO2nqlZ87nd01zP1DIqn29d+y/htoblf15pH94z9rLWmlOb18rnl/JYmo/2XGMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4pi8Y3gRD
   </data>
  </layer>
  <objectgroup name="entities" width="100" height="100">
