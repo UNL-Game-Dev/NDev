@@ -30,6 +30,9 @@ Crafty.c("PlatformControls", {
 
 	// Double-key press timeout in ms
 	doubleKeysTimeout: 250, 
+
+	// Object crouch-state
+	isCrouching: false,
 	
 	init:
 	function() {
@@ -63,8 +66,23 @@ Crafty.c("PlatformControls", {
 				} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 					this.direction = "right";
 				}
-				
-				this.trigger("Walk");
+
+				if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+					this.trigger("Crawl");
+				} else {
+					this.trigger("Walk");
+				}
+			}
+			if(ev.keyCode == Crafty.keys.DOWN_ARROW) {
+				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]
+				|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					this.trigger("Crawl");
+				}
+				else {
+					if (this.grounded) {
+						this.trigger("Crouch");
+					}
+				}
 			}
 			if(ev.keyCode == Crafty.keys.SPACE) {
 				if(Crafty("PickupState").hasPickup("pistol")) {
@@ -121,9 +139,32 @@ Crafty.c("PlatformControls", {
 			|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
 					this.direction = "left";
-					this.trigger("Walk");
+					if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						this.trigger("Crawl");
+					} else {
+						this.trigger("Walk");
+					}
 				} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
 					this.direction = "right";
+					if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						this.trigger("Crawl");
+					} else {
+						this.trigger("Walk");
+					}
+				} else {
+					if(this.grounded) {
+						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+							this.trigger("Crouch");
+						} else {
+							this.trigger("Stand");
+						}
+					}
+				}
+			}
+
+			if(ev.keyCode === Crafty.keys.DOWN_ARROW) {
+				if(Crafty.keydown[Crafty.keys.LEFT_ARROW]
+				|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
 					this.trigger("Walk");
 				} else {
 					if(this.grounded) {
@@ -167,9 +208,17 @@ Crafty.c("PlatformControls", {
 				&& !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
 				|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW]
 				&& !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
-					this.trigger("Walk");
+					if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						this.trigger("Crawl");
+					} else {
+						this.trigger("Walk");
+					}
 				} else {
-					this.trigger("Land");
+					if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						this.trigger("Crouch");
+					} else {
+						this.trigger("Land");
+					}
 				}
 			}
 			
@@ -244,6 +293,18 @@ Crafty.c("PlatformControls", {
 				this.doubleDownKey = this.doubleKeysState.NO_PRESS;
 			}
 			
+			// Check if we should stand up
+			// This is needed for when the down arrow was released with an obstacle overhead
+			if( !Crafty.keydown[Crafty.keys.DOWN_ARROW]
+			&& this.isCrouching) {
+				if (Crafty.keydown[Crafty.keys.LEFT_ARROW]
+				|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					this.trigger("Walk");
+				} else {
+					this.trigger("Stand");
+				}
+			}
+
 		}).bind("EvaluateInertia", function() {
 			if(this.grounded) {
 				// If on the ground, use simple weird physics!
