@@ -149,14 +149,16 @@ Crafty.c("PlatformControls", {
 				(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
 			
 			var lastGrounded = this.grounded;
-			this.grounded = false;
-			// Search through all normals for a ground normal.
-			for(var i = this.currentNormals.length - 1; i >= 0; --i) {
-				var n = norm(this.currentNormals[i]);
-				if(dot(n, [0,-1]) > 0) {
-					this.grounded = true;
-					break;
-				}
+			this.grounded = this.hitNormal([0,-1]);
+			
+			// Check for pushable objects and push them.
+			var pushableRight = this.hitNormal([-1,0], "Pushable");
+			var pushableLeft = this.hitNormal([+1,0], "Pushable");
+			if(pushableRight) {
+				pushableRight.push([+1,0]);
+			}
+			if(pushableLeft) {
+				pushableLeft.push([-1,0]);
 			}
 			
 			// Trigger falling, walking or landing animation.
