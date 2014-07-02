@@ -31,6 +31,9 @@ Crafty.c("PlatformControls", {
 
 	// Double-key press timeout in ms
 	doubleKeysTimeout: 250, 
+
+	// Object crouch-state
+	isCrouching: false,
 	
 	init:
 	function() {
@@ -83,7 +86,22 @@ Crafty.c("PlatformControls", {
 						this.direction = "right";
 					}
 
-					this.trigger("Walk");
+					if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						this.trigger("Crawl");
+					} else {
+						this.trigger("Walk");
+					}
+				}
+				if(ev.keyCode == Crafty.keys.DOWN_ARROW) {
+					if(Crafty.keydown[Crafty.keys.LEFT_ARROW]
+					|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+						this.trigger("Crawl");
+					}
+					else {
+						if (this.grounded) {
+							this.trigger("Crouch");
+						}
+					}
 				}
 				if(ev.keyCode == Crafty.keys.SPACE) {
 					if(Crafty("PickupState").hasPickup("pistol")) {
@@ -119,7 +137,7 @@ Crafty.c("PlatformControls", {
 						}
 					}
 				}
-
+				
 				// Check for a double press of the down arrow
 				if (this.doubleDownKey != this.doubleKeysState.DOUBLE) {
 					var timePassed = new Date().getTime() - this.lastKeyPress;
@@ -132,7 +150,7 @@ Crafty.c("PlatformControls", {
 						this.doubleDownKey = this.doubleKeysState.DOUBLE;
 					}
 				}
-
+				
 				this.lastKeyPress = new Date().getTime();
 			},
 			
@@ -142,9 +160,32 @@ Crafty.c("PlatformControls", {
 				|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 					if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
 						this.direction = "left";
-						this.trigger("Walk");
+						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+							this.trigger("Crawl");
+						} else {
+							this.trigger("Walk");
+						}
 					} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
 						this.direction = "right";
+						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+							this.trigger("Crawl");
+						} else {
+							this.trigger("Walk");
+						}
+					} else {
+						if(this.grounded) {
+							if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+								this.trigger("Crouch");
+							} else {
+								this.trigger("Stand");
+							}
+						}
+					}
+				}
+
+				if(ev.keyCode === Crafty.keys.DOWN_ARROW) {
+					if(Crafty.keydown[Crafty.keys.LEFT_ARROW]
+					|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
 						this.trigger("Walk");
 					} else {
 						if(this.grounded) {
@@ -169,6 +210,28 @@ Crafty.c("PlatformControls", {
 				&& this.sense("ClimbableRight", this._phX - 5, this._phY, -4))) {
 					this.setState("Climb");
 					return;
+				}
+				
+				// Trigger falling, walking or landing animation.
+				if(!this.grounded && lastGrounded) {
+					this.trigger("Fall");
+				} else if(this.grounded && !lastGrounded) {
+					if((Crafty.keydown[Crafty.keys.LEFT_ARROW]
+					&& !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
+					|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW]
+					&& !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
+						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+							this.trigger("Crawl");
+						} else {
+							this.trigger("Walk");
+						}
+					} else {
+						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+							this.trigger("Crouch");
+						} else {
+							this.trigger("Land");
+						}
+					}
 				}
 				
 				// The key "x" target difference.
@@ -253,17 +316,30 @@ Crafty.c("PlatformControls", {
 				}
 
 				this._phX = this._phPX + this._vx;
-
+				
 				// See if sticking makes sense now, and if it does, do so.
 				if(this.grounded || lastGrounded) {
 					this._groundStick();
 				}
-
-				// If not grounded, apply gravity.
-				if(!this.grounded) {
-					this._phAY += 580;
+				// Update double-key tracking
+				// Phaseable Platforms
+				if (this.doubleDownKey === this.doubleKeysState.DOUBLE) {
+					this.attemptPhase = true;
+					this.doubleDownKey = this.doubleKeysState.NO_PRESS;
 				}
 
+				// Check if we should stand up
+				// This is needed for when the down arrow was released with an obstacle overhead
+				if( !Crafty.keydown[Crafty.keys.DOWN_ARROW]
+				&& this.isCrouching) {
+					if (Crafty.keydown[Crafty.keys.LEFT_ARROW]
+					|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+						this.trigger("Walk");
+					} else {
+						this.trigger("Stand");
+					}
+				}
+				
 				// Update double-key tracking
 				// Phaseable Platforms
 				if (this.doubleDownKey === this.doubleKeysState.DOUBLE) {
@@ -300,6 +376,8 @@ Crafty.c("PlatformControls", {
 					this._phPY = this._phY;
 					this._phX += this._phX - px;
 					this._phY += this._phY - py;
+					
+					this._phAY += 580;
 				}
 			}
 		});
