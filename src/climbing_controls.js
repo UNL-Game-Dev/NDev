@@ -13,7 +13,7 @@ Crafty.c("ClimbingControls", {
 			
 			EnterState:
 			function() {
-				this._ladderSide = this.direction === "left" ? -1 : +1;
+				this._ladderSide = this.dx;
 			},
 			
 			PrePhysicsTick:

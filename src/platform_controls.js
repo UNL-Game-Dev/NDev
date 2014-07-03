@@ -38,10 +38,12 @@ Crafty.c("PlatformControls", {
 	init:
 	function() {
 		
-		this.requires("Sensor");
+		this.requires("TileConstraint, Sensor");
 		
 		this.grounded = false;
-		this.direction = "right";
+		
+		// Direction that we are facing in the x-direction.
+		this.dx = +1;
 		
 		this._upHeld = false;
 		this._forceRemaining = 0;
@@ -63,14 +65,14 @@ Crafty.c("PlatformControls", {
 			function() {
 				// Ensure walking in the correct direction upon entering this
 				// state.
-				if(this.direction === "left"
+				if(this.dx < 0
 				&& Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
-					this.direction = "right";
+					this.dx = +1;
 					this.trigger("Walk");
 				}
-				if(this.direction === "right"
+				else if(this.dx > 0
 				&& Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
-					this.direction = "left";
+					this.dx = -1;
 					this.trigger("Walk");
 				}
 			},
@@ -81,9 +83,9 @@ Crafty.c("PlatformControls", {
 				|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 					// Update direction based on which key was pressed.
 					if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
-						this.direction = "left";
+						this.dx = -1;
 					} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
-						this.direction = "right";
+						this.dx = +1;
 					}
 
 					if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
@@ -107,7 +109,7 @@ Crafty.c("PlatformControls", {
 					if(Crafty("PickupState").hasPickup("pistol")) {
 						var bullet = Crafty.e("Projectile");
 						bullet.setPhysPos(this.x, this.y);
-						if(this.direction === "left") {
+						if(this.dx < 0) {
 							bullet._phX = bullet._phPX - 10;
 						} else {
 							bullet._phX = bullet._phPX + 10;
@@ -123,7 +125,7 @@ Crafty.c("PlatformControls", {
 						var dynamite = Crafty.e("Dynamite");
 						var dynamiteThrowSpeed = 3;
 						dynamite.setPhysPos(this.x, this.y).ignite();
-						if(this.direction === "left") {
+						if(this.dx < 0) {
 							dynamite._phX = dynamite._phPX - dynamiteThrowSpeed;
 						} else {
 							dynamite._phX = dynamite._phPX + dynamiteThrowSpeed;
@@ -159,14 +161,14 @@ Crafty.c("PlatformControls", {
 				if(ev.keyCode === Crafty.keys.LEFT_ARROW
 				|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
 					if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
-						this.direction = "left";
+						this.dx = -1;
 						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
 							this.trigger("Crawl");
 						} else {
 							this.trigger("Walk");
 						}
 					} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
-						this.direction = "right";
+						this.dx = +1;
 						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
 							this.trigger("Crawl");
 						} else {
@@ -204,12 +206,28 @@ Crafty.c("PlatformControls", {
 			function() {
 				
 				// See if touching ladder. If so, switch to ladder state.
-				if((this.direction === "right"
+				if((this.dx > 0
 				&& this.sense("ClimbableLeft", this._phX + 5, this._phY, -4))
-				|| (this.direction === "left"
+				|| (this.dx < 0
 				&& this.sense("ClimbableRight", this._phX - 5, this._phY, -4))) {
 					this.setState("Climb");
 					return;
+				}
+				
+				// The key "x" target difference.
+				var kx =
+					(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
+					(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
+
+				var lastGrounded = this.grounded;
+				this.grounded = false;
+				// Search through all normals for a ground normal.
+				for(var i = this.currentNormals.length - 1; i >= 0; --i) {
+					var n = norm(this.currentNormals[i]);
+					if(dot(n, [0,-1]) > 0) {
+						this.grounded = true;
+						break;
+					}
 				}
 				
 				// Trigger falling, walking or landing animation.
@@ -231,36 +249,6 @@ Crafty.c("PlatformControls", {
 						} else {
 							this.trigger("Land");
 						}
-					}
-				}
-				
-				// The key "x" target difference.
-				var kx =
-					(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
-					(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
-
-				var lastGrounded = this.grounded;
-				this.grounded = false;
-				// Search through all normals for a ground normal.
-				for(var i = this.currentNormals.length - 1; i >= 0; --i) {
-					var n = norm(this.currentNormals[i]);
-					if(dot(n, [0,-1]) > 0) {
-						this.grounded = true;
-						break;
-					}
-				}
-
-				// Trigger falling, walking or landing animation.
-				if(!this.grounded && lastGrounded) {
-					this.trigger("Fall");
-				} else if(this.grounded && !lastGrounded) {
-					if((Crafty.keydown[Crafty.keys.LEFT_ARROW]
-					&& !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
-					|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW]
-					&& !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
-						this.trigger("Walk");
-					} else {
-						this.trigger("Land");
 					}
 				}
 
@@ -383,6 +371,15 @@ Crafty.c("PlatformControls", {
 		});
 		
 		this.setState("Platform");
+	},
+	
+	/**
+	 * Select a value based on which direction we are facing, given a left and
+	 * right value.
+	 */
+	dxSelect:
+	function(leftValue, rightValue) {
+		return this.dx < 0 ? leftValue : rightValue;
 	},
 	
 	/**
