@@ -18,11 +18,13 @@ Crafty.c("Player", {
 			.requires("player")
 			.requires("Collision")
 			.requires("Physical")
+			.requires("TileConstraint")
 			.requires("PlatformConstraint")
             .requires("HazardResponse")
-			.requires("PlatformControls")
 			.requires("DefaultPhysicsDraw")
 			.requires("ScrollTarget")
+			.requires("PlatformControls")
+			.requires("ClimbingControls")
 		// Define animations
 			.reel("PlayerStandLeft", 1000, [[0, 0], [1, 0], [2, 0], [3, 0], [3, 0], [2, 0], [1, 0], [0, 0]])
 			.reel("PlayerStandRight", 1000, [[4, 0], [5, 0], [6, 0], [7, 0], [7, 0], [6, 0], [5, 0], [4, 0]])
@@ -47,7 +49,7 @@ Crafty.c("Player", {
 					}
 					this._setCollisionNormal();
 				}
-				this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
+				this.animate(this.dxSelect("PlayerStandLeft", "PlayerStandRight"), -1);
 				this.isCrouching = false;
 			})
 			.bind("Walk", function(ev) {
@@ -59,48 +61,48 @@ Crafty.c("Player", {
 					this._setCollisionNormal();
 				}
 				if(this.grounded) {
-					this.animate(this.direction === "left" ? "PlayerWalkLeft" : "PlayerWalkRight", -1);
+					this.animate(this.dxSelect("PlayerWalkLeft", "PlayerWalkRight"), -1);
 				} else {
-					this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
+					this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
 				}
 				this.isCrouching = false;
 			})
 			.bind("Jump", function() {
 				this._setCollisionNormal();
-				this.animate(this.direction === "left" ? "PlayerJumpLeft" : "PlayerJumpRight", 0);
+				this.animate(this.dxSelect("PlayerJumpLeft", "PlayerJumpRight"), 0);
 				this.isCrouching = false;
 				this.timeout(function() {
 					if(!this.grounded) {
-						this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
+						this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
 					}
 				}, 500);
 			})
 			.bind("Fall", function() {
 				this._setCollisionNormal();
-				this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
+				this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
 				this.isCrouching = false;
 			})
 			.bind("Land", function() {
 				this._setCollisionNormal();
-				this.animate(this.direction === "left" ? "PlayerLandLeft" : "PlayerLandRight", 0);
+				this.animate(this.dxSelect("PlayerLandLeft", "PlayerLandRight"), 0);
 				this.timeout(function() {
 					if(this.grounded) {
-						this.animate(this.direction === "left" ? "PlayerStandLeft" : "PlayerStandRight", -1);
+						this.animate(this.dxSelect("PlayerStandLeft", "PlayerStandRight"), -1);
 					}
 				}, 500);
 				this.isCrouching = false;
 			})
 			.bind("Crouch", function() {
 				this._setCollisionCrouch();
-				this.animate(this.direction === "left" ? "PlayerCrouchLeft" : "PlayerCrouchRight", -1);
+				this.animate(this.dxSelect("PlayerCrouchLeft", "PlayerCrouchRight"), -1);
 				this.isCrouching = true;
 			})
 			.bind("Crawl", function(ev) {
 				this._setCollisionCrouch();
 				if (this.grounded) {
-					this.animate(this.direction === "left" ? "PlayerCrouchLeft" : "PlayerCrouchRight", -1);
+					this.animate(this.dxSelect("PlayerCrouchLeft", "PlayerCrouchRight"), -1);
 				} else {
-					this.animate(this.direction === "left" ? "PlayerFallLeft" : "PlayerFallRight", -1);
+					this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
 				}
 				this.isCrouching = true;
 			})
