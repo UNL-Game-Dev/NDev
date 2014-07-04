@@ -215,9 +215,7 @@ Crafty.c("PlatformControls", {
 				}
 				
 				// The key "x" target difference.
-				var kx =
-					(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
-					(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
+				var kx = Crafty("Controls").getControl("Horizontal");
 
 				var lastGrounded = this.grounded;
 				this.grounded = false;
