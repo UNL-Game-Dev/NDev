@@ -24,5 +24,6 @@
 	</control>
 	<control name="phase">
 		<key double="true">DOWN_ARROW</key>
+		<key double="true">S</key>
 	</control>
 </controls>
