@@ -40,15 +40,6 @@ Crafty.scene("testMap", function() {
 	// Create the controls mapper.
 	var controls = Crafty.e("Controls")
 	                     .loadKeyMapping("assets/controls/controls.xml");
-	/*.mapKeys({
-		left: Crafty.keys.LEFT_ARROW,
-		right: Crafty.keys.RIGHT_ARROW,
-		up: Crafty.keys.UP_ARROW,
-		down: Crafty.keys.DOWN_ARROW,
-		jump: Crafty.keys.UP_ARROW,
-		action: Crafty.keys.SPACE,
-		phase: { double: Crafty.keys.DOWN_ARROW }
-	});*/
 
 	// Create the general quake viewport effect handler
 	var quake = Crafty.e("EarthquakeViewport, Persistent");
