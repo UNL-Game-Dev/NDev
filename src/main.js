@@ -23,16 +23,7 @@ Crafty.scene("testMap", function() {
 			}
 		});
 	
-	Crafty.sprite(32, "assets/sprites/player.png", {
-		player: [0, 0]
-	}, 0);
-	
-	Crafty.sprite("assets/sprites/projectile.png", {projectile: [0, 0, 8, 8]});
-	
-	Crafty.sprite("assets/sprites/test_enemy_1.png", {test_enemy_1: [0, 0, 32, 32]});
-	Crafty.sprite("assets/sprites/test_enemy_2.png", {test_enemy_2: [0, 0, 32, 32]});
-	
-	Crafty.sprite(16, "assets/sprites/dynamite.png", { dynamite: [0, 0] });
+	Crafty.e("SpriteLoader").load("assets/sprites/sprites.xml");
 	
 	// Create the clock.
 	var clock = Crafty.e("Clock, Persistent");
