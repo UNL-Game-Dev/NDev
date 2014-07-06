@@ -36,6 +36,16 @@ Crafty.scene("testMap", function() {
 	
 	// Create the clock.
 	var clock = Crafty.e("Clock, Persistent");
+	
+	// Create the controls mapper.
+	var controls = Crafty.e("Controls").mapKeys({
+		left: Crafty.keys.LEFT_ARROW,
+		right: Crafty.keys.RIGHT_ARROW,
+		up: Crafty.keys.UP_ARROW,
+		down: Crafty.keys.DOWN_ARROW,
+		jump: Crafty.keys.UP_ARROW,
+		shoot: Crafty.keys.SPACE
+	});
 
 	// Create the general quake viewport effect handler
 	var quake = Crafty.e("EarthquakeViewport, Persistent");
