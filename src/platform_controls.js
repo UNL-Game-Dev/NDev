@@ -86,7 +86,7 @@ Crafty.c("PlatformControls", {
 							this.trigger("Crouch");
 						}
 					}
-				} else if(ev.control === "shoot") {
+				} else if(ev.control === "action") {
 					if(Crafty("PickupState").hasPickup("pistol")) {
 						var bullet = Crafty.e("Projectile");
 						bullet.setPhysPos(this.x, this.y);

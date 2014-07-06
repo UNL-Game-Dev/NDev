@@ -41,10 +41,10 @@ Crafty.scene("testMap", function() {
 	var controls = Crafty.e("Controls").mapKeys({
 		left: Crafty.keys.LEFT_ARROW,
 		right: Crafty.keys.RIGHT_ARROW,
-		up: [Crafty.keys.UP_ARROW, Crafty.keys.SPACE],
+		up: Crafty.keys.UP_ARROW,
 		down: Crafty.keys.DOWN_ARROW,
 		jump: Crafty.keys.UP_ARROW,
-		shoot: Crafty.keys.SPACE,
+		action: Crafty.keys.SPACE,
 		phase: { double: Crafty.keys.DOWN_ARROW }
 	});
 
