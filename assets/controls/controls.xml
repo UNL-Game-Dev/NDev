@@ -23,8 +23,6 @@
 		<key>SPACE</key>
 	</control>
 	<control name="phase">
-		<key>
-			<double>DOWN_ARROW</double>
-		</key>
+		<key double="true">DOWN_ARROW</key>
 	</control>
 </controls>

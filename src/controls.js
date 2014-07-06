@@ -5,34 +5,35 @@ Crafty.c("Controls", {
 		// Mapping of controls.
 		this._ctrlKeyMapping = new Relation();
 		
-		// Keep track of key presses for double keystrokes.
+		// Keep track of key presses and double keystrokes.
+		this._keydown = {};
 		this._keyLastPressed = {};
-		this._keyDoublePressed = {};
-		
 		this._doublePressTimeout = 250;
-		
 		this._doublePressKeyCodeOffset = 10000;
 		
 		// When key is pressed, trigger the corresponding control event(s).
 		this.bind("KeyDown", function(ev) {
 			var keyCode = ev.keyCode;
+			this._keydown[keyCode] = true;
 			
 			// Check for double key press.
 			var now = _.now();
 			var keyLastPressed = this._keyLastPressed[keyCode] || 0;
 			var doublePressMappedControls = [];
 			if(now - keyLastPressed < this._doublePressTimeout) {
-				this._keyDoublePressed[keyCode] = true;
-				var doublePressKeyCode = this._encodeDoublePress(keyCode);
-				doublePressMappedControls = this._ctrlKeyMapping.getReverse(doublePressKeyCode);
+				this._updateDoublePressKeyStatus(keyCode, true);
+				doublePressMappedControls =
+				    this._getDoublePressMappedControls(keyCode);
+			} else {
+				// Save the time of this keypress.
+				this._keyLastPressed[keyCode] = now;
 			}
 			
-			// Save the time of this keypress.
-			this._keyLastPressed[keyCode] = now;
-			
 			// Process controls.
-			var singlePressMappedControls = this._ctrlKeyMapping.getReverse(keyCode);
-			var mappedControls = singlePressMappedControls.concat(doublePressMappedControls);
+			var singlePressMappedControls = this._ctrlKeyMapping
+			                                    .getReverse(keyCode);
+			var mappedControls = singlePressMappedControls
+			                         .concat(doublePressMappedControls);
 			
 			_(mappedControls).each(function(control) {
 				Crafty.trigger("ControlPressed", {
@@ -46,18 +47,22 @@ Crafty.c("Controls", {
 		// When key is released, trigger the corresponding control event(s).
 		this.bind("KeyUp", function(ev) {
 			var keyCode = ev.keyCode;
+			delete this._keydown[keyCode];
 			
 			// Check for release of a double key press.
 			var doublePressMappedControls = [];
-			if(this._keyDoublePressed[keyCode]) {
-				delete this._keyDoublePressed[keyCode];
-				var doublePressKeyCode = this._encodeDoublePress(keyCode);
-				doublePressMappedControls = this._ctrlKeyMapping.getReverse(doublePressKeyCode);
+			if(this._keyIsDoublePressed(keyCode)) {
+				this._updateDoublePressKeyStatus(keyCode, false);
+				doublePressMappedControls =
+				    this._getDoublePressMappedControls(keyCode);
 			}
 			
 			// Process controls.
-			var singlePressMappedControls = this._ctrlKeyMapping.getReverse(keyCode);
-			var mappedControls = singlePressMappedControls.concat(doublePressMappedControls);
+			var singlePressMappedControls = this._ctrlKeyMapping
+			                                    .getReverse(keyCode);
+			var mappedControls = singlePressMappedControls
+			                         .concat(doublePressMappedControls);
+			
 			_(mappedControls).each(function(control) {
 				Crafty.trigger("ControlReleased", {
 					control: control,
@@ -68,10 +73,13 @@ Crafty.c("Controls", {
 		});
 	},
 	
+	/**
+	 * Apply key mapping from a dictionary.
+	 */
 	mapKeys:
-	function(mapping) {
+	function(mappingDict) {
 		var newMapping = {};
-		_(mapping).each(function(keys, control) {
+		_(mappingDict).each(function(keys, control) {
 			keys = _(keys).isArray() ? keys : [keys];
 			newMapping[control] = _(keys).map(function(key) {
 				return (_(key).isObject() && !_(key.double).isUndefined())
@@ -80,8 +88,52 @@ Crafty.c("Controls", {
 			}, this);
 		}, this);
 		this._ctrlKeyMapping.map(newMapping);
+		
+		return this;
 	},
 	
+	/**
+	 * Load key mapping from an XML file.
+	 */
+	loadKeyMapping:
+	function(filename) {
+		$.ajax({
+			type: "GET",
+			url: filename,
+			context: this,
+			success: function (data) {
+				var keyMapping = {};
+				
+				data = $(data).children("controls");
+				
+				_(data.children("control")).each(function(controlElement) {
+					controlElement = $(controlElement);
+					var controlName = controlElement.attr("name");
+					var keyElements = controlElement.children("key");
+					var mappedKeys = _(keyElements).map(function(keyElement) {
+						keyElement = $(keyElement);
+						var double = (keyElement.attr("double") || "").trim()
+						                        .toLowerCase();
+						var keyName = keyElement.text().trim();
+						var keyCode = Crafty.keys[keyName];
+						if(double && double !== "false") {
+							return { double: keyCode };
+						} else {
+							return keyCode;
+						}
+					});
+					keyMapping[controlName] = mappedKeys;
+				});
+				this.mapKeys(keyMapping);
+			}
+		});
+		
+		return this;
+	},
+	
+	/**
+	 * See if a key is down, given a control name or key code.
+	 */
 	keyDown:
 	function(key) {
 		
@@ -89,18 +141,22 @@ Crafty.c("Controls", {
 		if(this._ctrlKeyMapping.containsLeft(key)) {
 			var mappedKeys = this._ctrlKeyMapping.getForward(key);
 			return _(mappedKeys).find(function(mappedKey) {
-				return Crafty.keydown[mappedKey];
-			}) != undefined;
+				return this._keyIsDown(mappedKey);
+			}, this) !== undefined;
 		}
 		
 		var mappedKey = Crafty.keys[key];
-		if(mappedKey !== undefined) {
-			return Crafty.keydown[mappedKey];
+		if(!_(mappedKey).isUndefined()) {
+			return this._keyIsDown(mappedKey);
 		}
 		
-		return Crafty.keydown[key];
+		return this._keyIsDown(key);
 	},
 	
+	/**
+	 * Get the value of a control class, given the control class name.
+	 * (a la Unity)
+	 */
 	getControl:
 	function(control) {
 		return {
@@ -111,9 +167,52 @@ Crafty.c("Controls", {
 		}[control.toLowerCase()];
 	},
 	
+	/**
+	 * Encode a double press into its key code representation.
+	 */
 	_encodeDoublePress:
 	function(keyCode) {
 		return keyCode + this._doublePressKeyCodeOffset;
+	},
+	
+	/**
+	 * See whether a key is down based on a key code.
+	 */
+	_keyIsDown:
+	function(keyCode) {
+		return this._keydown[keyCode] || false;
+	},
+	
+	/**
+	 * See whether a double-pressed key is being held down.
+	 */
+	_keyIsDoublePressed:
+	function(keyCode) {
+		var doublePressKeyCode = this._encodeDoublePress(keyCode);
+		return this._keydown[doublePressKeyCode] || false;
+	},
+	
+	/**
+	 * Update status of double-pressed key to be pressed or not pressed.
+	 */
+	_updateDoublePressKeyStatus:
+	function(keyCode, pressed) {
+		var doublePressKeyCode = this._encodeDoublePress(keyCode);
+		if(pressed) {
+			this._keydown[doublePressKeyCode] = true;
+			this._keyLastPressed[doublePressKeyCode] = _.now();
+		} else {
+			delete this._keydown[doublePressKeyCode];
+		}
+	},
+	
+	/**
+	 * Get the controls mapped to a double-pressed key.
+	 */
+	_getDoublePressMappedControls:
+	function(keyCode) {
+		var doublePressKeyCode = this._encodeDoublePress(keyCode);
+		return this._ctrlKeyMapping.getReverse(doublePressKeyCode);
 	}
 });
 
