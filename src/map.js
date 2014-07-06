@@ -115,6 +115,15 @@ Crafty.c("TiledMap", {
 					ent.addComponent("Unstable");
 				}
 				
+				// Set whether the tile is climbable
+				if(tileInfo.climbable) {
+					if(tileInfo.climbable.indexOf('l') >= 0) {
+						ent.addComponent("ClimbableLeft");
+					}
+					if(tileInfo.climbable.indexOf('r') >= 0) {
+						ent.addComponent("ClimbableRight");
+					}
+				}
 				// Set whether the entity is destructible.
 				if(tileInfo.destructible) {
 					ent.addComponent("Destructible");

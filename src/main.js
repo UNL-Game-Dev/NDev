@@ -27,6 +27,9 @@ Crafty.scene("testMap", function() {
 	
 	// Create the clock.
 	var clock = Crafty.e("Clock, Persistent");
+
+	// Create the general quake viewport effect handler
+	var quake = Crafty.e("EarthquakeViewport, Persistent");
 	
 	// Create the physics ticker.
 	// This triggers physics ticks, which are used to more precisely control

@@ -28,7 +28,6 @@ Crafty.c("Explosion", {
 	 */
 	explode:
 	function() {
-		
 		this.attr({
 				w: 0,
 				h: 0,
@@ -52,6 +51,7 @@ Crafty.c("Explosion", {
 					ob.applyImpulse(px * fac, py * fac);
 				}
 			});
+		Crafty.trigger("Quake");
 		return this;
 	}
 });
