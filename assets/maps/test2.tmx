@@ -33,6 +33,21 @@
     <property name="pushable" value="true"/>
    </properties>
   </tile>
+  <tile id="13">
+   <properties>
+    <property name="climbable" value="l"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="climbable" value="lr"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="climbable" value="r"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="17" name="Backtiles" tilewidth="32" tileheight="32">
   <image source="ark.png" width="128" height="128"/>
@@ -231,7 +246,7 @@
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2O1uwiAUBmCaTN0fL2BLtvu/zMkiGcFCYdPZtM+TEBM/aj1vDwVDYA+m6zg++0T49hp+MpFLv1q9Pi7j/TLeisfPwePLZVys0+mBx0/HlkmfaeC9eS0PYay+ea9QN1KfWNPjdaTrfqS3ToPftzfpGh8RM6llcO74vDzq7nXfiLnGnjmH5flLHnVz83mqZ947hzBf56kxWt/ZK91zjtn5PHLt8Wz5701aNS7XSHP1WVpHjfZHb85bkX5n2mP05LFUn1Ymv+mP/LNb7o+/aNUlvpavb8v+G1HmsSdxXz66B2/Jcwnh9npfUu7v99Qf984iF2toX74uvffkKXvsXVdsydrWLyPnsIbzvbd8jv6vufmlMebuGbV13RbzmLO2nqlZ87nd01zP1DIqn29d+y/htoblf15pH94z9rLWmlOb18rnl/JYmo/2XGMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4pi8Y3gRD
+   eJzt2FFPwjAQAOAuAeUF9FUT/f8/U5ZYvYy26yLIwr4vaSCMQbnbdVdSYguG83i69yT4Mebj9fv5PslNryGVr+WP83g/j7fJ42fn5x7Sbz4O4XtinigbY/R8g8+dxj3nRT7ahgXvjXW0T+37xKFwLNYNZUvykWM8jlxTrdrKNRHz8rJodtuSr/ElxhjXcnCsvD+uifJRd637Ru6hjmm+l5KPutzzRDmesXZqPevQGDWn1N9DxPUuz+cWvcdalNb3Voyn/XEpPrUeOjsVzmnpzfOjyL8z7zF68jEXn1ZOTuF5616Uj8fvePT6+ItWXMZjcR8Y83IqnlE3zceWjPvy3j14j5iXlC6v9znTvf2W6uPauYjGGPoPa11678lDeOztKx7J2vqXJXNYw3yvLa7R/7U27xqjdM+o9XWPmI+StdVMzZrndk2lmqnlaPp669rfpcsYTv/zyvvwnrGVXquktq5NX5/Lx9x6tOUYAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwD19AaUrBTk=
   </data>
  </layer>
  <objectgroup name="entities" width="100" height="100">

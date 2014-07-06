@@ -11,14 +11,10 @@ Crafty.c("EnemyGroundControls", {
 	
 	init:
 	function() {
+		
+		this.requires("Sensor");
+		
 		this.grounded = false;
-		
-		// A sensor that is exactly the same as the platforming character.
-		this._sensor = Crafty.e("2D");
-		this._sensor.w = this.w;
-		this._sensor.h = this.h;
-		this._sensor.addComponent("Collision");
-		
 		this._forceRemaining = 0;
 		
 		this._vx = 0;
@@ -151,20 +147,15 @@ Crafty.c("EnemyGroundControls", {
 		// Find the xvel first.
 		var xvel = Math.abs(this._phX - this._phPX)*2;
 		
-		// Use the sensor because changing this.x/y updates graphics.
-		this._sensor.x = this._phX;
-		this._sensor.y = this._phY;
-		
-		if(this._sensor.hit("Tile")) {
+		if(this.sense("Tile", this._phX, this._phY)) {
 			// Enemy can't move sideways.
 			// Iterate upwards to see if the enemy can stick up.
-			for(var y = this._sensor.y; y >= this._phY - xvel; --y) {
-				this._sensor.y = y;
-				if(!this._sensor.hit("Tile")) {
+			for(var y = this._phY; y >= this._phY - xvel; --y) {
+				if(!this.sense("Tile", this._phX, y)) {
 					// If the enemy moves up to y, they can stick!
 					// Move the enemy to y+1, so that the enemy is
 					// still in the ground after sticking.
-					this._phY = this._sensor.y + 1;
+					this._phY = y + 1;
 					this.grounded = true;
 					break;
 				}
@@ -172,13 +163,12 @@ Crafty.c("EnemyGroundControls", {
 		} else {
 			// Enemy can move sideways.
 			// Iterate downwards to see if the enemy can stick down.
-			for(var y = this._sensor.y; y <= this._phY + xvel; ++y) {
-				this._sensor.y = y;
-				if(this._sensor.hit("Tile")) {
+			for(var y = this._phY; y <= this._phY + xvel; ++y) {
+				if(this.sense("Tile", this._phX, y)) {
 					// If the enemy moves down to y, they can stick!
 					// Move the enemy to y+1, so that the enemy is
 					// put in the ground after sticking.
-					this._phY = this._sensor.y + 1;
+					this._phY = y + 1;
 					this.grounded = true;
 					break;
 				}
