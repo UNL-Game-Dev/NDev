@@ -95,7 +95,7 @@ Crafty.c("PlatformControls", {
 					}
 				}
 				if(ev.control === "down") {
-					if(Crafty.getControl("Horizontal") != 0) {
+					if(controls.getControl("Horizontal") != 0) {
 						this.trigger("Crawl");
 					}
 					else {
