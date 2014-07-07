@@ -27,9 +27,7 @@ Crafty.c("PlatformControls", {
 	init:
 	function() {
 		
-		this.requires("TileConstraint, Sensor");
-		
-		this.grounded = false;
+		this.requires("TileConstraint, Sensor, Groundable");
 		
 		// Direction that we are facing in the x-direction.
 		this.dx = +1;
@@ -82,7 +80,7 @@ Crafty.c("PlatformControls", {
 						this.trigger("Crawl");
 					}
 					else {
-						if (this.grounded) {
+						if (this.isGrounded()) {
 							this.trigger("Crouch");
 						}
 					}
@@ -142,7 +140,7 @@ Crafty.c("PlatformControls", {
 							this.trigger("Walk");
 						}
 					} else {
-						if(this.grounded) {
+						if(this.isGrounded()) {
 							if (controls.keyDown("down")) {
 								this.trigger("Crouch");
 							} else {
@@ -154,7 +152,7 @@ Crafty.c("PlatformControls", {
 					if(controls.getControl("Horizontal") != 0) {
 						this.trigger("Walk");
 					} else {
-						if(this.grounded) {
+						if(this.isGrounded()) {
 							this.trigger("Stand");
 						}
 					}
@@ -175,9 +173,6 @@ Crafty.c("PlatformControls", {
 				
 				// The key "x" target difference.
 				var kx = controls.getControl("Horizontal");
-				
-				var lastGrounded = this.grounded;
-				this.grounded = this.hitNormal([0,-1]);
 
 				// Check for pushable objects and push them.
 				var pushableRight = this.hitNormal([-1,0], "Pushable");
@@ -188,35 +183,14 @@ Crafty.c("PlatformControls", {
 				if(pushableLeft) {
 					pushableLeft.push([-1,0]);
 				}
-				
-				// Trigger falling, walking or landing animation.
-				if(!this.grounded && lastGrounded) {
-					this.trigger("Fall");
-				} else if(this.grounded && !lastGrounded) {
-					if(kx != 0) {
-						if (controls) {
-							this.trigger("Crawl");
-						} else {
-							this.trigger("Walk");
-						}
-					} else {
-						if (controls.keyDown("down")) {
-							this.trigger("Crouch");
-						} else {
-							this.trigger("Land");
-						}
-					}
-				}
 
 				if(!controls.keyDown("up")) {
 					this._upHeld = false;
 				}
 				// Jump if on the ground and want to.
-				if(this.grounded && controls.keyDown("up")) {
+				if(this.isGrounded() && controls.keyDown("up")) {
 					this.trigger("Jump");
-					this.grounded = false;
-					// Don't try to stick.
-					lastGrounded = false;
+					this.detachFromGround();
 					this._upHeld = true;
 					this._forceRemaining = 2.0;
 				}
@@ -231,7 +205,7 @@ Crafty.c("PlatformControls", {
 				var desvx = kx * 2.8;
 				// Add to the physics velocity.
 				// This depends on the player being in the ground or not.
-				if(!this.grounded) {
+				if(!this.isGrounded()) {
 					// If not, lose a lot of control.
 					desvx *= this.airControlFactor;
 				}
@@ -258,13 +232,8 @@ Crafty.c("PlatformControls", {
 					// direction, so do it a little quicker.
 					this._vx = approach(this._vx, desvx, this.activeBrakeDV);
 				}
-
-				this._phX = this._phPX + this._vx;
 				
-				// See if sticking makes sense now, and if it does, do so.
-				if(this.grounded || lastGrounded) {
-					this._groundStick();
-				}
+				this._phX = this._phPX + this._vx;
 
 				// Check if we should stand up
 				// This is needed for when the down arrow was released with an obstacle overhead
@@ -280,7 +249,7 @@ Crafty.c("PlatformControls", {
 			
 			EvaluateInertia:
 			function() {
-				if(this.grounded) {
+				if(this.isGrounded()) {
 					// If on the ground, use simple weird physics!
 
 					// If player was just about stopped horizontally, reset _vx.
@@ -309,6 +278,31 @@ Crafty.c("PlatformControls", {
 					
 					this._phAY += 580;
 				}
+			},
+			
+			EnterGround:
+			function() {
+				var kx = controls.getControl("Horizontal");
+				// Trigger landing, walking, or crouching.
+				if(kx != 0) {
+					if(controls) {
+						this.trigger("Crawl");
+					} else {
+						this.trigger("Walk");
+					}
+				} else {
+					if(controls.keyDown("down")) {
+						this.trigger("Crouch");
+					} else {
+						this.trigger("Land");
+					}
+				}
+			},
+			
+			LeaveGround:
+			function() {
+				// Trigger falling.
+				this.trigger("Fall");
 			}
 		});
 		
@@ -322,48 +316,6 @@ Crafty.c("PlatformControls", {
 	dxSelect:
 	function(leftValue, rightValue) {
 		return this.dx < 0 ? leftValue : rightValue;
-	},
-	
-	/**
-	 * Keeps the player moving along a slope, up to 45 degrees either way.
-	 */
-	_groundStick:
-	function() {
-		// Here, need a specific order to work.
-		// First check to see if the player can move sideways.
-		// If not, check to see how much up is necessary.
-		// If so, check to see how much down is necessary.
-		
-		// Find the xvel first.
-		var xvel = Math.abs(this._phX - this._phPX)*2;
-		
-		if(this.sense("Tile", this._phX, this._phY)) {
-			// Player can't move sideways.
-			// Iterate upwards to see if the player can stick up.
-			for(var y = this._phY; y >= this._phY - xvel; --y) {
-				if(!this.sense("Tile", this._phX, y)) {
-					// If the player moves up to y, they can stick!
-					// Move the player to y+1, so that the player is
-					// still in the ground after sticking.
-					this._phY = y + 1;
-					this.grounded = true;
-					break;
-				}
-			}
-		} else {
-			// Player can move sideways.
-			// Iterate downwards to see if the player can stick down.
-			for(var y = this._phY; y <= this._phY + xvel; ++y) {
-				if(this.sense("Tile", this._phX, y)) {
-					// If the player moves down to y, they can stick!
-					// Move the player to y+1, so that the player is
-					// put in the ground after sticking.
-					this._phY = y + 1;
-					this.grounded = true;
-					break;
-				}
-			}
-		}
 	}
 });
 

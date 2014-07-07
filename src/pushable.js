@@ -5,7 +5,8 @@ Crafty.c("Pushable", {
 	init:
 	function() {
 		this.requires("2D, Physical, PhysicsGravity, Inertia," +
-					  "DefaultPhysicsDraw, TileConstraint, GroundFriction");
+					  "DefaultPhysicsDraw, TileConstraint, GroundFriction," +
+					  "Groundable");
 	},
 	
 	push:
