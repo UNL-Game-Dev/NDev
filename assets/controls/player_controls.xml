@@ -26,7 +26,4 @@
 		<key double="true">DOWN_ARROW</key>
 		<key double="true">S</key>
 	</control>
-	<control name="equip">
-		<key>TAB</key>
-	</control>
 </controls>
