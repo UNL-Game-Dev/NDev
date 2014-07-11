@@ -11,11 +11,6 @@ Crafty.c("Player", {
 	init:
 	function() {
 		
-		this._pickupState = Crafty("PickupState");
-		this._items = [];
-		this._equippedItemIndex = -1;
-		this._loadItems();
-		
 		this
 		// Base components
 			.requires("2D")
@@ -29,6 +24,7 @@ Crafty.c("Player", {
             .requires("HazardResponse")
 			.requires("DefaultPhysicsDraw")
 			.requires("ScrollTarget")
+			.requires("ItemEquip")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
 		// Bind animations
@@ -126,35 +122,6 @@ Crafty.c("Player", {
 		});
         
 		this.makeScrollTarget();
-	},
-	
-	_loadItems:
-	function() {
-		var itemsDict = {
-			pistol: "Pistol",
-			dynamite: "Dynamite"
-		};
-		_(itemsDict).each(function(item, pickup) {
-			if(this._pickupState.hasPickup(pickup)) {
-				var newItem = Crafty.e(item);
-				this._items.push(newItem);
-			}
-		});
-	},
-	
-	_equipItem:
-	function() {
-		this._currentItemIndex =
-		    (this._currentItemIndex + 1) % (this._items.length + 1) - 1;
-		this._items[this._currentItemIndex].equip();
-	},
-	
-	_action:
-	function() {
-		if(this._currentItemIndex >= 0) {
-			var item = this._items[this._currentItemIndex];
-			item.activate();
-		}
 	},
 	
 	_setCollisionNormal:
