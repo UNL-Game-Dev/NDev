@@ -153,7 +153,7 @@ Crafty.c("TileConstraint", {
 	function() {
 		this.requires("Physical, Collision");
 		
-		this.currentNormals = [];
+		this.currentHits = [];
 
 		// Tracks phaseable component that this is in the process of dropping through
 		this._phaseableInProgress;
@@ -162,8 +162,8 @@ Crafty.c("TileConstraint", {
 		this.attemptPhase = false;
 
 		this.bind("ResolveConstraint", function() {
-			this.currentNormals = [];
-			/*
+			this.currentHits = [];
+			/*=
 			 * Try 20 times, since there could only possibly be 20 tiles next
 			 * to you at once, right?
 			 * This may remain, since Crafty doesn't provide a way to test
@@ -183,15 +183,15 @@ Crafty.c("TileConstraint", {
 					break;
 				
 				// Just resolve it lazily, yay verlet integration.
-				var norm = hit.normal;
-				var overlap = scale([norm.x, norm.y], -hit.overlap);
+				var norm = [hit.normal.x, hit.normal.y];
+				var overlap = scale(norm, -hit.overlap);
 				
 				this._phX += overlap[0];
 				this._phY += overlap[1];
 				
-				// Maintain a "current normals" list in case other components
+				// Maintain a "current hits" list in case other components
 				// (such as platforming physics) are interested.
-				this.currentNormals.push(overlap);
+				this.currentHits.push(hit);
 			}
 
 			// If object is in the process of phasing through an object,
@@ -219,17 +219,7 @@ Crafty.c("TileConstraint", {
 					// non-phaseable tile, in which case the phase needs to be cancelled
 					// or else the object could drop through the phaseable platform after
 					// moving onto it long after the double-press
-					var grounded = false;
-					for(var i = this.currentNormals.length - 1; i >= 0; --i) {
-						var x = this.currentNormals[i][0];
-						var y = this.currentNormals[i][1];
-						var d = Math.sqrt(x*x + y*y);
-						var n = [x/d, y/d]
-						if(dot(n, [0,-1]) > 0) {
-							grounded = true;
-							break;
-						}
-					}
+					var grounded = this.hitNormal([0,-1]);
 					if (grounded) {
 						// Another non-phaseable tile is keeping us from phasing
 						// Cancel the phase.
@@ -274,6 +264,11 @@ Crafty.c("TileConstraint", {
 		for(var j in hits) {
 			var hit = hits[j];
 			var ob = hit.obj;
+			
+			// Don't register collision with itself.
+			if(ob === this) {
+				continue;
+			}
 
 			// If we're phasing through the tile, don't register hit
 			if (this._phaseableInProgress === ob) {
@@ -308,6 +303,35 @@ Crafty.c("TileConstraint", {
 			return hit;
 		}
 		this.attemptPhase = false;
+		return false;
+	},
+	
+	/**
+	 * Check for collision with a given normal. Returns the first object hit
+	 * that has the given component, with a dot product with the given normal
+	 * above a threshold.
+	 */
+	hitNormal:
+	function(targetNorm, component, threshold) {
+		// Threshold defaults to 0.
+		threshold = threshold || 0;
+		
+		// Search through all hits for the desired normal.
+		for(var i = this.currentHits.length - 1; i >= 0; --i) {
+			var hit = this.currentHits[i];
+			var norm = [hit.normal.x, hit.normal.y];
+			if(dot(norm, targetNorm) > threshold) {
+				var ob = hit.obj;
+				if(!component) {
+					return ob;
+				}
+				
+				if(ob.has(component)) {
+					return ob;
+				}
+			}
+		}
+		
 		return false;
 	},
 	
@@ -392,6 +416,24 @@ Crafty.c("FakeInertia", {
 	}
 });
 
+/**
+ * Ground friction. 
+ */
+Crafty.c("GroundFriction", {
+	init:
+	function() {
+		this.requires("Physical, TileConstraint, DefaultPhysicsDraw");
+		
+		this.bind("PrePhysicsTick", function() {
+			if(this.hitNormal([0,-1], "Tile")) {
+				var vx = this._phX - this._phPX;
+				vx = floorToZero(vx / 2);
+				this._phX = this._phPX + vx;
+			}
+		});
+	}
+});
+
 //---------------------------
 // Common physics vector math.
 // Assumes vectors in form [x,y]
@@ -407,7 +449,7 @@ function rNormal(v) {
 }
 
 // Returns the normalized version of the given vector.
-function norm(v) {
+function normalized(v) {
 	var x = v[0];
 	var y = v[1];
 	var d = Math.sqrt(x*x + y*y);
@@ -442,4 +484,8 @@ function scale(v, scalar) {
 // Returns angle of v w/r to x axis, in degrees
 function angle(v) {
 	return Math.atan2(-v[1], v[0]) * 180 / Math.PI;
+}
+
+function floorToZero(x) {
+	return x > 0 ? Math.floor(x) : Math.ceil(x);
 }

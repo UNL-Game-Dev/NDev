@@ -30,6 +30,7 @@
   <tile id="12">
    <properties>
     <property name="destructible" value="true"/>
+    <property name="pushable" value="true"/>
    </properties>
   </tile>
   <tile id="13">

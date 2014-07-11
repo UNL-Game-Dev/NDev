@@ -650,7 +650,8 @@
             {
              "12":
                 {
-                 "destructible":"true"
+                 "destructible":"true",
+                 "pushable":"true"
                 },
              "13":
                 {

@@ -28,7 +28,8 @@ Crafty.c("SpriteLoader", {
 				that._currDirectory = getDirectory(filename);
 				
 				// Load each sprite sheet.
-				data.children("spriteSheet").each(function(index, spriteSheetElement) {
+				data.children("spriteSheet").each(function(index,
+														spriteSheetElement) {
 					that._loadSpriteSheet(spriteSheetElement);
 				});
 			}

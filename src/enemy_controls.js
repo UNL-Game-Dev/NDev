@@ -27,15 +27,7 @@ Crafty.c("EnemyGroundControls", {
 			var kx = (this.target.x > this.x ? 1 : 0) + (this.target.x < this.x ? -1 : 0);
 			
 			var lastGrounded = this.grounded;
-			this.grounded = false;
-			// Search through all normals for a ground normal.
-			for(var i = this.currentNormals.length - 1; i >= 0; --i) {
-				var n = norm(this.currentNormals[i]);
-				if(dot(n, [0,-1]) > 0) {
-					this.grounded = true;
-					break;
-				}
-			}
+			this.grounded = this.hitNormal([0,-1]);
 			
 			/*
 			// Saving this for when enemies have animations.
