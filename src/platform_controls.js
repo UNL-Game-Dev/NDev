@@ -21,17 +21,6 @@ Crafty.c("PlatformControls", {
 	// Time to recover after being hit.
 	recoveryTime: 1.0,
 
-	// Double Press Key States
-	doubleKeysState:  {
-		NO_PRESS: 0,
-		INITIAL: 1,
-		RELEASE: 2,
-		DOUBLE: 3
-	},
-
-	// Double-key press timeout in ms
-	doubleKeysTimeout: 250, 
-
 	// Object crouch-state
 	isCrouching: false,
 	
@@ -53,10 +42,8 @@ Crafty.c("PlatformControls", {
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
-
-		// Double-press of DOWN_ARROW
-		this.doubleDownKey = this.doubleKeysState.NO_PRESS;
-		this.lastKeyPress = new Date().getTime();
+		
+		var controls = Crafty("Controls");
 		
 		// Bind event handlers.
 		this.requires("StateMachine").state("Platform", {
@@ -65,38 +52,33 @@ Crafty.c("PlatformControls", {
 			function() {
 				// Ensure walking in the correct direction upon entering this
 				// state.
-				if(this.dx < 0
-				&& Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+				if(this.dx < 0 && controls.keyDown("right")) {
 					this.dx = +1;
 					this.trigger("Walk");
 				}
-				else if(this.dx > 0
-				&& Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
+				else if(this.dx > 0 && controls.keyDown("left")) {
 					this.dx = -1;
 					this.trigger("Walk");
 				}
 			},
 			
-			KeyDown:
+			ControlPressed:
 			function(ev) {
-				if(ev.keyCode === Crafty.keys.LEFT_ARROW
-				|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+				if(ev.control === "left" || ev.control === "right") {
 					// Update direction based on which key was pressed.
-					if(ev.keyCode === Crafty.keys.LEFT_ARROW) {
+					if(ev.control === "left") {
 						this.dx = -1;
-					} else if (ev.keyCode === Crafty.keys.RIGHT_ARROW) {
+					} else if (ev.control === "right") {
 						this.dx = +1;
 					}
 
-					if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+					if(controls.keyDown("down")) {
 						this.trigger("Crawl");
 					} else {
 						this.trigger("Walk");
 					}
-				}
-				if(ev.keyCode == Crafty.keys.DOWN_ARROW) {
-					if(Crafty.keydown[Crafty.keys.LEFT_ARROW]
-					|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+				} else if(ev.control === "down") {
+					if(controls.getControl("Horizontal") != 0) {
 						this.trigger("Crawl");
 					}
 					else {
@@ -104,8 +86,7 @@ Crafty.c("PlatformControls", {
 							this.trigger("Crouch");
 						}
 					}
-				}
-				if(ev.keyCode == Crafty.keys.SPACE) {
+				} else if(ev.control === "action") {
 					if(Crafty("PickupState").hasPickup("pistol")) {
 						var bullet = Crafty.e("Projectile");
 						bullet.setPhysPos(this.x, this.y);
@@ -114,10 +95,10 @@ Crafty.c("PlatformControls", {
 						} else {
 							bullet._phX = bullet._phPX + 10;
 						}
-						if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
+						if(controls.keyDown("up")) {
 							bullet._phX = bullet._phPX;
 							bullet._phY = bullet._phPY - 10;
-						} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						} else if(controls.keyDown("down")) {
 							bullet._phX = bullet._phPX;
 							bullet._phY = bullet._phPY + 10;
 						}
@@ -130,75 +111,53 @@ Crafty.c("PlatformControls", {
 						} else {
 							dynamite._phX = dynamite._phPX + dynamiteThrowSpeed;
 						}
-						if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
+						if(controls.keyDown("up")) {
 							dynamite._phX = dynamite._phPX;
 							dynamite._phY = dynamite._phPY - dynamiteThrowSpeed;
-						} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						} else if(controls.keyDown("down")) {
 							dynamite._phX = dynamite._phPX;
 							dynamite._phY = dynamite._phPY + dynamiteThrowSpeed;
 						}
 					}
+				} else if(ev.control === "phase") {
+					this.attemptPhase = true;
 				}
-				
-				// Check for a double press of the down arrow
-				if (this.doubleDownKey != this.doubleKeysState.DOUBLE) {
-					var timePassed = new Date().getTime() - this.lastKeyPress;
-					if(ev.keyCode != Crafty.keys.DOWN_ARROW) {
-						this.doubleDownKey = this.doubleKeysState.NO_PRESS;
-					} else if (this.doubleDownKey === this.doubleKeysState.NO_PRESS
-					|| timePassed > this.doubleKeysTimeout) {
-						this.doubleDownKey = this.doubleKeysState.INITIAL;
-					} else if (this.doubleDownKey === this.doubleKeysState.RELEASE) {
-						this.doubleDownKey = this.doubleKeysState.DOUBLE;
-					}
-				}
-				
-				this.lastKeyPress = new Date().getTime();
 			},
 			
-			KeyUp:
+			ControlReleased:
 			function(ev) {
-				if(ev.keyCode === Crafty.keys.LEFT_ARROW
-				|| ev.keyCode === Crafty.keys.RIGHT_ARROW) {
-					if(Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
+				if(ev.control === "left" || ev.control === "right") {
+					if(controls.keyDown("left")) {
 						this.dx = -1;
-						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						if (controls.keyDown("down")) {
 							this.trigger("Crawl");
 						} else {
 							this.trigger("Walk");
 						}
-					} else if(Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					} else if(controls.keyDown("right")) {
 						this.dx = +1;
-						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						if (controls.keyDown("down")) {
 							this.trigger("Crawl");
 						} else {
 							this.trigger("Walk");
 						}
 					} else {
 						if(this.grounded) {
-							if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+							if (controls.keyDown("down")) {
 								this.trigger("Crouch");
 							} else {
 								this.trigger("Stand");
 							}
 						}
 					}
-				}
-
-				if(ev.keyCode === Crafty.keys.DOWN_ARROW) {
-					if(Crafty.keydown[Crafty.keys.LEFT_ARROW]
-					|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+				} else if(ev.control === "down") {
+					if(controls.getControl("Horizontal") != 0) {
 						this.trigger("Walk");
 					} else {
 						if(this.grounded) {
 							this.trigger("Stand");
 						}
 					}
-				}
-
-				if(ev.keyCode === Crafty.keys.DOWN_ARROW
-				&& this.doubleDownKey === this.doubleKeysState.INITIAL) {
-					this.doubleDownKey = this.doubleKeysState.RELEASE;
 				}
 			},
 			
@@ -215,10 +174,7 @@ Crafty.c("PlatformControls", {
 				}
 				
 				// The key "x" target difference.
-				var kx =
-					(Crafty.keydown[Crafty.keys.RIGHT_ARROW] ? 1 : 0) +
-					(Crafty.keydown[Crafty.keys.LEFT_ARROW] ? -1 : 0);
-				
+				var kx = controls.getControl("Horizontal");
 				var lastGrounded = this.grounded;
 				this.grounded = this.hitNormal([0,-1]);
 
@@ -236,17 +192,14 @@ Crafty.c("PlatformControls", {
 				if(!this.grounded && lastGrounded) {
 					this.trigger("Fall");
 				} else if(this.grounded && !lastGrounded) {
-					if((Crafty.keydown[Crafty.keys.LEFT_ARROW]
-					&& !Crafty.keydown[Crafty.keys.RIGHT_ARROW])
-					|| (Crafty.keydown[Crafty.keys.RIGHT_ARROW]
-					&& !Crafty.keydown[Crafty.keys.LEFT_ARROW])) {
-						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+					if(kx != 0) {
+						if (controls) {
 							this.trigger("Crawl");
 						} else {
 							this.trigger("Walk");
 						}
 					} else {
-						if (Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
+						if (controls.keyDown("down")) {
 							this.trigger("Crouch");
 						} else {
 							this.trigger("Land");
@@ -254,11 +207,11 @@ Crafty.c("PlatformControls", {
 					}
 				}
 
-				if(!Crafty.keydown[Crafty.keys.UP_ARROW]) {
+				if(!controls.keyDown("up")) {
 					this._upHeld = false;
 				}
 				// Jump if on the ground and want to.
-				if(this.grounded && Crafty.keydown[Crafty.keys.UP_ARROW]) {
+				if(this.grounded && controls.keyDown("up")) {
 					this.trigger("Jump");
 					this.grounded = false;
 					// Don't try to stick.
@@ -267,7 +220,7 @@ Crafty.c("PlatformControls", {
 					this._forceRemaining = 2.0;
 				}
 				if(this._upHeld &&
-						Crafty.keydown[Crafty.keys.UP_ARROW] &&
+						controls.keyDown("up") &&
 						this._forceRemaining > 0) {
 					this._forceRemaining -= 0.08;
 					this._phY = this._phPY - this._forceRemaining - 2;
@@ -311,30 +264,16 @@ Crafty.c("PlatformControls", {
 				if(this.grounded || lastGrounded) {
 					this._groundStick();
 				}
-				// Update double-key tracking
-				// Phaseable Platforms
-				if (this.doubleDownKey === this.doubleKeysState.DOUBLE) {
-					this.attemptPhase = true;
-					this.doubleDownKey = this.doubleKeysState.NO_PRESS;
-				}
 
 				// Check if we should stand up
 				// This is needed for when the down arrow was released with an obstacle overhead
-				if( !Crafty.keydown[Crafty.keys.DOWN_ARROW]
+				if( !controls.keyDown("down")
 				&& this.isCrouching) {
-					if (Crafty.keydown[Crafty.keys.LEFT_ARROW]
-					|| Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+					if (controls.getControl("Horizontal") != 0) {
 						this.trigger("Walk");
 					} else {
 						this.trigger("Stand");
 					}
-				}
-				
-				// Update double-key tracking
-				// Phaseable Platforms
-				if (this.doubleDownKey === this.doubleKeysState.DOUBLE) {
-					this.attemptPhase = true;
-					this.doubleDownKey = this.doubleKeysState.NO_PRESS;
 				}
 			},
 			

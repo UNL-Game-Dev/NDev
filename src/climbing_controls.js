@@ -6,6 +6,8 @@ Crafty.c("ClimbingControls", {
 	init:
 	function() {
 		
+		var controls = Crafty("Controls");
+		
 		this.requires("Sensor, Tween");
 		
 		// Bind event handlers.
@@ -45,19 +47,13 @@ Crafty.c("ClimbingControls", {
 					return;
 				}
 				
-				if(this._ladderSide == +1
-				&& Crafty.keydown[Crafty.keys.LEFT_ARROW]) {
-					this.setState("Platform");
-				} else if(this._ladderSide == -1
-				&& Crafty.keydown[Crafty.keys.RIGHT_ARROW]) {
+				// See if we are turning away from the ladder.
+				if(this._ladderSide * controls.getControl("Horizontal") < 0) {
 					this.setState("Platform");
 				}
 				
-				if(Crafty.keydown[Crafty.keys.UP_ARROW]) {
-					this._phY -= 1;
-				} else if(Crafty.keydown[Crafty.keys.DOWN_ARROW]) {
-					this._phY += 1;
-				}
+				// Move vertically on the ladder (negate for correct y-axis).
+				this._phY -= controls.getControl("Vertical");
 			},
 			
 			EvaluateInertia:
