@@ -25,21 +25,6 @@ Crafty.c("Player", {
 			.requires("ScrollTarget")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
-		// Define animations
-			.reel("PlayerStandLeft", 1000, [[0, 0], [1, 0], [2, 0], [3, 0], [3, 0], [2, 0], [1, 0], [0, 0]])
-			.reel("PlayerStandRight", 1000, [[4, 0], [5, 0], [6, 0], [7, 0], [7, 0], [6, 0], [5, 0], [4, 0]])
-			.reel("PlayerWalkLeft", 1000, 0, 1, 8)
-			.reel("PlayerWalkRight", 1000, 0, 2, 8)
-			.reel("PlayerJumpLeft", 500, 0, 3, 4)
-			.reel("PlayerJumpRight", 500, 4, 3, 4)
-			.reel("PlayerFallLeft", 1000, [[0, 4], [1, 4], [2, 4], [3, 4], [3, 4], [2, 4], [1, 4], [0, 4]])
-			.reel("PlayerFallRight", 1000, [[4, 4], [5, 4], [6, 4], [7, 4], [7, 4], [6, 4], [5, 4], [4, 4]])
-			.reel("PlayerLandLeft", 500, 0, 5, 4)
-			.reel("PlayerLandRight", 500, 4, 5, 4)
-			.reel("PlayerCrouchLeft", 1000, [[0, 6], [1, 6], [2, 6], [3, 6], [3, 6], [2, 6], [1, 6], [0, 6]])
-			.reel("PlayerCrouchRight", 1000, [[4, 6], [5, 6], [6, 6], [7, 6], [7, 6], [6, 6], [5, 6], [4, 6]])
-			.reel("PlayerCrawlLeft", 1000, 0, 7, 8)
-			.reel("PlayerCrawlRight", 1000, 0, 8, 8)
 		// Bind animations
 			.bind("Stand", function() {
 				if (!this._setCollisionNormal()) {
