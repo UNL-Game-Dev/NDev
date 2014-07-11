@@ -254,8 +254,7 @@ Crafty.c("SpriteLoader", {
 			// Load start frame and frame count.
 			from = from.split(" ");
 			if(from.length !== 2) {
-				throw "Frame coordinates must be x y: "
-					+ location.join(" ");
+				throw "Frame coordinates must be x y: " + location.join(" ");
 			}
 			anim.from = [
 				parseInt(from[0]),
@@ -274,7 +273,5 @@ Crafty.c("SpriteLoader", {
  * Get the directory of a file path.
  */
 function getDirectory(filename) {
-	var tokens = filename.split("/");
-	tokens.splice(-1);
-	return tokens.join("/");
+	return filename.substring(0, filename.lastIndexOf("/") + 1);
 }

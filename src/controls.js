@@ -1,3 +1,6 @@
+/**
+ * Controls component that maps keys to controls.
+ */
 Crafty.c("Controls", {
 	
 	init:
