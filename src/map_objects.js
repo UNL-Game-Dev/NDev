@@ -132,7 +132,7 @@ Crafty.c("MovingPlatform", {
 	init:
 	function() {
 		this.requires("2D, Canvas, Tween, Physical, Collision, Tile,"
-			+ "FakeInertia, DefaultPhysicsDraw");
+			+ "FakeInertia, DefaultPhysicsDraw, Platform");
 	},
 	
 	mapObjectInit:
