@@ -96,9 +96,14 @@ Crafty.c("Player", {
 		// Key handler
 			.bind("ControlPressed", function(ev) {
 				if(ev.control === "equip") {
-					this._equipItem();
+					this.switchItem();
 				} else if(ev.control === "action") {
-					this._action();
+					this.activateItem();
+				}
+			})
+			.bind("ControlReleased", function(ev) {
+				if(ev.control === "action") {
+					this.deactivateItem();
 				}
 			})
 		// Player attributes

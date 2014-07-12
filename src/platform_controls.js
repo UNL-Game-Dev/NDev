@@ -85,7 +85,7 @@ Crafty.c("PlatformControls", {
 						}
 					}
 				} else if(ev.control === "action") {
-					if(Crafty("PickupState").hasPickup("pistol")) {
+					/*if(Crafty("PickupState").hasPickup("pistol")) {
 						var bullet = Crafty.e("Projectile");
 						bullet.setPhysPos(this.x, this.y);
 						if(this.dx < 0) {
@@ -116,7 +116,7 @@ Crafty.c("PlatformControls", {
 							dynamite._phX = dynamite._phPX;
 							dynamite._phY = dynamite._phPY + dynamiteThrowSpeed;
 						}
-					}
+					}*/
 				} else if(ev.control === "phase") {
 					this.attemptPhase = true;
 				}

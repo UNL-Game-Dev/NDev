@@ -27,6 +27,8 @@
 		<key double="true">S</key>
 	</control>
 	<control name="equip">
-		<key>TAB</key>
+		<key>CTRL</key>
+		<key>ALT</key>
+		<key>SHIFT</key>
 	</control>
 </controls>
