@@ -6,9 +6,7 @@ Crafty.c("ClimbingControls", {
 	init:
 	function() {
 		
-		var controls = Crafty("Controls");
-		
-		this.requires("Sensor, Tween");
+		this.requires("Sensor, Tween, Controls");
 		
 		// Bind event handlers.
 		this.requires("StateMachine").state("Climb", {
@@ -48,12 +46,12 @@ Crafty.c("ClimbingControls", {
 				}
 				
 				// See if we are turning away from the ladder.
-				if(this._ladderSide * controls.getControl("Horizontal") < 0) {
+				if(this._ladderSide * this.getControl("Horizontal") < 0) {
 					this.setState("Platform");
 				}
 				
 				// Move vertically on the ladder.
-				this._phY += controls.getControl("Vertical");
+				this._phY += this.getControl("Vertical");
 			},
 			
 			EvaluateInertia:

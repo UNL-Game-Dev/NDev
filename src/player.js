@@ -25,8 +25,11 @@ Crafty.c("Player", {
 			.requires("DefaultPhysicsDraw")
 			.requires("ScrollTarget")
 			.requires("ItemEquip")
+			.requires("Controls")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
+		// Load controls
+			.loadKeyMapping("assets/controls/player_controls.xml")
 		// Bind animations
 			.bind("Stand", function() {
 				if (!this._setCollisionNormal()) {

@@ -27,10 +27,6 @@ Crafty.scene("testMap", function() {
 	
 	// Create the clock.
 	var clock = Crafty.e("Clock, Persistent");
-	
-	// Create the controls mapper.
-	var controls = Crafty.e("Controls")
-	                     .loadKeyMapping("assets/controls/controls.xml");
 
 	// Create the general quake viewport effect handler
 	var quake = Crafty.e("EarthquakeViewport, Persistent");
