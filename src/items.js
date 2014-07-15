@@ -54,14 +54,13 @@ Crafty.c("PistolItem", {
 	
 	init:
 	function() {
-		var controls = Crafty("Controls");
 		this.requires("2D");
 		this.bind("ItemActivate", function(data) {
 			var bullet = Crafty.e("Projectile");
 			bullet.setPhysPos(
 				this.x - bullet.w / 2,
 				this.y - bullet.h / 2);
-			
+
 			bullet._phX = bullet._phPX + data.params.direction[0] * 10;
 			bullet._phY = bullet._phPY + data.params.direction[1] * 10;
 		});
