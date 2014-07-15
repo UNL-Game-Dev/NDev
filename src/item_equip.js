@@ -4,6 +4,7 @@
 Crafty.c("ItemEquip", {
 	init:
 	function() {
+		this.requires("2D");
 		this._pickupState = Crafty("PickupState");
 		this._itemsInfo = [];
 		this._equippedItemIndex = -1;
@@ -17,18 +18,23 @@ Crafty.c("ItemEquip", {
 	switchItem:
 	function() {
 		var oldItemInfo = this._itemsInfo[this._equippedItemIndex];
-		this._equippedItemIndex = this._getNextItemIndex(this._equippedItemIndex);
+		this._equippedItemIndex =
+			this._getNextItemIndex(this._equippedItemIndex);
 		var newItemInfo = this._itemsInfo[this._equippedItemIndex];
 		
 		if(oldItemInfo) {
 			_([oldItemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemUnequipped", oldItemInfo.name);
+				ent.trigger("ItemUnequip", {
+					item: oldItemInfo.name
+				});
 			});
 		}
 		
 		if(newItemInfo) {
 			_([newItemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemEquipped", newItemInfo.name);
+				ent.trigger("ItemEquip", {
+					item: newItemInfo.name
+				});
 			});
 		}
 		
@@ -39,11 +45,15 @@ Crafty.c("ItemEquip", {
 	 * Activate the currently equipped item.
 	 */
 	activateItem:
-	function() {
+	function(params) {
 		var itemInfo = this._itemsInfo[this._equippedItemIndex];
 		if(itemInfo) {
+			// Trigger the activate signal for both the item and the holder.
 			_([itemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemActivated", itemInfo.name);
+				ent.trigger("ItemActivate", {
+					item: itemInfo.name,
+					params: params
+				});
 			});
 		}
 		
@@ -57,8 +67,11 @@ Crafty.c("ItemEquip", {
 	function() {
 		var itemInfo = this._itemsInfo[this._equippedItemIndex];
 		if(itemInfo) {
+			// Trigger the deactivate signal for both the item and the holder.
 			_([itemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemDeactivated", itemInfo.name);
+				ent.trigger("ItemDeactivate", {
+					name: itemInfo.name
+				});
 			});
 		}
 		
@@ -71,14 +84,18 @@ Crafty.c("ItemEquip", {
 	_loadItems:
 	function() {
 		var itemsDict = {
-			pistol: "Pistol",
-			dynamite: "Dynamite"
+			pistol: "PistolItem",
+			dynamite: "DynamiteItem"
 		};
 		_(itemsDict).each(function(itemName, pickupName) {
 			if(this._pickupState.hasPickup(pickupName)) {
-				var newItem = Crafty.e(itemName);
+				var newItem = Crafty.e(itemName).attr({
+					x: this.x + this.w / 2,
+					y: this.y + this.h / 2
+				});
+				this.attach(newItem);
 				this._itemsInfo.push({
-					name: itemName,
+					name: pickupName,
 					item: newItem
 				});
 			}

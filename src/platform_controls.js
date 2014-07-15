@@ -84,39 +84,6 @@ Crafty.c("PlatformControls", {
 							this.trigger("Crouch");
 						}
 					}
-				} else if(ev.control === "action") {
-					/*if(Crafty("PickupState").hasPickup("pistol")) {
-						var bullet = Crafty.e("Projectile");
-						bullet.setPhysPos(this.x, this.y);
-						if(this.dx < 0) {
-							bullet._phX = bullet._phPX - 10;
-						} else {
-							bullet._phX = bullet._phPX + 10;
-						}
-						if(controls.keyDown("up")) {
-							bullet._phX = bullet._phPX;
-							bullet._phY = bullet._phPY - 10;
-						} else if(controls.keyDown("down")) {
-							bullet._phX = bullet._phPX;
-							bullet._phY = bullet._phPY + 10;
-						}
-					} else if(Crafty("PickupState").hasPickup("dynamite")) {
-						var dynamite = Crafty.e("Dynamite");
-						var dynamiteThrowSpeed = 3;
-						dynamite.setPhysPos(this.x, this.y).ignite();
-						if(this.dx < 0) {
-							dynamite._phX = dynamite._phPX - dynamiteThrowSpeed;
-						} else {
-							dynamite._phX = dynamite._phPX + dynamiteThrowSpeed;
-						}
-						if(controls.keyDown("up")) {
-							dynamite._phX = dynamite._phPX;
-							dynamite._phY = dynamite._phPY - dynamiteThrowSpeed;
-						} else if(controls.keyDown("down")) {
-							dynamite._phX = dynamite._phPX;
-							dynamite._phY = dynamite._phPY + dynamiteThrowSpeed;
-						}
-					}*/
 				} else if(ev.control === "phase") {
 					this.attemptPhase = true;
 				}

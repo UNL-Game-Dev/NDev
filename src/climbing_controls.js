@@ -52,8 +52,8 @@ Crafty.c("ClimbingControls", {
 					this.setState("Platform");
 				}
 				
-				// Move vertically on the ladder (negate for correct y-axis).
-				this._phY -= controls.getControl("Vertical");
+				// Move vertically on the ladder.
+				this._phY += controls.getControl("Vertical");
 			},
 			
 			EvaluateInertia:

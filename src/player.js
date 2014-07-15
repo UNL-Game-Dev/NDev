@@ -10,7 +10,7 @@ Crafty.c("Player", {
     
 	init:
 	function() {
-		
+		var controls = Crafty("Controls");
 		this
 		// Base components
 			.requires("2D")
@@ -98,7 +98,7 @@ Crafty.c("Player", {
 				if(ev.control === "equip") {
 					this.switchItem();
 				} else if(ev.control === "action") {
-					this.activateItem();
+					this.activateItem({ direction: this._actionDirection() });
 				}
 			})
 			.bind("ControlReleased", function(ev) {
@@ -127,6 +127,15 @@ Crafty.c("Player", {
 		});
         
 		this.makeScrollTarget();
+	},
+	
+	_actionDirection:
+	function() {
+		var dir = Crafty("Controls").getControl("Direction");
+		if(dir[0] == 0 && dir[1] == 0) {
+			dir[0] = this.dxSelect(-1, +1);
+		}
+		return dir;
 	},
 	
 	_setCollisionNormal:
