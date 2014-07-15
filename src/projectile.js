@@ -19,6 +19,11 @@ Crafty.c("Projectile", {
 				this.destroy();
 			}, 3000)
 		// Collisions
+			.onHit("Inertia", function(hits) {
+				for(var i = 0; i < hits.length; i++) {
+					hits[i].obj.applyImpulse(this.getDX(), this.getDY());
+				}
+			})
 			.onHit("Tile", this.destroy)
 			.onHit("Enemy", function(hit) {
 				for (var i = 0; i < hit.length; i++) {
