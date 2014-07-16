@@ -41,15 +41,20 @@ Crafty.c("Explosion", {
 				alpha: 0
 			}, this.time * 1000)
 			.delay(this.destroy, this.time * 1000)
+			.onHit("Enemy", function(hits) {
+				_(hits).each(function(hit) {
+					hit.obj.destroy();
+				});
+			})
 			.onHit("Physical", function(hits) {
-				for(var i = 0; i < hits.length; i++) {
-					var hit = hits[i];
+				_(hits).each(function(hit) {
+					var ob = hit.obj;
 					var ob = hit.obj;
 					var px = ob.x - (this.x + this.w / 2),
 						py = ob.y - (this.y + this.h / 2);
 					var fac = this.strength / (dist([px, py]));
 					ob.applyImpulse(px * fac, py * fac);
-				}
+				}, this);
 			});
 		Crafty.trigger("Quake");
 		return this;

@@ -18,6 +18,7 @@
 	</control>
 	<control name="jump">
 		<key>UP_ARROW</key>
+		<key>W</key>
 	</control>
 	<control name="action">
 		<key>SPACE</key>
@@ -25,5 +26,10 @@
 	<control name="phase">
 		<key double="true">DOWN_ARROW</key>
 		<key double="true">S</key>
+	</control>
+	<control name="equip">
+		<key>CTRL</key>
+		<key>ALT</key>
+		<key>SHIFT</key>
 	</control>
 </controls>

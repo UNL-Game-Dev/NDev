@@ -10,6 +10,7 @@ Crafty.c("Player", {
     
 	init:
 	function() {
+		var controls = Crafty("Controls");
 		this
 		// Base components
 			.requires("2D")
@@ -23,8 +24,12 @@ Crafty.c("Player", {
             .requires("HazardResponse")
 			.requires("DefaultPhysicsDraw")
 			.requires("ScrollTarget")
+			.requires("ItemEquip")
+			.requires("Controls")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
+		// Load controls
+			.loadKeyMapping("assets/controls/player_controls.xml")
 		// Bind animations
 			.bind("Stand", function() {
 				if (!this._setCollisionNormal()) {
@@ -91,6 +96,19 @@ Crafty.c("Player", {
 				}
 				this.isCrouching = true;
 			})
+		// Key handler
+			.bind("ControlPressed", function(ev) {
+				if(ev.control === "equip") {
+					this.switchItem();
+				} else if(ev.control === "action") {
+					this.activateItem({ direction: this._actionDirection() });
+				}
+			})
+			.bind("ControlReleased", function(ev) {
+				if(ev.control === "action") {
+					this.deactivateItem();
+				}
+			})
 		// Player attributes
 			.attr({
 				// Time to recover from being hit, in seconds.
@@ -112,6 +130,15 @@ Crafty.c("Player", {
 		});
         
 		this.makeScrollTarget();
+	},
+	
+	_actionDirection:
+	function() {
+		var dir = Crafty("Controls").getControl("Direction");
+		if(dir[0] == 0 && dir[1] == 0) {
+			dir[0] = this.dxSelect(-1, +1);
+		}
+		return dir;
 	},
 	
 	_setCollisionNormal:

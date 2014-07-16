@@ -162,12 +162,24 @@ Crafty.c("Controls", {
 	 */
 	getControl:
 	function(control) {
-		return {
-			horizontal: (this.keyDown("left") ? -1 : 0)
-				+ (this.keyDown("right") ? +1 : 0),
-			vertical: (this.keyDown("down") ? -1 : 0)
-				+ (this.keyDown("up") ? +1 : 0)
-		}[control.toLowerCase()];
+		control = control.toLowerCase();
+		if(control === "horizontal") {
+			return (this.keyDown("left") ? -1 : 0)
+			     + (this.keyDown("right") ? +1 : 0);
+		} else if(control === "vertical") {
+			return (this.keyDown("down") ? +1 : 0)
+			     + (this.keyDown("up") ? -1 : 0);
+		} else if(control === "direction") {
+			var kx = (this.keyDown("left") ? -1 : 0)
+			       + (this.keyDown("right") ? +1 : 0);
+			var ky = (this.keyDown("down") ? +1 : 0)
+			       + (this.keyDown("up") ? -1 : 0);
+			if(kx != 0 && ky != 0) {
+				return [0.707 * kx, 0.707 * ky];
+			} else {
+				return [kx, ky];
+			}
+		}
 	},
 	
 	/**
