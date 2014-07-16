@@ -8,8 +8,13 @@ Crafty.c("ItemEquip", {
 		this._pickupState = Crafty("PickupState");
 		this._itemsInfo = [];
 		this._equippedItemIndex = -1;
+		this._itemsDict = {
+			pistol: "PistolItem",
+			dynamite: "DynamiteItem"
+		};
 		this._loadItems();
 		this.bind("GameStateLoaded", this._loadItems);
+		this.bind("PickupAdded", this._addItem);
 	},
 	
 	/**
@@ -83,13 +88,9 @@ Crafty.c("ItemEquip", {
 	 */
 	_loadItems:
 	function() {
-		var itemsDict = {
-			pistol: "PistolItem",
-			dynamite: "DynamiteItem"
-		};
-		_(itemsDict).each(function(itemName, pickupName) {
+		_(this._itemsDict).each(function(itemComponent, pickupName) {
 			if(this._pickupState.hasPickup(pickupName)) {
-				var newItem = Crafty.e(itemName).attr({
+				var newItem = Crafty.e(itemComponent).attr({
 					x: this.x + this.w / 2,
 					y: this.y + this.h / 2
 				});
@@ -100,6 +101,25 @@ Crafty.c("ItemEquip", {
 				});
 			}
 		}, this);
+	},
+	
+	/**
+	 * Add an item, given the pickup data.
+	 */
+	_addItem:
+	function(pickupData) {
+		var itemComponent = this._itemsDict[pickupData.name];
+		if(itemComponent) {
+			var newItem = Crafty.e(itemComponent).attr({
+				x: this.x + this.w / 2,
+				y: this.y + this.h / 2
+			});
+			this.attach(newItem);
+			this._itemsInfo.push({
+				name: pickupData.name,
+				item: newItem
+			});
+		}
 	},
 	
 	/**
