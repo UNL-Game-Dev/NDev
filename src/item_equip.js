@@ -6,12 +6,23 @@ Crafty.c("ItemEquip", {
 	function() {
 		this.requires("2D");
 		this._pickupState = Crafty("PickupState");
+		
+		/**
+		 * List of item info dicts.
+		 * name: item name
+		 * item: item entity
+		 */
 		this._itemsInfo = [];
+		
+		// Index of currently equipped item. (-1 means no item is equipped.)
 		this._equippedItemIndex = -1;
-		this._itemsDict = {
+		
+		// Dictionary mapping items to component names.
+		this._itemsToComponents = {
 			pistol: "PistolItem",
 			dynamite: "DynamiteItem"
 		};
+		
 		this._loadItems();
 		this.bind("GameStateLoaded", this._loadItems);
 		this.bind("PickupAdded", this._addItem);
@@ -44,6 +55,15 @@ Crafty.c("ItemEquip", {
 		}
 		
 		return this;
+	},
+	
+	/**
+	 * Get the currently equipped item entity.
+	 */
+	equippedItem:
+	function() {
+		var itemInfo = this._itemsInfo[this._equippedItemIndex];
+		return itemInfo ? itemInfo.item : null;
 	},
 	
 	/**
@@ -88,7 +108,7 @@ Crafty.c("ItemEquip", {
 	 */
 	_loadItems:
 	function() {
-		_(this._itemsDict).each(function(itemComponent, pickupName) {
+		_(this._itemsToComponents).each(function(itemComponent, pickupName) {
 			if(this._pickupState.hasPickup(pickupName)) {
 				var newItem = Crafty.e(itemComponent).attr({
 					x: this.x + this.w / 2,
@@ -108,7 +128,7 @@ Crafty.c("ItemEquip", {
 	 */
 	_addItem:
 	function(pickupData) {
-		var itemComponent = this._itemsDict[pickupData.name];
+		var itemComponent = this._itemsToComponents[pickupData.name];
 		if(itemComponent) {
 			var newItem = Crafty.e(itemComponent).attr({
 				x: this.x + this.w / 2,
