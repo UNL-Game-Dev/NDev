@@ -128,6 +128,7 @@ Crafty.c("HarpoonItem", {
 				this.fire(data.params.direction);
 			}
 		});
+		this.bind("ItemUnequip", function() { this.deactivate(); });
 		this.bind("EnterFrame", function() { this._onEnterFrame(); });
 	},
 	
@@ -180,7 +181,6 @@ Crafty.c("HarpoonItem", {
 					
 					while(this._line.hit("Tile")) {
 						this._line.w--;
-						console.log(this._line.w);
 					}
 					this._length = this._line.w;
 					
