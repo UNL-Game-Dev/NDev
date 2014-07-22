@@ -392,7 +392,7 @@ Crafty.c("DistanceConstraint", {
 		this.bind("ResolveConstraint", function() {
 			if(this._target) {
 				var myPos = add(
-					[this.x, this.y],
+					[this._phX, this._phY],
 					this._myOffset);
 				var targetPos = add(
 					[this._target.x, this._target.y],
@@ -405,8 +405,8 @@ Crafty.c("DistanceConstraint", {
 				if(distance > this._maxDistance) {
 					var norm = normalized(offset);
 					var posOffset = scale(norm, distance - this._maxDistance);
-					this._phX += posOffset[0] * 2;
-					this._phY += posOffset[1] * 2;
+					this._phX += posOffset[0];
+					this._phY += posOffset[1];
 				}
 			}
 		});
@@ -420,7 +420,7 @@ Crafty.c("DistanceConstraint", {
 			return this._target ? {
 				target: this._target,
 				targetPos: add([this._target.x, this._target.y], this._targetOffset),
-				myPos: add([this.x, this.y], this._myOffset),
+				myPos: add([this._phX, this._phY], this._myOffset),
 				actualDistance: dist(sub(
 					add([this.x, this.y], this._myOffset),
 					add([this._target.x, this._target.y], this._targetOffset)))

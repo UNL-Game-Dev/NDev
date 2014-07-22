@@ -97,14 +97,16 @@ Crafty.c("HarpoonItem", {
 		
 		this._reelTime = 0.3;
 		
+		var thickness = 2;
+		
 		// The line entity.
 		var self = this;
 		this._line = Crafty.e("2D, Canvas, Color, Collision")
 			.attr({
 				x: this.x,
-				y: this.y - 3,
-				w: 10,
-				h: 6,
+				y: this.y - thickness / 2,
+				w: 0,
+				h: thickness,
 				z: 100
 			})
 			.color("#000000")
@@ -117,7 +119,8 @@ Crafty.c("HarpoonItem", {
 		this.bind("ItemActivate", function(data) {
 			if(this._active) {
 				if(this._attached) {
-					var distance = this._owner.distanceConstraint().actualDistance;
+					var distance =
+						this._owner.distanceConstraint().actualDistance;
 					if(distance < this._thresholdLength) {
 						this.deactivate();
 					} else {
@@ -146,14 +149,21 @@ Crafty.c("HarpoonItem", {
 	
 	reel:
 	function() {
+		this.attr({ _reeling: true });
 		this.tween({ _length: this._minLength }, this._reelTime * 1000);
+		this.timeout(function() { this._reeling = false; }, this._reelTime * 1000);
 	},
 	
 	deactivate:
 	function() {
 		this._owner.cancelDistanceConstraint();
 		this.cancelTween("_length");
-		this.attr({ _length: 0, _active: false, _attached: false });
+		this.attr({
+			_length: 0,
+			_active: false,
+			_attached: false,
+			_reeling: false
+		});
 	},
 	
 	_onEnterFrame:
@@ -173,11 +183,19 @@ Crafty.c("HarpoonItem", {
 					rotation: Math.atan2(relPos[1], relPos[0]) * 180 / Math.PI,
 					w: constraint.actualDistance
 				});
+				
+				if(this._reeling) {
+					if(this._owner.hitNormal(scale(relPos, -1))) {
+						this.deactivate();
+					}
+				}
 			} else {
 				this._line.attr({ w: this._length });
 				
 				var hits = this._line.hit("Tile");
 				if(hits) {
+					
+					this.cancelTween("_length");
 					
 					while(this._line.hit("Tile")) {
 						this._line.w--;
@@ -203,7 +221,7 @@ Crafty.c("HarpoonItem", {
 
 					this.attr({ _attached: true });
 				}
-				if(this._length >= this._maxLength && !this._attached) {
+				if(this._length >= this._maxLength) {
 					// Deactivate when harpoon line reaches full extent and nothing
 					// is hit.
 					this.deactivate();
