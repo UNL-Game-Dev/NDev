@@ -122,7 +122,7 @@ Crafty.c("Player", {
 			if(!this.invincible) {
 				this.invincible = true;
 				var norm = hit.normal;
-				// TODO: Respond to this hazardous collision somehow.
+				// TODO: Respond to this hazardous collision somehow. Probably die/be unconscious until player decides to use up some meter fluid.
 				this.timeout(function() {
 					this.invincible = false;
 				}, this.recoveryTime * 1000);
