@@ -28,6 +28,9 @@ Crafty.c("Player", {
 			.requires("Controls")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
+		// Collision bounds
+			.collision([11, 0], [21, 0], [21, 32], [11, 32])
+			.attr({ sensorBounds: [11, 0, 21, 32] })
 		// Load controls
 			.loadKeyMapping("assets/controls/player_controls.xml")
 		// Bind animations
@@ -143,7 +146,7 @@ Crafty.c("Player", {
 	
 	_setCollisionNormal:
 	function() {
-		this.collision([0,0], [32,0], [32,32], [0,32]);
+		this.collision(new Crafty.polygon([[11,0], [21,0], [21,32], [11,32]]));
 		if( this.hitTile() )
 			return false;
 		return true;
@@ -151,7 +154,7 @@ Crafty.c("Player", {
 	
 	_setCollisionCrouch:
 	function() {
-		this.collision([0,16], [32,16], [32,32], [0,32]);
+		this.collision(new Crafty.polygon([[11,16], [21,16], [21,32], [11,32]]));
 		if ( this.hitTile() )
 			return false;
 		return true;

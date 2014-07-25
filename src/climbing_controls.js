@@ -21,8 +21,8 @@ Crafty.c("ClimbingControls", {
 				
 				// Check if not on ladder anymore, and if so, switch to platform
 				// state.
-				if(!this.sense("ClimbableRight", this._phX - 5, this._phY, -4)
-				&& !this.sense("ClimbableLeft", this._phX + 5, this._phY, -4)) {
+				if(!this.sense("ClimbableRight", this._phX - 5, this._phY, 4)
+				&& !this.sense("ClimbableLeft", this._phX + 5, this._phY, 4)) {
 					this.setState("Platform");
 					return;
 				}

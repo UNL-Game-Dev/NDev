@@ -129,9 +129,9 @@ Crafty.c("PlatformControls", {
 				
 				// See if touching ladder. If so, switch to ladder state.
 				if((this.dx > 0
-				&& this.sense("ClimbableLeft", this._phX + 5, this._phY, -4))
+				&& this.sense("ClimbableLeft", this._phX + 5, this._phY, 0))
 				|| (this.dx < 0
-				&& this.sense("ClimbableRight", this._phX - 5, this._phY, -4))) {
+				&& this.sense("ClimbableRight", this._phX - 5, this._phY, 0))) {
 					this.setState("Climb");
 					return;
 				}
