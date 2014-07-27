@@ -28,12 +28,12 @@
 				<frame>4 0</frame>
 			</reel>
 			<reel name="PlayerWalkLeft">
-				<duration>1000</duration>
+				<duration>650</duration>
 				<from>0 1</from>
 				<frameCount>8</frameCount>
 			</reel>
 			<reel name="PlayerWalkRight">
-				<duration>1000</duration>
+				<duration>650</duration>
 				<from>0 2</from>
 				<frameCount>8</frameCount>
 			</reel>
