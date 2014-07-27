@@ -69,7 +69,22 @@ Crafty.c("Player", {
 			})
 			.bind("Fall", function() {
 				this._setCollisionNormal();
-				this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
+				
+				// Play fall animation.
+				// If jumping animation is playing, wait until done.
+				var reel = this.reel();
+				if(reel !== "PlayerJumpLeft" && reel !== "PlayerJumpRight") {
+					this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
+				} else {
+					this.one("AnimationEnd", function(reel) {
+						if(reel.id === "PlayerJumpLeft") {
+							this.animate("PlayerFallLeft", -1);
+						} else if(reel.id === "PlayerJumpRight") {
+							this.animate("PlayerFallRight", -1);
+						}
+					});
+				}
+				
 				this.isCrouching = false;
 			})
 			.bind("Land", function() {
