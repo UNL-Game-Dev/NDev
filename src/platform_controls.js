@@ -244,7 +244,7 @@ Crafty.c("PlatformControls", {
 				}
 			},
 			
-			EnterGround:
+			GroundLand:
 			function() {
 				// Trigger landing, walking, or crouching.
 				if(this.getControl("Horizontal") != 0) {
@@ -262,7 +262,7 @@ Crafty.c("PlatformControls", {
 				}
 			},
 			
-			LeaveGround:
+			GroundLeave:
 			function() {
 				// Trigger falling.
 				this.trigger("Fall");
