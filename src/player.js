@@ -53,7 +53,7 @@ Crafty.c("Player", {
 					}
 					this._setCollisionNormal();
 				}
-				if(this.grounded) {
+				if(this.isGrounded()) {
 					this.animate(this.dxSelect("PlayerWalkLeft", "PlayerWalkRight"), -1);
 				} else {
 					this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
@@ -65,7 +65,7 @@ Crafty.c("Player", {
 				this.animate(this.dxSelect("PlayerJumpLeft", "PlayerJumpRight"), 0);
 				this.isCrouching = false;
 				this.timeout(function() {
-					if(!this.grounded) {
+					if(!this.isGrounded()) {
 						this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
 					}
 				}, 500);
@@ -79,7 +79,7 @@ Crafty.c("Player", {
 				this._setCollisionNormal();
 				this.animate(this.dxSelect("PlayerLandLeft", "PlayerLandRight"), 0);
 				this.timeout(function() {
-					if(this.grounded) {
+					if(this.isGrounded()) {
 						this.animate(this.dxSelect("PlayerStandLeft", "PlayerStandRight"), -1);
 					}
 				}, 500);
@@ -92,7 +92,7 @@ Crafty.c("Player", {
 			})
 			.bind("Crawl", function(ev) {
 				this._setCollisionCrouch();
-				if (this.grounded) {
+				if (this.isGrounded()) {
 					this.animate(this.dxSelect("PlayerCrouchLeft", "PlayerCrouchRight"), -1);
 				} else {
 					this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
