@@ -41,6 +41,7 @@ Crafty.c("GameState", {
 			allData[slot] = this.data;
 			localStorage["saveData"] = JSON.stringify(allData);
 		}
+		Crafty.trigger("GameStateSaved");
 		return slot;
 	},
 	
@@ -56,6 +57,7 @@ Crafty.c("GameState", {
 			this.data = allData[slot] || {};
 			console.log("Got slot ", slot, allData, this.data);
 		}
+		Crafty.trigger("GameStateLoaded");
 		return slot;
 	},
 	

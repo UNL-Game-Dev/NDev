@@ -71,8 +71,11 @@ Crafty.c("PickupState", {
 		// Store pickup data in saved object.
 		pickups[pickupName] = current;
 		
+		// Trigger pickup add event, signaling any interested components.
+		Crafty.trigger("PickupAdded", { name: pickupName, count: count });
+		
 		// Return actual applied difference for potential gameplay usage.
-		return current - old;
+		 return current - old;
 	},
 	
 	_pickupEntryByName:

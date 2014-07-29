@@ -27,7 +27,7 @@ Crafty.c("PlatformControls", {
 	init:
 	function() {
 		
-		this.requires("TileConstraint, Sensor, Groundable");
+		this.requires("TileConstraint, Sensor, Groundable, Controls");
 		
 		// Direction that we are facing in the x-direction.
 		this.dx = +1;
@@ -41,8 +41,6 @@ Crafty.c("PlatformControls", {
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
 		
-		var controls = Crafty("Controls");
-		
 		// Bind event handlers.
 		this.requires("StateMachine").state("Platform", {
 			
@@ -50,11 +48,11 @@ Crafty.c("PlatformControls", {
 			function() {
 				// Ensure walking in the correct direction upon entering this
 				// state.
-				if(this.dx < 0 && controls.keyDown("right")) {
+				if(this.dx < 0 && this.keyDown("right")) {
 					this.dx = +1;
 					this.trigger("Walk");
 				}
-				else if(this.dx > 0 && controls.keyDown("left")) {
+				else if(this.dx > 0 && this.keyDown("left")) {
 					this.dx = -1;
 					this.trigger("Walk");
 				}
@@ -70,51 +68,18 @@ Crafty.c("PlatformControls", {
 						this.dx = +1;
 					}
 
-					if(controls.keyDown("down")) {
+					if(this.keyDown("down")) {
 						this.trigger("Crawl");
 					} else {
 						this.trigger("Walk");
 					}
 				} else if(ev.control === "down") {
-					if(controls.getControl("Horizontal") != 0) {
+					if(this.getControl("Horizontal") != 0) {
 						this.trigger("Crawl");
 					}
 					else {
 						if (this.isGrounded()) {
 							this.trigger("Crouch");
-						}
-					}
-				} else if(ev.control === "action") {
-					if(Crafty("PickupState").hasPickup("pistol")) {
-						var bullet = Crafty.e("Projectile");
-						bullet.setPhysPos(this.x, this.y);
-						if(this.dx < 0) {
-							bullet._phX = bullet._phPX - 10;
-						} else {
-							bullet._phX = bullet._phPX + 10;
-						}
-						if(controls.keyDown("up")) {
-							bullet._phX = bullet._phPX;
-							bullet._phY = bullet._phPY - 10;
-						} else if(controls.keyDown("down")) {
-							bullet._phX = bullet._phPX;
-							bullet._phY = bullet._phPY + 10;
-						}
-					} else if(Crafty("PickupState").hasPickup("dynamite")) {
-						var dynamite = Crafty.e("Dynamite");
-						var dynamiteThrowSpeed = 3;
-						dynamite.setPhysPos(this.x, this.y).ignite();
-						if(this.dx < 0) {
-							dynamite._phX = dynamite._phPX - dynamiteThrowSpeed;
-						} else {
-							dynamite._phX = dynamite._phPX + dynamiteThrowSpeed;
-						}
-						if(controls.keyDown("up")) {
-							dynamite._phX = dynamite._phPX;
-							dynamite._phY = dynamite._phPY - dynamiteThrowSpeed;
-						} else if(controls.keyDown("down")) {
-							dynamite._phX = dynamite._phPX;
-							dynamite._phY = dynamite._phPY + dynamiteThrowSpeed;
 						}
 					}
 				} else if(ev.control === "phase") {
@@ -125,23 +90,23 @@ Crafty.c("PlatformControls", {
 			ControlReleased:
 			function(ev) {
 				if(ev.control === "left" || ev.control === "right") {
-					if(controls.keyDown("left")) {
+					if(this.keyDown("left")) {
 						this.dx = -1;
-						if (controls.keyDown("down")) {
+						if (this.keyDown("down")) {
 							this.trigger("Crawl");
 						} else {
 							this.trigger("Walk");
 						}
-					} else if(controls.keyDown("right")) {
+					} else if(this.keyDown("right")) {
 						this.dx = +1;
-						if (controls.keyDown("down")) {
+						if (this.keyDown("down")) {
 							this.trigger("Crawl");
 						} else {
 							this.trigger("Walk");
 						}
 					} else {
 						if(this.isGrounded()) {
-							if (controls.keyDown("down")) {
+							if (this.keyDown("down")) {
 								this.trigger("Crouch");
 							} else {
 								this.trigger("Stand");
@@ -149,7 +114,7 @@ Crafty.c("PlatformControls", {
 						}
 					}
 				} else if(ev.control === "down") {
-					if(controls.getControl("Horizontal") != 0) {
+					if(this.getControl("Horizontal") != 0) {
 						this.trigger("Walk");
 					} else {
 						if(this.isGrounded()) {
@@ -172,7 +137,7 @@ Crafty.c("PlatformControls", {
 				}
 				
 				// The key "x" target difference.
-				var kx = controls.getControl("Horizontal");
+				var kx = this.getControl("Horizontal");
 
 				// Check for pushable objects and push them.
 				var pushableRight = this.hitNormal([-1,0], "Pushable");
@@ -184,18 +149,18 @@ Crafty.c("PlatformControls", {
 					pushableLeft.push([-1,0]);
 				}
 
-				if(!controls.keyDown("up")) {
+				if(!this.keyDown("up")) {
 					this._upHeld = false;
 				}
 				// Jump if on the ground and want to.
-				if(this.isGrounded() && controls.keyDown("up")) {
+				if(this.isGrounded() && this.keyDown("up")) {
 					this.trigger("Jump");
 					this.detachFromGround();
 					this._upHeld = true;
 					this._forceRemaining = 2.0;
 				}
 				if(this._upHeld &&
-						controls.keyDown("up") &&
+						this.keyDown("up") &&
 						this._forceRemaining > 0) {
 					this._forceRemaining -= 0.08;
 					this._phY = this._phPY - this._forceRemaining - 2;
@@ -237,9 +202,8 @@ Crafty.c("PlatformControls", {
 
 				// Check if we should stand up
 				// This is needed for when the down arrow was released with an obstacle overhead
-				if( !controls.keyDown("down")
-				&& this.isCrouching) {
-					if (controls.getControl("Horizontal") != 0) {
+				if(!this.keyDown("down") && this.isCrouching) {
+					if (this.getControl("Horizontal") != 0) {
 						this.trigger("Walk");
 					} else {
 						this.trigger("Stand");
@@ -280,18 +244,17 @@ Crafty.c("PlatformControls", {
 				}
 			},
 			
-			EnterGround:
+			GroundLand:
 			function() {
-				var kx = controls.getControl("Horizontal");
 				// Trigger landing, walking, or crouching.
-				if(kx != 0) {
-					if(controls) {
+				if(this.getControl("Horizontal") != 0) {
+					if(this.keyDown("down")) {
 						this.trigger("Crawl");
 					} else {
 						this.trigger("Walk");
 					}
 				} else {
-					if(controls.keyDown("down")) {
+					if(this.keyDown("down")) {
 						this.trigger("Crouch");
 					} else {
 						this.trigger("Land");
@@ -299,7 +262,7 @@ Crafty.c("PlatformControls", {
 				}
 			},
 			
-			LeaveGround:
+			GroundLeave:
 			function() {
 				// Trigger falling.
 				this.trigger("Fall");

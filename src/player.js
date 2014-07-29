@@ -10,6 +10,7 @@ Crafty.c("Player", {
     
 	init:
 	function() {
+		var controls = Crafty("Controls");
 		this
 		// Base components
 			.requires("2D")
@@ -23,8 +24,12 @@ Crafty.c("Player", {
             .requires("HazardResponse")
 			.requires("DefaultPhysicsDraw")
 			.requires("ScrollTarget")
+			.requires("ItemEquip")
+			.requires("Controls")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
+		// Load controls
+			.loadKeyMapping("assets/controls/player_controls.xml")
 		// Bind animations
 			.bind("Stand", function() {
 				if (!this._setCollisionNormal()) {
@@ -45,7 +50,7 @@ Crafty.c("Player", {
 					}
 					this._setCollisionNormal();
 				}
-				if(this.grounded) {
+				if(this.isGrounded()) {
 					this.animate(this.dxSelect("PlayerWalkLeft", "PlayerWalkRight"), -1);
 				} else {
 					this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
@@ -57,21 +62,36 @@ Crafty.c("Player", {
 				this.animate(this.dxSelect("PlayerJumpLeft", "PlayerJumpRight"), 0);
 				this.isCrouching = false;
 				this.timeout(function() {
-					if(!this.grounded) {
+					if(!this.isGrounded()) {
 						this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
 					}
 				}, 500);
 			})
 			.bind("Fall", function() {
 				this._setCollisionNormal();
-				this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
+				
+				// Play fall animation.
+				// If jumping animation is playing, wait until done.
+				var reel = this.reel();
+				if(reel !== "PlayerJumpLeft" && reel !== "PlayerJumpRight") {
+					this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
+				} else {
+					this.one("AnimationEnd", function(reel) {
+						if(reel.id === "PlayerJumpLeft") {
+							this.animate("PlayerFallLeft", -1);
+						} else if(reel.id === "PlayerJumpRight") {
+							this.animate("PlayerFallRight", -1);
+						}
+					});
+				}
+				
 				this.isCrouching = false;
 			})
 			.bind("Land", function() {
 				this._setCollisionNormal();
 				this.animate(this.dxSelect("PlayerLandLeft", "PlayerLandRight"), 0);
 				this.timeout(function() {
-					if(this.grounded) {
+					if(this.isGrounded()) {
 						this.animate(this.dxSelect("PlayerStandLeft", "PlayerStandRight"), -1);
 					}
 				}, 500);
@@ -84,12 +104,25 @@ Crafty.c("Player", {
 			})
 			.bind("Crawl", function(ev) {
 				this._setCollisionCrouch();
-				if (this.grounded) {
+				if (this.isGrounded()) {
 					this.animate(this.dxSelect("PlayerCrouchLeft", "PlayerCrouchRight"), -1);
 				} else {
 					this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
 				}
 				this.isCrouching = true;
+			})
+		// Key handler
+			.bind("ControlPressed", function(ev) {
+				if(ev.control === "equip") {
+					this.switchItem();
+				} else if(ev.control === "action") {
+					this.activateItem({ direction: this._actionDirection() });
+				}
+			})
+			.bind("ControlReleased", function(ev) {
+				if(ev.control === "action") {
+					this.deactivateItem();
+				}
 			})
 		// Player attributes
 			.attr({
@@ -112,6 +145,15 @@ Crafty.c("Player", {
 		});
         
 		this.makeScrollTarget();
+	},
+	
+	_actionDirection:
+	function() {
+		var dir = Crafty("Controls").getControl("Direction");
+		if(dir[0] == 0 && dir[1] == 0) {
+			dir[0] = this.dxSelect(-1, +1);
+		}
+		return dir;
 	},
 	
 	_setCollisionNormal:
