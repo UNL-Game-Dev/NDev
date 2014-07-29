@@ -4,14 +4,8 @@ function PickupEntry(name, max) {
 	this.max = max || 1;
 }
 
-function addPistol() {
-	// Demonstrates how to use the PickupState component.
-	Crafty("PickupState").addPickup("pistol");
-	throw "Debug function!";
-}
-
-function addDynamite() {
-	Crafty("PickupState").addPickup("dynamite");
+function addPickup(pickup) {
+	Crafty("PickupState").addPickup(pickup);
 	throw "Debug function!";
 }
 

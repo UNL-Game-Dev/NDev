@@ -219,8 +219,7 @@ Crafty.c("TileConstraint", {
 					// non-phaseable tile, in which case the phase needs to be cancelled
 					// or else the object could drop through the phaseable platform after
 					// moving onto it long after the double-press
-					var grounded = this.hitNormal([0,-1]);
-					if (grounded) {
+					if (this.hitNormal([0,-1])) {
 						// Another non-phaseable tile is keeping us from phasing
 						// Cancel the phase.
 						this._phaseableInProgress = null;
@@ -335,6 +334,14 @@ Crafty.c("TileConstraint", {
 		return false;
 	},
 	
+	hitEntity:
+	function(ent) {
+		var id = ent[0];
+		return _(this.currentHits).any(function(hit) {
+			return hit.obj[0] === id;
+		});
+	},
+	
 	_oneWayCollides:
 	function(overlap, prevDisplacement) {
 		return -overlap[1] >= Math.abs(overlap[0])
@@ -370,6 +377,79 @@ Crafty.c("PlatformConstraint", {
 		});
 	}
 });
+
+/**
+ * Constrains an entity to be within a certain distance of another entity.
+ */
+Crafty.c("DistanceConstraint", {
+	init:
+	function() {
+		this.requires("2D");
+		this._target = null;
+		this._maxDistance = 0;
+		this._myOffset = [ 0, 0 ];
+		this._targetOffset = [ 0, 0 ];
+		this.bind("ResolveConstraint", function() {
+			if(this._target) {
+				var myPos = add(
+					[this._phX, this._phY],
+					this._myOffset);
+				var targetPos = add(
+					[this._target.x, this._target.y],
+					this._targetOffset);
+				var offset = sub(
+					targetPos,
+					myPos);
+				var distance = dist(offset);
+				
+				if(distance > this._maxDistance) {
+					var norm = normalized(offset);
+					var posOffset = scale(norm, distance - this._maxDistance);
+					this._phX += posOffset[0];
+					this._phY += posOffset[1];
+				}
+			}
+		});
+	},
+	
+	distanceConstraint:
+	function(target, distance, myOffset, targetOffset) {
+		
+		// If no arguments were passed, get info about the constraint.
+		if(arguments.length === 0) {
+			return this._target ? {
+				target: this._target,
+				targetPos: add([this._target.x, this._target.y], this._targetOffset),
+				myPos: add([this._phX, this._phY], this._myOffset),
+				actualDistance: dist(sub(
+					add([this.x, this.y], this._myOffset),
+					add([this._target.x, this._target.y], this._targetOffset)))
+			} : null;
+		}
+		
+		this._target = target || this._target;
+		this._maxDistance = distance;
+		this._myOffset = myOffset || this._myOffset || [ 0, 0 ];
+		this._targetOffset = targetOffset || this._targetOffset || [ 0, 0 ];
+	},
+	
+	cancelDistanceConstraint:
+	function() {
+		this._target = null;
+	}
+});
+
+function debug(x, y) {
+	var w = 2;
+	if(_(x).isArray()) {
+		y = x[1];
+		x = x[0];
+	}
+	Crafty.e("2D, Canvas, Color").color("#ff00ff").attr({ x: x + w, y: y + w, w: 2 * w, h: 2 * w, z: 100 });
+	Crafty.e("2D, Canvas, Color").color("#ff00ff").attr({ x: x - 3 * w, y: y + w, w: 2 * w, h: 2 * w, z: 100 });
+	Crafty.e("2D, Canvas, Color").color("#ff00ff").attr({ x: x - 3 * w, y: y - 3 * w, w: 2 * w, h: 2 * w, z: 100 });
+	Crafty.e("2D, Canvas, Color").color("#ff00ff").attr({ x: x + w, y: y - 3 * w, w: 2 * w, h: 2 * w, z: 100 });
+}
 
 /**
  * Apply a simple, constant acceleration downwards on the physical entity.
