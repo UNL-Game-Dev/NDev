@@ -18,7 +18,7 @@ Crafty.c("Unstable", {
 				 * Number of frames an object must be in contact before unstable
 				 * platform collapses
 				 */
-				collapseTime: 18
+				collapseTime: 12
 			});
 
 		// Sensor for detecting objects resting on top.

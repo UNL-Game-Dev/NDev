@@ -28,6 +28,9 @@ Crafty.c("Player", {
 			.requires("Controls")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
+		// Collision bounds
+			.collision([11, 0], [21, 0], [21, 32], [11, 32])
+			.attr({ sensorBounds: [11, 0, 21, 32] })
 		// Load controls
 			.loadKeyMapping("assets/controls/player_controls.xml")
 		// Bind animations
@@ -39,7 +42,21 @@ Crafty.c("Player", {
 					}
 					this._setCollisionNormal();
 				}
-				this.animate(this.dxSelect("PlayerStandLeft", "PlayerStandRight"), -1);
+				
+				// Play stand animation.
+				// If landing animation is playing, wait until done.
+				var reel = this.reel();
+				if(reel !== "PlayerLandLeft" && reel !== "PlayerLandRight") {
+					this.animate(this.dxSelect("PlayerStandLeft", "PlayerStandRight"), -1);
+				} else {
+					this.one("AnimationEnd", function(reel) {
+						if(reel.id === "PlayerLandLeft") {
+							this.animate("PlayerStandLeft", -1);
+						} else if(reel.id === "PlayerLandRight") {
+							this.animate("PlayerStandRight", -1);
+						}
+					});
+				}
 				this.isCrouching = false;
 			})
 			.bind("Walk", function(ev) {
@@ -61,11 +78,6 @@ Crafty.c("Player", {
 				this._setCollisionNormal();
 				this.animate(this.dxSelect("PlayerJumpLeft", "PlayerJumpRight"), 0);
 				this.isCrouching = false;
-				this.timeout(function() {
-					if(!this.isGrounded()) {
-						this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
-					}
-				}, 500);
 			})
 			.bind("Fall", function() {
 				this._setCollisionNormal();
@@ -158,7 +170,7 @@ Crafty.c("Player", {
 	
 	_setCollisionNormal:
 	function() {
-		this.collision([0,0], [32,0], [32,32], [0,32]);
+		this.collision(new Crafty.polygon([[11,0], [21,0], [21,32], [11,32]]));
 		if( this.hitTile() )
 			return false;
 		return true;
@@ -166,7 +178,7 @@ Crafty.c("Player", {
 	
 	_setCollisionCrouch:
 	function() {
-		this.collision([0,16], [32,16], [32,32], [0,32]);
+		this.collision(new Crafty.polygon([[11,16], [21,16], [21,32], [11,32]]));
 		if ( this.hitTile() )
 			return false;
 		return true;

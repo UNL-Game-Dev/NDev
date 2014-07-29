@@ -34,7 +34,12 @@ Crafty.c("Groundable", {
 		return this._grounded;
 	},
 	
-	detachFromGround:
+	isStuckToGround:
+	function() {
+		return this._groundStickActive;
+	},
+	
+	unstickFromGround:
 	function() {
 		this._groundStickActive = false;
 	},

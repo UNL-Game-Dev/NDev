@@ -11,15 +11,18 @@ Crafty.c("Sensor", {
 		this._sensor.w = this.w;
 		this._sensor.h = this.h;
 		this._sensor.addComponent("Collision");
+		this.sensorBounds = [0, 0, this.w, this.h];
 	},
 	
 	sense:
 	function(component, x, y, margin) {
 		margin = margin || 0;
-		this._sensor.w = this.w + margin * 2;
-		this._sensor.h = this.h + margin * 2;
-		this._sensor.x = x - margin;
-		this._sensor.y = y - margin;
+		
+		var bounds = this.sensorBounds;
+		this._sensor.x = x + bounds[0] - margin;
+		this._sensor.y = y - bounds[1] - margin;
+		this._sensor.w = bounds[2] - bounds[0] + 2 * margin;
+		this._sensor.h = bounds[3] - bounds[1] + 2 * margin;
 		
 		var hits = this._sensor.hit(component || "Collision");
 		return hits && _(hits).any(function(hit) {
