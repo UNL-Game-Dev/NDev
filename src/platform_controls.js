@@ -153,9 +153,9 @@ Crafty.c("PlatformControls", {
 					this._upHeld = false;
 				}
 				// Jump if on the ground and want to.
-				if(this.isGrounded() && this.keyDown("up")) {
+				if(this.isGrounded() && this.keyDown("up") && !this._upHeld) {
 					this.trigger("Jump");
-					this.detachFromGround();
+					this.unstickFromGround();
 					this._upHeld = true;
 					this._forceRemaining = 2.0;
 				}
@@ -259,6 +259,7 @@ Crafty.c("PlatformControls", {
 					} else {
 						this.trigger("Land");
 					}
+					this.trigger("Stand");
 				}
 			},
 			

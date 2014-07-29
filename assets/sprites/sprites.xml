@@ -38,12 +38,12 @@
 				<frameCount>8</frameCount>
 			</reel>
 			<reel name="PlayerJumpLeft">
-				<duration>500</duration>
+				<duration>400</duration>
 				<from>0 3</from>
 				<frameCount>4</frameCount>
 			</reel>
 			<reel name="PlayerJumpRight">
-				<duration>500</duration>
+				<duration>400</duration>
 				<from>4 3</from>
 				<frameCount>4</frameCount>
 			</reel>
@@ -70,12 +70,12 @@
 				<frame>4 4</frame>
 			</reel>
 			<reel name="PlayerLandLeft">
-				<duration>500</duration>
+				<duration>350</duration>
 				<from>0 5</from>
 				<frameCount>4</frameCount>
 			</reel>
 			<reel name="PlayerLandRight">
-				<duration>500</duration>
+				<duration>350</duration>
 				<from>4 5</from>
 				<frameCount>4</frameCount>
 			</reel>

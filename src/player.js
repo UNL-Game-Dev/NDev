@@ -42,7 +42,21 @@ Crafty.c("Player", {
 					}
 					this._setCollisionNormal();
 				}
-				this.animate(this.dxSelect("PlayerStandLeft", "PlayerStandRight"), -1);
+				
+				// Play stand animation.
+				// If landing animation is playing, wait until done.
+				var reel = this.reel();
+				if(reel !== "PlayerLandLeft" && reel !== "PlayerLandRight") {
+					this.animate(this.dxSelect("PlayerStandLeft", "PlayerStandRight"), -1);
+				} else {
+					this.one("AnimationEnd", function(reel) {
+						if(reel.id === "PlayerLandLeft") {
+							this.animate("PlayerStandLeft", -1);
+						} else if(reel.id === "PlayerLandRight") {
+							this.animate("PlayerStandRight", -1);
+						}
+					});
+				}
 				this.isCrouching = false;
 			})
 			.bind("Walk", function(ev) {
@@ -64,11 +78,6 @@ Crafty.c("Player", {
 				this._setCollisionNormal();
 				this.animate(this.dxSelect("PlayerJumpLeft", "PlayerJumpRight"), 0);
 				this.isCrouching = false;
-				this.timeout(function() {
-					if(!this.isGrounded()) {
-						this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
-					}
-				}, 500);
 			})
 			.bind("Fall", function() {
 				this._setCollisionNormal();
