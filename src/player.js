@@ -116,11 +116,7 @@ Crafty.c("Player", {
 			})
 			.bind("Crawl", function(ev) {
 				this._setCollisionCrouch();
-				if (this.isGrounded()) {
-					this.animate(this.dxSelect("PlayerCrouchLeft", "PlayerCrouchRight"), -1);
-				} else {
-					this.animate(this.dxSelect("PlayerFallLeft", "PlayerFallRight"), -1);
-				}
+				this.animate(this.dxSelect("PlayerCrawlLeft", "PlayerCrawlRight"), -1);
 				this.isCrouching = true;
 			})
 		// Key handler
