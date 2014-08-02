@@ -32,7 +32,7 @@ Crafty.c("PlatformControls", {
 		// Direction that we are facing in the x-direction.
 		this.dx = +1;
 		
-		this._upHeld = false;
+		this._isJumping = false;
 		this._forceRemaining = 0;
 		
 		this.invincible = false;
@@ -67,8 +67,8 @@ Crafty.c("PlatformControls", {
 					} else if (ev.control === "right") {
 						this.dx = +1;
 					}
-
-					if(this.keyDown("down")) {
+					
+					if(this.keyDown("down") && this.isGrounded()) {
 						this.trigger("Crawl");
 					} else {
 						this.trigger("Walk");
@@ -81,6 +81,11 @@ Crafty.c("PlatformControls", {
 						if (this.isGrounded()) {
 							this.trigger("Crouch");
 						}
+					}
+				} else if(ev.control === "jump") {
+					if(this.isGrounded() && !this._isJumping) {
+						this.trigger("Jump");
+						this._jump();
 					}
 				} else if(ev.control === "phase") {
 					this.attemptPhase = true;
@@ -121,6 +126,8 @@ Crafty.c("PlatformControls", {
 							this.trigger("Stand");
 						}
 					}
+				} else if(ev.control === "jump") {
+					this._isJumping = false;
 				}
 			},
 			
@@ -148,26 +155,17 @@ Crafty.c("PlatformControls", {
 				if(pushableLeft) {
 					pushableLeft.push([-1,0]);
 				}
-
-				if(!this.keyDown("up")) {
-					this._upHeld = false;
-				}
-				// Jump if on the ground and want to.
-				if(this.isGrounded() && this.keyDown("up") && !this._upHeld) {
-					this.trigger("Jump");
-					this.unstickFromGround();
-					this._upHeld = true;
-					this._forceRemaining = 2.0;
-				}
-				if(this._upHeld &&
-						this.keyDown("up") &&
-						this._forceRemaining > 0) {
-					this._forceRemaining -= 0.08;
+				
+				// The longer you hold the jump key, the higher you will go.
+				if(this._forceRemaining > 0) {
+					this._forceRemaining -= this.keyDown("jump") ? 0.08 : 0.25;
 					this._phY = this._phPY - this._forceRemaining - 2;
 				}
+				
+				var targetSpeed = this.isCrouching ? 0.9 : 2.8;
 
 				// The desired x vel.
-				var desvx = kx * 2.8;
+				var desvx = kx * targetSpeed;
 				// Add to the physics velocity.
 				// This depends on the player being in the ground or not.
 				if(!this.isGrounded()) {
@@ -186,7 +184,10 @@ Crafty.c("PlatformControls", {
 						this._vx = approach(this._vx, desvx, this.accelerateDV);
 					} else {
 						// Don't make them slow down when they're attempting to keep
-						// going!
+						// going! (Unless they're crawling).
+						if(this.isCrouching) {
+							this._vx = approach(this._vx, desvx, this.accelerateDV);
+						}
 					}
 				} else if(desvx == 0.0) {
 					// Player might want to stop.
@@ -246,20 +247,25 @@ Crafty.c("PlatformControls", {
 			
 			GroundLand:
 			function() {
-				// Trigger landing, walking, or crouching.
-				if(this.getControl("Horizontal") != 0) {
-					if(this.keyDown("down")) {
-						this.trigger("Crawl");
-					} else {
-						this.trigger("Walk");
-					}
+				// Trigger jumping, landing, walking, or crouching.
+				if(this.keyDown("jump")) {
+					this.trigger("Jump");
+					this._jump();
 				} else {
-					if(this.keyDown("down")) {
-						this.trigger("Crouch");
+					if(this.getControl("Horizontal") != 0) {
+						if(this.keyDown("down")) {
+							this.trigger("Crawl");
+						} else {
+							this.trigger("Walk");
+						}
 					} else {
-						this.trigger("Land");
+						if(this.keyDown("down")) {
+							this.trigger("Crouch");
+						} else {
+							this.trigger("Land");
+						}
+						this.trigger("Stand");
 					}
-					this.trigger("Stand");
 				}
 			},
 			
@@ -280,6 +286,15 @@ Crafty.c("PlatformControls", {
 	dxSelect:
 	function(leftValue, rightValue) {
 		return this.dx < 0 ? leftValue : rightValue;
+	},
+	
+	_jump:
+	function() {
+		this._isJumping = true;
+		this.timeout(function() {
+			this.unstickFromGround();
+			this._forceRemaining = 2.0;
+		}, 140);
 	}
 });
 

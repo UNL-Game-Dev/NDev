@@ -102,12 +102,12 @@
 				<frame>4 6</frame>
 			</reel>
 			<reel name="PlayerCrawlLeft">
-				<duration>1000</duration>
+				<duration>700</duration>
 				<from>0 7</from>
 				<frameCount>8</frameCount>
 			</reel>
 			<reel name="PlayerCrawlRight">
-				<duration>1000</duration>
+				<duration>700</duration>
 				<from>0 8</from>
 				<frameCount>8</frameCount>
 			</reel>
