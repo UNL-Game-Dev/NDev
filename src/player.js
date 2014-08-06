@@ -151,8 +151,64 @@ Crafty.c("Player", {
 				}, this.recoveryTime * 1000);
 			}
 		});
+		
+		this.bind("Crush", this.die);
         
 		this.makeScrollTarget();
+	},
+	
+	die:
+	function() {
+		this._destroyWorkaround();
+		Crafty("Clock").schedule(function() {
+			Crafty.trigger("SpawnPlayer");
+		}, 0.5);
+	},
+	
+	/**
+	 * This is a very hackish workaround to a bug in the CraftyJS engine
+	 * that causes the game to crash when a sprite animation is destroyed.
+	 * When this bug is fixed, get rid of this and replace ._destroyWorkaround
+	 * with .destroy().
+	 */
+	_destroyWorkaround:
+	function() {
+		this._phX = this.x = NaN;
+		this.visible = false;
+		this.unbind("EnterFrame")
+		    .unbind("PrePhysicsTick")
+		    .unbind("EvaluateAccel")
+		    .unbind("UpdateCollisions")
+		    .unbind("EvaluateHits")
+		    .unbind("ResolveConstraint")
+		    .unbind("EvaluateInertia")
+		    .unbind("UpdateDraw")
+		    .unbind("UpdateViewport")
+		    .unbind("Stand")
+		    .unbind("Walk")
+		    .unbind("Jump")
+		    .unbind("Fall")
+		    .unbind("Land")
+		    .unbind("Crouch")
+		    .unbind("Crawl")
+		    .unbind("ControlPressed")
+		    .unbind("ControlReleased")
+		    .removeComponent("Player")
+			.removeComponent("2D")
+			.removeComponent("Canvas")
+			.removeComponent("SpriteAnimation")
+			.removeComponent("player")
+			.removeComponent("Collision")
+			.removeComponent("Physical")
+			.removeComponent("TileConstraint")
+			.removeComponent("PlatformConstraint")
+            .removeComponent("HazardResponse")
+			.removeComponent("DefaultPhysicsDraw")
+			.removeComponent("ScrollTarget")
+			.removeComponent("ItemEquip")
+			.removeComponent("Controls")
+			.removeComponent("PlatformControls")
+			.removeComponent("ClimbingControls");
 	},
 	
 	_actionDirection:

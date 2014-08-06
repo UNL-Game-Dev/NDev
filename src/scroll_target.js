@@ -15,6 +15,7 @@ var scrollSpeed = 0.15;
 Crafty.c("ScrollTarget", {
 	init:
 	function() {
+		this.requires("2D");
 		this.bind("UpdateViewport", function() {
 			if(currentTarget == this) {
 				var offsetX = Crafty.viewport._width / Crafty.viewport._scale / 2.0;
@@ -30,5 +31,12 @@ Crafty.c("ScrollTarget", {
 	makeScrollTarget:
 	function() {
 		currentTarget = this;
+		return this;
+	},
+	
+	removeScrollTarget:
+	function() {
+		currentTarget = null;
+		return this;
 	}
 });
