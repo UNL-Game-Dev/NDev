@@ -153,6 +153,9 @@ Crafty.c("TileConstraint", {
 	function() {
 		this.requires("Physical, Collision");
 		
+		this._minCrushAngle = 157.5;
+		this._minCrushOverlap = 2.5;
+		
 		this.currentHits = [];
 
 		// Tracks phaseable component that this is in the process of dropping through
@@ -226,6 +229,17 @@ Crafty.c("TileConstraint", {
 						this._phaseableInProgress = null;
 					}
 				}
+			}
+			
+			// Check if object is being crushed, and fire event to notify.
+			var currentNormals = [];
+			_(this.currentHits).each(function(hit) {
+				if(hit.overlap < -this._minCrushOverlap) {
+					currentNormals.push(hit.normal);
+				}
+			}, this);
+			if(this._vectorsWithAngle(currentNormals, this._minCrushAngle)) {
+				this.trigger("Crush");
 			}
 		});
 	},
@@ -339,6 +353,27 @@ Crafty.c("TileConstraint", {
 	function(overlap, prevDisplacement) {
 		return -overlap[1] >= Math.abs(overlap[0])
 			&& dot(overlap, add(overlap, prevDisplacement)) <= 1.0;
+	},
+	
+	/**
+	 * Check to see if there exists a pair of vectors in a set of vectors
+	 * whose angle is greater than the given threshold.
+	 */
+	_vectorsWithAngle:
+	function(vectors, threshold) {
+		// TODO: Please fix if there is a more efficient (better than
+		// n^2) way of doing this.
+		var dotThreshold = Math.cos(threshold * Math.PI / 180);
+		for(var i = 0; i < vectors.length - 1; i++) {
+			for(var j = i + 1; j < vectors.length; j++) {
+				var v1 = vecToList(vectors[i]);
+				var v2 = vecToList(vectors[j]);
+				if(dot(v1, v2) < dotThreshold) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 });
 
@@ -433,6 +468,10 @@ Crafty.c("GroundFriction", {
 		});
 	}
 });
+
+function vecToList(v) {
+	return [v.x, v.y];
+}
 
 //---------------------------
 // Common physics vector math.
