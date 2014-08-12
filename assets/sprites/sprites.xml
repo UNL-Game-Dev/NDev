@@ -129,4 +129,8 @@
 		<tileSize>16</tileSize>
 		<sprite name="dynamite"/>
 	</spriteSheet>
+	<spriteSheet src="harpoon">
+		<tileSize>16</tileSize>
+		<sprite name="harpoon"/>
+	</spriteSheet>
 </spritesData>

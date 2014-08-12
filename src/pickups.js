@@ -4,11 +4,6 @@ function PickupEntry(name, max) {
 	this.max = max || 1;
 }
 
-function addPickup(pickup) {
-	Crafty("PickupState").addPickup(pickup);
-	throw "Debug function!";
-}
-
 /**
  * Keeps track of pickups that the player encounters and uses.
  */

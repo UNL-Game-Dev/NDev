@@ -614,6 +614,48 @@
                  "width":0,
                  "x":960,
                  "y":640
+                }, 
+                {
+                 "gid":33,
+                 "height":0,
+                 "name":"harpoonPickup",
+                 "properties":
+                    {
+                     "pickup":"harpoon"
+                    },
+                 "type":"Pickup",
+                 "visible":true,
+                 "width":0,
+                 "x":808,
+                 "y":184
+                }, 
+                {
+                 "gid":34,
+                 "height":0,
+                 "name":"dynamitePickup",
+                 "properties":
+                    {
+                     "pickup":"dynamite"
+                    },
+                 "type":"Pickup",
+                 "visible":true,
+                 "width":0,
+                 "x":904,
+                 "y":408
+                }, 
+                {
+                 "gid":35,
+                 "height":0,
+                 "name":"pistolPickup",
+                 "properties":
+                    {
+                     "pickup":"pistol"
+                    },
+                 "type":"Pickup",
+                 "visible":true,
+                 "width":0,
+                 "x":1192,
+                 "y":472
                 }],
          "opacity":1,
          "properties":
@@ -721,6 +763,51 @@
                 }
             },
          "tilewidth":32
+        }, 
+        {
+         "firstgid":33,
+         "image":"..\/sprites\/harpoon.png",
+         "imageheight":16,
+         "imagewidth":16,
+         "margin":0,
+         "name":"harpoon",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":16,
+         "tilewidth":16
+        }, 
+        {
+         "firstgid":34,
+         "image":"..\/sprites\/dynamite.png",
+         "imageheight":16,
+         "imagewidth":16,
+         "margin":0,
+         "name":"dynamite",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":16,
+         "tilewidth":16
+        }, 
+        {
+         "firstgid":35,
+         "image":"..\/sprites\/pistol.png",
+         "imageheight":16,
+         "imagewidth":16,
+         "margin":0,
+         "name":"pistol",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":16,
+         "tilewidth":16
         }],
  "tilewidth":32,
  "version":1,
