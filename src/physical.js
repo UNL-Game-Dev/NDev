@@ -241,9 +241,6 @@ Crafty.c("TileConstraint", {
 				}
 			}, this);
 			if(this._vectorsWithAngle(currentNormals, this._minCrushAngle)) {
-				if(this.__c.Player) {
-					console.log(prevX, prevY);
-				}
 				this.trigger("Crush");
 			}
 		});
