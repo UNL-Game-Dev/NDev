@@ -98,6 +98,8 @@ Crafty.c("Physical", {
 			this._phX += px;
 			this._phY += py;
 		}
+		// Notify component of impulse.
+		this.trigger("Impulse", [px, py]);
 	}
 });
 
@@ -166,7 +168,7 @@ Crafty.c("TileConstraint", {
 
 		this.bind("ResolveConstraint", function() {
 			this.currentHits = [];
-			/*=
+			/*
 			 * Try 20 times, since there could only possibly be 20 tiles next
 			 * to you at once, right?
 			 * This may remain, since Crafty doesn't provide a way to test
@@ -176,6 +178,7 @@ Crafty.c("TileConstraint", {
 			 * overlaps two tiles, both emit a collision! This results in double
 			 * the force required being applied, making things bounce. No good.
 			 */
+			var prevX = this._phX, prevY = this._phY;
 			for(var i = 20; i >= 0; --i) {
 				this.x = this._phX;
 				this.y = this._phY;
@@ -238,6 +241,9 @@ Crafty.c("TileConstraint", {
 				}
 			}, this);
 			if(this._vectorsWithAngle(currentNormals, this._minCrushAngle)) {
+				if(this.__c.Player) {
+					console.log(prevX, prevY);
+				}
 				this.trigger("Crush");
 			}
 		});
@@ -419,7 +425,7 @@ Crafty.c("PlatformConstraint", {
 Crafty.c("DistanceConstraint", {
 	init:
 	function() {
-		this.requires("2D");
+		this.requires("2D, Physical");
 		this._target = null;
 		this._maxDistance = 0;
 		this._myOffset = [ 0, 0 ];
@@ -440,8 +446,7 @@ Crafty.c("DistanceConstraint", {
 				if(distance > this._maxDistance) {
 					var norm = normalized(offset);
 					var posOffset = scale(norm, distance - this._maxDistance);
-					this._phX += posOffset[0];
-					this._phY += posOffset[1];
+					this.applyImpulse(posOffset[0], posOffset[1]);
 				}
 			}
 		});

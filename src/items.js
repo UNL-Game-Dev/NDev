@@ -157,6 +157,7 @@ Crafty.c("HarpoonItem", {
 	deactivate:
 	function() {
 		this._owner.cancelDistanceConstraint();
+		this._owner.trigger("HarpoonUnattached");
 		this.cancelTween("_length");
 		this.attr({
 			_length: 0,
@@ -220,6 +221,8 @@ Crafty.c("HarpoonItem", {
 						targetOffset);
 
 					this.attr({ _attached: true });
+					
+					this._owner.trigger("HarpoonAttached");
 				}
 				if(this._length >= this._maxLength) {
 					// Deactivate when harpoon line reaches full extent and nothing

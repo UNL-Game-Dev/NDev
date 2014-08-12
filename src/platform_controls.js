@@ -37,6 +37,8 @@ Crafty.c("PlatformControls", {
 		
 		this.invincible = false;
 		
+		this.stopInMidAir = true;
+		
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
@@ -172,35 +174,41 @@ Crafty.c("PlatformControls", {
 					// If not, lose a lot of control.
 					desvx *= this.airControlFactor;
 				}
+				
+				var vx = this._vx;
 
-				var avx = Math.abs(this._vx);
+				var avx = Math.abs(vx);
 				var adesvx = Math.abs(desvx);
 
-				if(iSign(this._vx) == iSign(desvx)) {
+				if(iSign(vx) == iSign(desvx)) {
 					// Player's attempting to increase velocity.
 					if(adesvx > avx) {
 						// If their velocity's greater than the current, let them
 						// increase the velocity by a little.
-						this._vx = approach(this._vx, desvx, this.accelerateDV);
+						vx = approach(vx, desvx, this.accelerateDV);
 					} else {
 						// Don't make them slow down when they're attempting to keep
 						// going! (Unless they're crawling).
 						if(this.isCrouching) {
-							this._vx = approach(this._vx, desvx, this.accelerateDV);
+							vx = approach(vx, desvx, this.accelerateDV);
 						}
 					}
 				} else if(desvx == 0.0) {
-					// Player might want to stop.
-					this._vx = approach(this._vx, desvx, this.slowToStopDV);
+					if(this.stopInMidAir || this.isGrounded()) {
+						// Player might want to stop.
+						vx = approach(vx, desvx, this.slowToStopDV);
+					}
 				} else {
 					// The player is trying to turn around.
 					// This is like "braking" in preparation to accelerate the other
 					// direction, so do it a little quicker.
-					this._vx = approach(this._vx, desvx, this.activeBrakeDV);
+					vx = approach(vx, desvx, this.activeBrakeDV);
 				}
 				
-				this._phX = this._phPX + this._vx;
-
+				this._phX = this._phPX + vx;
+				
+				this._vx = vx;
+				
 				// Check if we should stand up
 				// This is needed for when the down arrow was released with an obstacle overhead
 				if(!this.keyDown("down") && this.isCrouching) {
@@ -273,6 +281,11 @@ Crafty.c("PlatformControls", {
 			function() {
 				// Trigger falling.
 				this.trigger("Fall");
+			},
+			
+			Impulse:
+			function(impulse) {
+				this._vx += impulse[0];
 			}
 		});
 		
