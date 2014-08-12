@@ -27,7 +27,9 @@ Crafty.c("ItemEquip", {
 		this._loadItems();
 		this.bind("GameStateLoaded", this._loadItems);
 		this.bind("PickupAdded", function(pickupData) {
-			this._addItem(pickupData.name);
+			if(pickupData.count) {
+				this._addItem(pickupData.name);
+			}
 		});
 	},
 	

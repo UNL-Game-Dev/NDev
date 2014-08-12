@@ -61,7 +61,7 @@ Crafty.c("PickupState", {
 		pickups[pickupName] = current;
 		
 		// Trigger pickup add event, signaling any interested components.
-		Crafty.trigger("PickupAdded", { name: pickupName, count: count });
+		Crafty.trigger("PickupAdded", { name: pickupName, count: current - old });
 		
 		// Return actual applied difference for potential gameplay usage.
 		 return current - old;

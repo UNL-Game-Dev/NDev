@@ -302,5 +302,15 @@
     <property name="pickup" value="pistol"/>
    </properties>
   </object>
+  <object name="pistolPickup2" type="Pickup" gid="35" x="1256" y="472">
+   <properties>
+    <property name="pickup" value="pistol"/>
+   </properties>
+  </object>
+  <object name="pistolPickup3" type="Pickup" gid="35" x="1288" y="472">
+   <properties>
+    <property name="pickup" value="pistol"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -656,6 +656,34 @@
                  "width":0,
                  "x":1192,
                  "y":472
+                }, 
+                {
+                 "gid":35,
+                 "height":0,
+                 "name":"pistolPickup2",
+                 "properties":
+                    {
+                     "pickup":"pistol"
+                    },
+                 "type":"Pickup",
+                 "visible":true,
+                 "width":0,
+                 "x":1256,
+                 "y":472
+                }, 
+                {
+                 "gid":35,
+                 "height":0,
+                 "name":"pistolPickup3",
+                 "properties":
+                    {
+                     "pickup":"pistol"
+                    },
+                 "type":"Pickup",
+                 "visible":true,
+                 "width":0,
+                 "x":1288,
+                 "y":472
                 }],
          "opacity":1,
          "properties":
