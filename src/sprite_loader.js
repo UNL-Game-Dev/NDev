@@ -6,6 +6,8 @@ Crafty.c("SpriteLoader", {
 	init:
 	function() {
 		this._spriteAnimDict = {};
+		this._spriteSheetDict = {};
+		this._spriteToSpriteSheet = {};
 	},
 	
 	/**
@@ -41,12 +43,65 @@ Crafty.c("SpriteLoader", {
 		 */
 		Crafty.bind("NewEntity", function(data) {
 			var ent = Crafty(data.id);
-			if(!ent.has("Sprite") || !ent.has("SpriteAnimation")) {
+			if(!ent.has("Sprite")) {
 				return;
 			}
 			
+			// Define sprite animations, if definitions exist.
 			that._defineAnimations(ent);
 		});
+	},
+	
+	getSpriteData:
+	function(sprite, dataSetName, spriteTileCoords) {
+		var spriteSheetName = this._spriteToSpriteSheet[sprite];
+		if(!spriteSheetName) {
+			return;
+		}
+		var spriteSheet = this._spriteSheetDict[spriteSheetName];
+		var data = spriteSheet.data[dataSetName];
+		if(!data) {
+			return;
+		}
+		if(spriteTileCoords[1] >= data.length
+		|| spriteTileCoords[0] >= data[spriteTileCoords[1]].length) {
+			return;
+		}
+		var dataPoint = data[spriteTileCoords[1]][spriteTileCoords[0]];
+		return dataPoint;
+	},
+	
+	getSpriteTileCoords:
+	function(sprite) {
+		return this._spriteSheetDict[this._spriteToSpriteSheet[sprite]].spriteDict[sprite];
+	},
+	
+	getSprite:
+	function(ent) {
+		for(var sprite in this._spriteToSpriteSheet) {
+			if(ent.has(sprite)) {
+				return sprite;
+			}
+			return null;
+		}
+	},
+	
+	/**
+	 * Get the sprite sheet and sprite associated with a given entity.
+	 */
+	_getSpriteInfo:
+	function(ent) {
+		for(var spriteSheet in this._spriteSheetDict) {
+			var spriteDict = this._spriteSheetDict[spriteSheet].spriteDict;
+			for(var sprite in spriteDict) {
+				if(ent.has(sprite)) {
+					return {
+						spriteName: sprite,
+						spriteSheetName: spriteSheet
+					};
+				}
+			}
+		}
 	},
 	
 	/**
@@ -56,17 +111,19 @@ Crafty.c("SpriteLoader", {
 	function(ent) {
 		for(var sprite in this._spriteAnimDict) {
 			if(ent.has(sprite)) {
-				ent.addComponent("SpriteAnimation");
 				var animDict = this._spriteAnimDict[sprite];
-				for(var name in animDict) {
-					var anim = animDict[name];
-					if(anim.frames) {
-						ent.reel(name, anim.duration, anim.frames);
-					} else {
-						ent.reel(name, anim.duration, anim.from[0],
-								 anim.from[1], anim.frameCount);
+				if(animDict) {
+					for(var name in animDict) {
+						var anim = animDict[name];
+						if(anim.frames) {
+							ent.reel(name, anim.duration, anim.frames);
+						} else {
+							ent.reel(name, anim.duration, anim.from[0],
+									 anim.from[1], anim.frameCount);
+						}
 					}
 				}
+				return;
 			}
 		}
 	},
@@ -76,6 +133,7 @@ Crafty.c("SpriteLoader", {
 	 */
 	_loadSpriteSheet:
 	function(spriteSheetElement) {
+		
 		var that = this;
 		spriteSheetElement = $(spriteSheetElement);
 		var src = spriteSheetElement.attr("src");
@@ -113,12 +171,31 @@ Crafty.c("SpriteLoader", {
 			}
 		}
 		paddingAroundBorder = (paddingAroundBorder === "true");
+		
+		// Load extra data.
+		var spriteSheetData = {};
+		var dataElement = spriteSheetElement.children("data");
+		$(dataElement).children("set").each(function(index, setElement) {
+			setElement = $(setElement);
+			var dataSetName = setElement.attr("name");
+			var dataSet = [];
+			$(setElement).children("row").each(function(index, rowElement) {
+				var rowData = [];
+				$(rowElement).children("point").each(function(index,
+				                                                 pointElement) {
+					var data = $(pointElement).getAttributes();
+					rowData.push(data);
+				});
+				dataSet.push(rowData);
+			});
+			spriteSheetData[dataSetName] = dataSet;
+		});
 
 		// Load sprites.
 		var spriteDict = {};
 		spriteSheetElement.children("sprite").each(function(index,
-													spriteElement) {
-			var sprite = that._createSprite(spriteElement);
+		                                                       spriteElement) {
+			var sprite = that._createSprite(spriteElement, src);
 
 			// Create the sprite dict entry.
 			spriteDict[sprite.name] = sprite.bounds;
@@ -136,23 +213,25 @@ Crafty.c("SpriteLoader", {
 			url = this._currDirectory + "/" + url;
 		}
 		
+		this._spriteSheetDict[src] = {
+			data: spriteSheetData,
+			tileSize: [tileWidth, tileHeight],
+			spriteDict: spriteDict
+		};
+		
 		// Load the sprite into Crafty.
 		Crafty.sprite(tileWidth, tileHeight, url, spriteDict,
-					  paddingX, paddingY, paddingAroundBorder);
+		              paddingX, paddingY, paddingAroundBorder);
 	},
 	
 	/**
 	 * Create a sprite object from its XML definition.
 	 */
 	_createSprite:
-	function(spriteElement) {
+	function(spriteElement, spriteSheetName) {
 		var that = this;
 		spriteElement = $(spriteElement);
 		var name = spriteElement.attr("name");
-		var location = spriteElement.children("location").text()
-			.trim();
-		var dimensions = spriteElement.children("dimensions").text()
-			.trim();
 
 		if(!name) {
 			throw "Sprite name attribute missing";
@@ -160,21 +239,19 @@ Crafty.c("SpriteLoader", {
 
 		// Get the sprite location and dimensions.
 		var spriteX = 0, spriteY = 0, spriteW = 1, spriteH = 1;
-		if(location) {
-			location = location.split(" ");
-			if(location.length === 2) {
-				spriteX = parseInt(location[0]);
-				spriteY = parseInt(location[1]);
-			}
+		var attrX = spriteElement.attr("x"), attrY = spriteElement.attr("y");
+		var attrW = spriteElement.attr("w"), attrH = spriteElement.attr("h");
+		if(attrX) {
+			spriteX = parseInt(attrX);
 		}
-		if(dimensions) {
-			dimensions = dimensions.split(" ");
-			if(dimensions.length === 1) {
-				spriteW = spriteH = parseInt(dimensions[0]);
-			} else if(dimensions.length === 2) {
-				spriteW = parseInt(dimensions[0]);
-				spriteH = parseInt(dimensions[1]);
-			}
+		if(attrY) {
+			spriteY = parseInt(attrY);
+		}
+		if(attrW) {
+			spriteW = parseInt(attrW);
+		}
+		if(attrH) {
+			spriteH = parseInt(attrH);
 		}
 
 		// Load each animation.
@@ -187,6 +264,9 @@ Crafty.c("SpriteLoader", {
 			});
 			that._spriteAnimDict[name] = animDict;
 		}
+		
+		// Map sprite name to sprite sheet name for future reference.
+		that._spriteToSpriteSheet[name] = spriteSheetName;
 		
 		return {
 			name: name,
@@ -207,11 +287,9 @@ Crafty.c("SpriteLoader", {
 		animElement = $(animElement);
 
 		var name = animElement.attr("name");
-		var duration = animElement.children("duration").text()
-			.trim();
+		var duration = animElement.children("duration").text().trim();
 		var from = animElement.children("from").text().trim();
-		var frameCount = animElement.children("frameCount")
-			.text().trim();
+		var frameCount = animElement.children("frameCount").text().trim();
 		var frameElements = animElement.children("frame");
 
 		if(!name) {
@@ -269,9 +347,76 @@ Crafty.c("SpriteLoader", {
 	}
 });
 
+Crafty.c("SpriteData", {
+	init:
+	function() {
+		this._spriteLoader = Crafty("SpriteLoader");
+		this._spriteTileCoords = [0, 0];
+		this._currentSprite = this._spriteLoader.getSprite(this);
+		this.bind("FrameChange", function(data) {
+			this._spriteTileCoords = data.frames[data.currentFrame];
+		});
+	},
+	
+	getSprite:
+	function() {
+		return this._currentSprite;
+	},
+	
+	setSprite:
+	function(sprite) {
+		if(sprite !== this._currentSprite) {
+			if(this._currentSprite) {
+				this.removeComponent(this._currentSprite);
+			}
+			this.addComponent(this._currentSprite = sprite);
+			this._spriteTileCoords =
+				this._spriteLoader.getSpriteTileCoords(sprite);
+		}
+		
+		return this;
+	},
+	
+	getSpriteData:
+	function(dataSetName) {
+		return this._spriteLoader.getSpriteData(
+			this._currentSprite,
+			dataSetName,
+			this._spriteTileCoords);
+	},
+	
+	getPoint:
+	function(pointName) {
+		var data = this.getSpriteData(pointName);
+		return data && data.x !== undefined && data.y !== undefined
+			? [data.x, data.y]
+			: null;
+	}
+});
+
 /**
  * Get the directory of a file path.
  */
 function getDirectory(filename) {
 	return filename.substring(0, filename.lastIndexOf("/") + 1);
+}
+
+/**
+ * Get a dictionary of attributes of an XML element.
+ */
+$.fn.getAttributes = function() {
+	var attributes = {}; 
+	
+	if(this.length) {
+		$.each(this[0].attributes, function(index, attr) {
+			attributes[attr.name] = tryParseNumber(attr.value);
+       	}); 
+	}
+	
+	return attributes;
+};
+
+function tryParseNumber(value) {
+	var parsed = parseFloat(value);
+	return !isNaN(parsed) ? parsed : value;
 }

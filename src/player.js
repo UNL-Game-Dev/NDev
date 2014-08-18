@@ -28,6 +28,7 @@ Crafty.c("Player", {
 			.requires("Controls")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
+			.requires("SpriteData")
 		// Collision bounds
 			.collision([11, 0], [21, 0], [21, 32], [11, 32])
 			.attr({ sensorBounds: [11, 0, 21, 32] })

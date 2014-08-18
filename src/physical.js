@@ -425,54 +425,80 @@ Crafty.c("DistanceConstraint", {
 		this.requires("2D, Physical");
 		this._target = null;
 		this._maxDistance = 0;
-		this._myOffset = [ 0, 0 ];
-		this._targetOffset = [ 0, 0 ];
-		this.bind("ResolveConstraint", function() {
-			if(this._target) {
-				var myPos = add(
-					[this._phX, this._phY],
-					this._myOffset);
-				var targetPos = add(
-					[this._target.x, this._target.y],
-					this._targetOffset);
-				var offset = sub(
-					targetPos,
-					myPos);
-				var distance = dist(offset);
-				
-				if(distance > this._maxDistance) {
-					var norm = normalized(offset);
-					var posOffset = scale(norm, distance - this._maxDistance);
-					this.applyImpulse(posOffset[0], posOffset[1]);
-				}
-			}
-		});
+		this._myOffset = [0, 0];
+		this._targetOffset = [0, 0];
+		this._myOffsetEntity = this;
+		this.bind("ResolveConstraint", this._resolveDistanceConstraint);
 	},
 	
 	distanceConstraint:
-	function(target, distance, myOffset, targetOffset) {
+	function(target, distance, myOffset, targetOffset, myOffsetEntity) {
 		
 		// If no arguments were passed, get info about the constraint.
 		if(arguments.length === 0) {
+			var myPos = this._getMyPos(), targetPos = this._getTargetPos();
 			return this._target ? {
 				target: this._target,
-				targetPos: add([this._target.x, this._target.y], this._targetOffset),
-				myPos: add([this._phX, this._phY], this._myOffset),
-				actualDistance: dist(sub(
-					add([this.x, this.y], this._myOffset),
-					add([this._target.x, this._target.y], this._targetOffset)))
+				targetPos: targetPos,
+				myPos: myPos,
+				actualDistance: dist(sub(myPos, targetPos))
 			} : null;
 		}
 		
 		this._target = target || this._target;
-		this._maxDistance = distance;
+		this._maxDistance = distance !== undefined ? distance : this._maxDistance;
 		this._myOffset = myOffset || this._myOffset || [ 0, 0 ];
 		this._targetOffset = targetOffset || this._targetOffset || [ 0, 0 ];
+		this._myOffsetEntity = myOffsetEntity || this._myOffsetEntity || this;
 	},
 	
 	cancelDistanceConstraint:
 	function() {
 		this._target = null;
+	},
+	
+	_resolveDistanceConstraint:
+	function() {
+		if(this._target) {
+			var myPos = this._getMyPos();
+			var targetPos = this._getTargetPos();
+			
+			var offset = sub(
+				targetPos,
+				myPos);
+			var distance = dist(offset);
+
+			if(distance > this._maxDistance) {
+				var norm = normalized(offset);
+				var maxCorrection = 1;
+				var posOffset = scale(norm, Math.min(distance - this._maxDistance, maxCorrection));
+				this.applyImpulse(posOffset[0], posOffset[1]);
+			}
+		}
+	},
+	
+	_resolvePoint:
+	function(point, ent) {
+		ent = ent || this;
+		var result = point;
+		if(ent.has("SpriteData") && _(point).isString()) {
+			result = ent.getPoint(point);
+		}
+		else if(_(point).isFunction()) {
+			result = point.call(ent);
+		}
+		result = add(result || [0, 0], [ent.x, ent.y]);
+		return result;
+	},
+	
+	_getMyPos:
+	function() {
+		return this._resolvePoint(this._myOffset, this._myOffsetEntity);
+	},
+	
+	_getTargetPos:
+	function() {
+		return this._resolvePoint(this._targetOffset, this._target);
 	}
 });
 

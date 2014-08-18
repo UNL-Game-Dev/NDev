@@ -73,7 +73,9 @@ Crafty.c("PistolItem", {
 Crafty.c("HarpoonItem", {
 	init:
 	function() {
-		this.requires("2D, Tween");
+		this.requires("2D, Canvas, Sprite, Tween, SpriteData, Attachable").setSprite("harpoon_l_w");
+		
+		this.visible = false;
 		
 		// The maximum length of the harpoon line.
 		this._maxLength = 128;
@@ -89,19 +91,23 @@ Crafty.c("HarpoonItem", {
 		// The shooting speed of the line, in pixels/sec.
 		this._speed = 512;
 		
+		// The entity using the harpoon.
 		this._owner = null;
 		
+		// Whether or not the harpoon is being fired or attached to something.
 		this._active = false;
 		
+		// Whether or not the harpoon is attached to something.
 		this._attached = false;
 		
+		// Time for the harpoon to reel in.
 		this._reelTime = 0.3;
 		
 		var thickness = 2;
 		
 		// The line entity.
 		var self = this;
-		this._line = Crafty.e("2D, Canvas, Color, Collision")
+		this._line = Crafty.e("2D, Canvas, Color, Collision, Attachable")
 			.attr({
 				x: this.x,
 				y: this.y - thickness / 2,
@@ -110,11 +116,16 @@ Crafty.c("HarpoonItem", {
 				z: 100
 			})
 			.color("#000000")
-			.origin(0, 3);
-		this.attach(this._line);
+			.origin(0, thickness / 2)
+			.attachTo(this, "tip");
+		//this.attach(this._line);
 		
 		this.bind("ItemAttach", function(data) {
 			this._owner = data.owner.addComponent("DistanceConstraint");
+			this.attachTo(this._owner, "hand.R", function(data) {
+				var dir = data.orientation;
+				this.setSprite("harpoon_" + (_(dir).contains("w") || dir === "n" ? "l" : "r") + "_" + dir);
+			});
 		});
 		this.bind("ItemActivate", function(data) {
 			if(this._active) {
@@ -131,12 +142,24 @@ Crafty.c("HarpoonItem", {
 				this.fire(data.params.direction);
 			}
 		});
-		this.bind("ItemUnequip", function() { this.deactivate(); });
+		this.bind("ItemUnequip", function() {
+			this.visible = false;
+			this.deactivate();
+		});
 		this.bind("EnterFrame", function() { this._onEnterFrame(); });
+		
+		this.bind("ItemEquipped", function() {
+			// Only show item if hand position is available.
+			this.visible = !!this._owner.getSpriteData("hand.R");
+		});
 	},
 	
+	/**
+	 * Fire the harpoon gun.
+	 */
 	fire:
 	function(dir) {
+		
 		var time = this._maxLength / this._speed * 1000;
 
 		this._direction = dir || this._direction;
@@ -145,15 +168,25 @@ Crafty.c("HarpoonItem", {
 		});
 		this.attr({ _length: 0, _active: true, _attached: false })
 			.tween({ _length: this._maxLength }, time);
+		
+		return this;
 	},
 	
+	/**
+	 * Reel in the harpoon, drawing the owner towards the target entity.
+	 */
 	reel:
 	function() {
 		this.attr({ _reeling: true });
 		this.tween({ _length: this._minLength }, this._reelTime * 1000);
 		this.timeout(function() { this._reeling = false; }, this._reelTime * 1000);
+		
+		return this;
 	},
 	
+	/**
+	 * Deactivate the harpoon and unattach it from everything.
+	 */
 	deactivate:
 	function() {
 		this._owner.cancelDistanceConstraint();
@@ -165,6 +198,8 @@ Crafty.c("HarpoonItem", {
 			_attached: false,
 			_reeling: false
 		});
+		
+		return this;
 	},
 	
 	_onEnterFrame:
@@ -173,12 +208,13 @@ Crafty.c("HarpoonItem", {
 		if(this._active) {
 			if(this._attached) {
 				// Update the length of the distance constraint to match the
-				// length of the line.
+				// length of the line, and offset by the tip position.
 				this._owner.distanceConstraint(null, this._length);
 				
 				// Orient the harpoon line towards the target position.
 				var constraint = this._owner.distanceConstraint();
 				var relPos = sub(constraint.targetPos, constraint.myPos);
+				relPos = [Math.round(relPos[0]), Math.round(relPos[1])];
 				
 				this._line.attr({
 					rotation: Math.atan2(relPos[1], relPos[0]) * 180 / Math.PI,
@@ -209,17 +245,15 @@ Crafty.c("HarpoonItem", {
 						this.x + this._length * this._direction[0],
 						this.y + this._length * this._direction[1]
 					];
-					var myOffset = sub(
-						[this.x, this.y],
-						[this._owner.x, this._owner.y]);
 					var targetOffset = sub(harpoonPos, [target.x, target.y]);
 					
 					this._owner.distanceConstraint(
 						target,
 						this._length,
-						myOffset,
-						targetOffset);
-
+						"tip",
+						targetOffset,
+						this);
+					
 					this.attr({ _attached: true });
 					
 					this._owner.trigger("HarpoonAttached");
@@ -231,5 +265,44 @@ Crafty.c("HarpoonItem", {
 				}
 			}
 		}
+	}
+});
+
+Crafty.c("Attachable", {
+	init:
+	function() {
+		this._attachEntity = null;
+		this._attachPoint = null;
+		this._attachCallback = null;
+		
+		this.bind("EnterFrame", function() {
+			if(!this.visible) {
+				return;
+			}
+			if(!this._attachEntity) {
+				return;
+			}
+			
+			var offsetData = this._attachEntity.getSpriteData(this._attachPoint);
+			var offset = this._attachPoint && this._attachEntity.getPoint(this._attachPoint) || [0, 0];
+			var offsetZ = offsetData.z || 0;
+			if(this._attachCallback) {
+				this._attachCallback.call(this, offsetData);
+			}
+			var origin = this.has("SpriteData") && this.getPoint("origin") || [0, 0];
+			var target = sub(add([this._attachEntity.x, this._attachEntity.y], offset), origin);
+			this.x = target[0];
+			this.y = target[1];
+			this.z = this._attachEntity.z + offsetZ;
+		});
+	},
+	
+	attachTo:
+	function(ent, point, callback) {
+		this._attachEntity = ent || null;
+		this._attachPoint = point || null;
+		this._attachCallback = callback || null;
+		
+		return this;r
 	}
 });

@@ -626,11 +626,11 @@
                  "type":"Pickup",
                  "visible":true,
                  "width":0,
-                 "x":808,
-                 "y":184
+                 "x":364,
+                 "y":284
                 }, 
                 {
-                 "gid":34,
+                 "gid":53,
                  "height":0,
                  "name":"dynamitePickup",
                  "properties":
@@ -644,7 +644,7 @@
                  "y":408
                 }, 
                 {
-                 "gid":35,
+                 "gid":54,
                  "height":0,
                  "name":"pistolPickup",
                  "properties":
@@ -658,7 +658,7 @@
                  "y":472
                 }, 
                 {
-                 "gid":35,
+                 "gid":54,
                  "height":0,
                  "name":"pistolPickup2",
                  "properties":
@@ -672,7 +672,7 @@
                  "y":472
                 }, 
                 {
-                 "gid":35,
+                 "gid":54,
                  "height":0,
                  "name":"pistolPickup3",
                  "properties":
@@ -795,8 +795,8 @@
         {
          "firstgid":33,
          "image":"..\/sprites\/harpoon.png",
-         "imageheight":16,
-         "imagewidth":16,
+         "imageheight":72,
+         "imagewidth":90,
          "margin":0,
          "name":"harpoon",
          "properties":
@@ -808,7 +808,7 @@
          "tilewidth":16
         }, 
         {
-         "firstgid":34,
+         "firstgid":53,
          "image":"..\/sprites\/dynamite.png",
          "imageheight":16,
          "imagewidth":16,
@@ -823,7 +823,7 @@
          "tilewidth":16
         }, 
         {
-         "firstgid":35,
+         "firstgid":54,
          "image":"..\/sprites\/pistol.png",
          "imageheight":16,
          "imagewidth":16,

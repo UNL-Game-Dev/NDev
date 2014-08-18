@@ -4,6 +4,132 @@
 	<fileExtension>png</fileExtension>
 	<spriteSheet src="player">
 		<tileSize>32</tileSize>
+		<data>
+			<set name="hand.R">
+				<row>
+					<point x="12" y="19" z="-1" orientation="sw"/>
+					<point x="11" y="19" z="-1" orientation="sw"/>
+					<point x="11" y="20" z="-1" orientation="sw"/>
+					<point x="11" y="20" z="-1" orientation="sw"/>
+					<point x="19" y="20" z="+1" orientation="se"/>
+					<point x="19" y="20" z="+1" orientation="se"/>
+					<point x="19" y="19" z="+1" orientation="se"/>
+					<point x="18" y="19" z="+1" orientation="se"/>
+				</row>
+				<row>
+					<point x="11" y="20" z="-1" orientation="sw"/>
+					<point x="10" y="20" z="-1" orientation="sw"/>
+					<point x="7" y="20" z="-1" orientation="sw"/>
+					<point x="10" y="21" z="-1" orientation="sw"/>
+					<point x="11" y="20" z="-1" orientation="sw"/>
+					<point x="15" y="20" z="-1" orientation="s"/>
+					<point x="20" y="21" z="-1" orientation="s"/>
+					<point x="15" y="21" z="-1" orientation="s"/>
+				</row>
+				<row>
+					<point x="19" y="20" z="+1" orientation="se"/>
+					<point x="16" y="20" z="+1" orientation="s"/>
+					<point x="11" y="21" z="+1" orientation="s"/>
+					<point x="16" y="21" z="+1" orientation="s"/>
+					<point x="19" y="20" z="+1" orientation="se"/>
+					<point x="22" y="20" z="+1" orientation="se"/>
+					<point x="24" y="20" z="+1" orientation="se"/>
+					<point x="22" y="21" z="+1" orientation="se"/>
+				</row>
+				<row>
+					<point x="11" y="18" z="-1" orientation="w"/>
+					<point x="11" y="16" z="-1" orientation="w"/>
+					<point x="8" y="8" z="-1" orientation="nw"/>
+					<point x="6" y="12" z="-1" orientation="nw"/>
+					<point x="19" y="19" z="+1" orientation="e"/>
+					<point x="20" y="17" z="+1" orientation="e"/>
+					<point x="23" y="7" z="+1" orientation="ne"/>
+					<point x="25" y="11" z="+1" orientation="ne"/>
+				</row>
+				<row>
+					<point x="5" y="10" z="-1" orientation="nw"></point>
+					<point x="5" y="10" z="-1" orientation="nw"></point>
+					<point x="5" y="10" z="-1" orientation="nw"></point>
+					<point x="5" y="10" z="-1" orientation="nw"></point>
+					<point x="27" y="10" z="+1" orientation="ne"></point>
+					<point x="27" y="10" z="+1" orientation="ne"></point>
+					<point x="27" y="10" z="+1" orientation="ne"></point>
+					<point x="27" y="10" z="+1" orientation="ne"></point>
+				</row>
+				<row>
+					<point x="7" y="17" z="-1" orientation="w"></point>
+					<point x="9" y="23" z="-1" orientation="sw"></point>
+					<point x="19" y="23" z="-1" orientation="s"></point>
+					<point x="17" y="21" z="-1" orientation="sw"></point>
+					<point x="25" y="17" z="+1" orientation="e"></point>
+					<point x="23" y="23" z="+1" orientation="se"></point>
+					<point x="13" y="23" z="+1" orientation="s"></point>
+					<point x="15" y="21" z="+1" orientation="se"></point>
+				</row>
+			</set>
+			<set name="hand.L">
+				<row>
+					<point x="14" y="19" z="+1" orientation="sw"/>
+					<point x="13" y="19" z="+1" orientation="sw"/>
+					<point x="13" y="20" z="+1" orientation="sw"/>
+					<point x="13" y="20" z="+1" orientation="sw"/>
+					<point x="19" y="20" z="-1" orientation="se"/>
+					<point x="19" y="20" z="-1" orientation="se"/>
+					<point x="19" y="19" z="-1" orientation="se"/>
+					<point x="18" y="19" z="-1" orientation="se"/>
+				</row>
+				<row>
+					<point x="13" y="20" z="+1" orientation="sw"/>
+					<point x="16" y="20" z="+1" orientation="s"/>
+					<point x="21" y="21" z="+1" orientation="s"/>
+					<point x="16" y="21" z="+1" orientation="s"/>
+					<point x="13" y="20" z="+1" orientation="sw"/>
+					<point x="10" y="20" z="+1" orientation="sw"/>
+					<point x="8" y="20" z="+1" orientation="sw"/>
+					<point x="10" y="21" z="+1" orientation="sw"/>
+				</row>
+				<row>
+					<point x="19" y="20" z="-1" orientation="se"/>
+					<point x="16" y="20" z="-1" orientation="s"/>
+					<point x="11" y="21" z="-1" orientation="s"/>
+					<point x="16" y="21" z="-1" orientation="s"/>
+					<point x="19" y="20" z="-1" orientation="se"/>
+					<point x="22" y="20" z="-1" orientation="se"/>
+					<point x="24" y="20" z="-1" orientation="se"/>
+					<point x="22" y="21" z="-1" orientation="se"/>
+				</row>
+				<row>
+					<point x="13" y="19" z="+1" orientation="w"/>
+					<point x="12" y="17" z="+1" orientation="w"/>
+					<point x="9" y="7" z="+1" orientation="nw"/>
+					<point x="7" y="11" z="+1" orientation="nw"/>
+					<point x="19" y="19" z="-1" orientation="e"/>
+					<point x="20" y="17" z="-1" orientation="e"/>
+					<point x="23" y="7" z="-1" orientation="ne"/>
+					<point x="25" y="11" z="-1" orientation="ne"/>
+				</row>
+				<row>
+					<point x="5" y="10" z="+1" orientation="nw"></point>
+					<point x="5" y="10" z="+1" orientation="nw"></point>
+					<point x="5" y="10" z="+1" orientation="nw"></point>
+					<point x="5" y="10" z="+1" orientation="nw"></point>
+					<point x="27" y="10" z="-1" orientation="ne"></point>
+					<point x="27" y="10" z="-1" orientation="ne"></point>
+					<point x="27" y="10" z="-1" orientation="ne"></point>
+					<point x="27" y="10" z="-1" orientation="ne"></point>
+				</row>
+				<row>
+					<point x="7" y="17" z="+1" orientation="w"></point>
+					<point x="9" y="23" z="+1" orientation="sw"></point>
+					<point x="19" y="23" z="+1" orientation="s"></point>
+					<point x="17" y="21" z="+1" orientation="sw"></point>
+					<point x="25" y="17" z="-1" orientation="e"></point>
+					<point x="23" y="23" z="-1" orientation="se"></point>
+					<point x="13" y="23" z="-1" orientation="s"></point>
+					<point x="15" y="21" z="-1" orientation="se"></point>
+				</row>
+			</set>
+		</data>
 		<sprite name="player">
 			<reel name="PlayerStandLeft">
 				<duration>1000</duration>
@@ -130,7 +256,88 @@
 		<sprite name="dynamite"/>
 	</spriteSheet>
 	<spriteSheet src="harpoon">
-		<tileSize>16</tileSize>
-		<sprite name="harpoon"/>
+		<tileSize>18</tileSize>
+		<data>
+			<set name="origin">
+				<row>
+					<point x="9" y="13"/>
+					<point x="5" y="12"/>
+					<point x="4" y="9"/>
+					<point x="6" y="5"/>
+					<point x="9" y="4"/>
+				</row>
+				<row>
+					<point x="8" y="13"/>
+					<point x="11" y="12"/>
+					<point x="13" y="9"/>
+					<point x="13" y="4"/>
+					<point x="8" y="4"/>
+				</row>
+				<row>
+					<point x="9" y="13"/>
+					<point x="5" y="12"/>
+					<point x="4" y="9"/>
+					<point x="6" y="5"/>
+					<point x="9" y="4"/>
+				</row>
+				<row>
+					<point x="8" y="13"/>
+					<point x="11" y="12"/>
+					<point x="13" y="9"/>
+					<point x="13" y="4"/>
+					<point x="8" y="4"/>
+				</row>
+			</set>
+			<set name="tip">
+				<row>
+					<point x="7" y="2"/>
+					<point x="14" y="2"/>
+					<point x="15" y="7"/>
+					<point x="16" y="14"/>
+					<point x="11" y="15"/>
+				</row>
+				<row>
+					<point x="10" y="2"/>
+					<point x="2" y="2"/>
+					<point x="2" y="7"/>
+					<point x="3" y="13"/>
+					<point x="6" y="15"/>
+				</row>
+				<row>
+					<point x="7" y="2"/>
+					<point x="14" y="2"/>
+					<point x="15" y="7"/>
+					<point x="16" y="14"/>
+					<point x="11" y="15"/>
+				</row>
+				<row>
+					<point x="10" y="2"/>
+					<point x="2" y="2"/>
+					<point x="2" y="7"/>
+					<point x="3" y="13"/>
+					<point x="6" y="15"/>
+				</row>
+			</set>
+		</data>
+		<sprite name="harpoon_r_n" x="0" y="0"/>
+		<sprite name="harpoon_r_ne" x="1" y="0"/>
+		<sprite name="harpoon_r_e" x="2" y="0"/>
+		<sprite name="harpoon_r_se" x="3" y="0"/>
+		<sprite name="harpoon_r_s" x="4" y="0"/>
+		<sprite name="harpoon_l_n" x="0" y="1"/>
+		<sprite name="harpoon_l_nw" x="1" y="1"/>
+		<sprite name="harpoon_l_w" x="2" y="1"/>
+		<sprite name="harpoon_l_sw" x="3" y="1"/>
+		<sprite name="harpoon_l_s" x="4" y="1"/>
+		<sprite name="harpoon_out_r_n" x="0" y="2"/>
+		<sprite name="harpoon_out_r_ne" x="1" y="2"/>
+		<sprite name="harpoon_out_r_e" x="2" y="2"/>
+		<sprite name="harpoon_out_r_se" x="3" y="2"/>
+		<sprite name="harpoon_out_r_s" x="4" y="2"/>
+		<sprite name="harpoon_out_l_n" x="0" y="3"/>
+		<sprite name="harpoon_out_l_nw" x="1" y="3"/>
+		<sprite name="harpoon_out_l_w" x="2" y="3"/>
+		<sprite name="harpoon_out_l_sw" x="3" y="3"/>
+		<sprite name="harpoon_out_l_s" x="4" y="3"/>
 	</spriteSheet>
 </spritesData>

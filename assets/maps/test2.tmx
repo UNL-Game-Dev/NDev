@@ -73,12 +73,12 @@
   </tile>
  </tileset>
  <tileset firstgid="33" name="harpoon" tilewidth="16" tileheight="16">
-  <image source="../sprites/harpoon.png" width="16" height="16"/>
+  <image source="../sprites/harpoon.png" width="90" height="72"/>
  </tileset>
- <tileset firstgid="34" name="dynamite" tilewidth="16" tileheight="16">
+ <tileset firstgid="53" name="dynamite" tilewidth="16" tileheight="16">
   <image source="../sprites/dynamite.png" width="16" height="16"/>
  </tileset>
- <tileset firstgid="35" name="pistol" tilewidth="16" tileheight="16">
+ <tileset firstgid="54" name="pistol" tilewidth="16" tileheight="16">
   <image source="../sprites/pistol.png" width="16" height="16"/>
  </tileset>
  <imagelayer name="bg_parallax" width="100" height="100">
@@ -287,27 +287,27 @@
     <property name="speed" value="10"/>
    </properties>
   </object>
-  <object name="harpoonPickup" type="Pickup" gid="33" x="808" y="184">
+  <object name="harpoonPickup" type="Pickup" gid="33" x="364" y="284">
    <properties>
     <property name="pickup" value="harpoon"/>
    </properties>
   </object>
-  <object name="dynamitePickup" type="Pickup" gid="34" x="904" y="408">
+  <object name="dynamitePickup" type="Pickup" gid="53" x="904" y="408">
    <properties>
     <property name="pickup" value="dynamite"/>
    </properties>
   </object>
-  <object name="pistolPickup" type="Pickup" gid="35" x="1192" y="472">
+  <object name="pistolPickup" type="Pickup" gid="54" x="1192" y="472">
    <properties>
     <property name="pickup" value="pistol"/>
    </properties>
   </object>
-  <object name="pistolPickup2" type="Pickup" gid="35" x="1256" y="472">
+  <object name="pistolPickup2" type="Pickup" gid="54" x="1256" y="472">
    <properties>
     <property name="pickup" value="pistol"/>
    </properties>
   </object>
-  <object name="pistolPickup3" type="Pickup" gid="35" x="1288" y="472">
+  <object name="pistolPickup3" type="Pickup" gid="54" x="1288" y="472">
    <properties>
     <property name="pickup" value="pistol"/>
    </properties>

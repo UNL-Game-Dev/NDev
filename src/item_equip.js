@@ -31,6 +31,19 @@ Crafty.c("ItemEquip", {
 				this._addItem(pickupData.name);
 			}
 		});
+		
+		this.bind("EnterFrame", function() {
+			var itemInfo = this._itemsInfo[this._equippedItemIndex];
+			if(itemInfo) {
+				var data = {
+					item: itemInfo.name,
+					owner: this
+				};
+				_([itemInfo.item, this]).each(function(ent) {
+					ent.trigger("ItemEquipped", data);
+				});
+			}
+		});
 	},
 	
 	/**
@@ -45,7 +58,8 @@ Crafty.c("ItemEquip", {
 		
 		if(oldItemInfo) {
 			var data = {
-				item: oldItemInfo.name
+				item: oldItemInfo.name,
+				owner: this
 			};
 			_([oldItemInfo.item, this]).each(function(ent) {
 				ent.trigger("ItemUnequip", data);
@@ -54,7 +68,8 @@ Crafty.c("ItemEquip", {
 		
 		if(newItemInfo) {
 			var data = {
-				item: newItemInfo.name
+				item: newItemInfo.name,
+				owner: this
 			};
 			_([newItemInfo.item, this]).each(function(ent) {
 				ent.trigger("ItemEquip", data);
@@ -81,13 +96,13 @@ Crafty.c("ItemEquip", {
 		var itemInfo = this._itemsInfo[this._equippedItemIndex];
 		if(itemInfo) {
 			// Trigger the activate signal for both the item and the holder.
-			var itemActivateData = {
+			var data = {
 				item: itemInfo.name,
 				owner: this,
 				params: params
 			};
 			_([itemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemActivate", itemActivateData);
+				ent.trigger("ItemActivate", data);
 			});
 		}
 		
