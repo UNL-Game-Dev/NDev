@@ -428,28 +428,28 @@ Crafty.c("DistanceConstraint", {
 		this._myOffset = [0, 0];
 		this._targetOffset = [0, 0];
 		this._myOffsetEntity = this;
+		
+		this._myPos = [0, 0];
+		this._targetPos = [0, 0];
+		this._actualDistance = 0;
+		
 		this.bind("ResolveConstraint", this._resolveDistanceConstraint);
 	},
 	
 	distanceConstraint:
 	function(target, distance, myOffset, targetOffset, myOffsetEntity) {
-		
-		// If no arguments were passed, get info about the constraint.
-		if(arguments.length === 0) {
-			var myPos = this._getMyPos(), targetPos = this._getTargetPos();
-			return this._target ? {
-				target: this._target,
-				targetPos: targetPos,
-				myPos: myPos,
-				actualDistance: dist(sub(myPos, targetPos))
-			} : null;
-		}
-		
 		this._target = target || this._target;
-		this._maxDistance = distance !== undefined ? distance : this._maxDistance;
+		this._maxDistance = distance !== undefined
+			? distance
+			: this._maxDistance;
 		this._myOffset = myOffset || this._myOffset || [ 0, 0 ];
 		this._targetOffset = targetOffset || this._targetOffset || [ 0, 0 ];
 		this._myOffsetEntity = myOffsetEntity || this._myOffsetEntity || this;
+	},
+	
+	getRelativePosition:
+	function() {
+		return sub(this._targetPos, this._myPos);
 	},
 	
 	cancelDistanceConstraint:
@@ -460,45 +460,22 @@ Crafty.c("DistanceConstraint", {
 	_resolveDistanceConstraint:
 	function() {
 		if(this._target) {
-			var myPos = this._getMyPos();
-			var targetPos = this._getTargetPos();
+			this._myPos = evalVector(this._myOffset, this._myOffsetEntity || this);
+			this._targetPos = evalVector(this._targetOffset, this._target);
 			
-			var offset = sub(
-				targetPos,
-				myPos);
+			var offset = sub(this._targetPos, this._myPos);
 			var distance = dist(offset);
 
 			if(distance > this._maxDistance) {
 				var norm = normalized(offset);
 				var maxCorrection = 1;
-				var posOffset = scale(norm, Math.min(distance - this._maxDistance, maxCorrection));
+				var correctionAmount = Math.min(distance - this._maxDistance, maxCorrection);
+				var posOffset = scale(norm, correctionAmount);
 				this.applyImpulse(posOffset[0], posOffset[1]);
+				this._myPos = add(this._myPos, posOffset);
+				this._actualDistance = distance - correctionAmount;
 			}
 		}
-	},
-	
-	_resolvePoint:
-	function(point, ent) {
-		ent = ent || this;
-		var result = point;
-		if(ent.has("SpriteData") && _(point).isString()) {
-			result = ent.getPoint(point);
-		}
-		else if(_(point).isFunction()) {
-			result = point.call(ent);
-		}
-		result = add(result || [0, 0], [ent.x, ent.y]);
-		return result;
-	},
-	
-	_getMyPos:
-	function() {
-		return this._resolvePoint(this._myOffset, this._myOffsetEntity);
-	},
-	
-	_getTargetPos:
-	function() {
-		return this._resolvePoint(this._targetOffset, this._target);
 	}
 });
 
@@ -582,6 +559,61 @@ function vecToList(v) {
 }
 
 //---------------------------
+// Utility functions
+
+/** Evaluate a vector in one of the following forms:
+ *     [x,y]
+ *     object with x, y properties
+ *     point name, e.g. "origin"
+ *     function returning a point
+ * Parameters:
+ *     vec: the vector to be evaluated
+ *     ent (optional): the entity to use as a context for the vector. The
+ *         entity's position will be added to the vector, and if the entity has
+ *         SpriteData defined, it can be used to get the vector by name.
+ * Returns: the evaluated vector in the form [x,y].
+ */
+function evalVector(vector, ent) {
+	var _vector = _(vector);
+	if(_vector.isArray() && vector.length === 2) {
+		if(ent) {
+			return add(vector, [ent.x, ent.y]);
+		} else {
+			return vector;
+		}
+	} else if(_vector.isObject() && _vector.has("x") && _vector.has("y")) {
+		if(ent) {
+			return add([vector.x, vector.y], [ent.x, ent.y]);
+		} else {
+			return [vector.x, vector.y];
+		}
+	} else if(_vector.isString()) {
+		if(ent && ent.has("SpriteData")) {
+			return add(ent.getPoint(vector) || [0, 0], [ent.x, ent.y]);
+		} else {
+			return [ent.x, ent.y];
+		}
+	} else if(_vector.isFunction()) {
+		if(ent) {
+			return add(vector.call(ent), [ent.x, ent.y]);
+		} else {
+			return vector();
+		}
+	} else {
+		if(ent) {
+			return [ent.x, ent.y];
+		} else {
+			return [0, 0];
+		}
+	}
+}
+
+// Floor a value towards zero (i.e. ceiling for negative numbers)
+function floorToZero(x) {
+	return x > 0 ? Math.floor(x) : Math.ceil(x);
+}
+
+//---------------------------
 // Common physics vector math.
 // Assumes vectors in form [x,y]
 
@@ -631,8 +663,4 @@ function scale(v, scalar) {
 // Returns angle of v w/r to x axis, in degrees
 function angle(v) {
 	return Math.atan2(-v[1], v[0]) * 180 / Math.PI;
-}
-
-function floorToZero(x) {
-	return x > 0 ? Math.floor(x) : Math.ceil(x);
 }
