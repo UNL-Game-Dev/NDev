@@ -46,14 +46,14 @@
 				<point x="25" y="11" z="+1" orientation="ne"/>
 			</row>
 			<row>
-				<point x="5" y="10" z="-1" orientation="nw"></point>
-				<point x="5" y="10" z="-1" orientation="nw"></point>
-				<point x="5" y="10" z="-1" orientation="nw"></point>
-				<point x="5" y="10" z="-1" orientation="nw"></point>
-				<point x="27" y="10" z="+1" orientation="ne"></point>
-				<point x="27" y="10" z="+1" orientation="ne"></point>
-				<point x="27" y="10" z="+1" orientation="ne"></point>
-				<point x="27" y="10" z="+1" orientation="ne"></point>
+				<point x="5" y="10" z="-1" orientation="n"></point>
+				<point x="5" y="10" z="-1" orientation="n"></point>
+				<point x="5" y="10" z="-1" orientation="n"></point>
+				<point x="5" y="10" z="-1" orientation="n"></point>
+				<point x="27" y="10" z="+1" orientation="n"></point>
+				<point x="27" y="10" z="+1" orientation="n"></point>
+				<point x="27" y="10" z="+1" orientation="n"></point>
+				<point x="27" y="10" z="+1" orientation="n"></point>
 			</row>
 			<row>
 				<point x="7" y="17" z="-1" orientation="w"></point>
