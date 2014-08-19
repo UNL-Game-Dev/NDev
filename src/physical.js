@@ -589,7 +589,7 @@ function evalVector(vector, ent) {
 		}
 	} else if(_vector.isString()) {
 		if(ent && ent.has("SpriteData")) {
-			return add(ent.getPoint(vector) || [0, 0], [ent.x, ent.y]);
+			return add(ent.getVector(vector) || [0, 0], [ent.x, ent.y]);
 		} else {
 			return [ent.x, ent.y];
 		}

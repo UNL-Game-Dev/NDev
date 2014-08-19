@@ -288,7 +288,7 @@ Crafty.c("Attachable", {
 				this._attachCallback.call(this, offsetData);
 			}
 			var offset = this._attachPoint
-				&& this._attachEntity.getPoint(this._attachPoint) || [0, 0];
+				&& this._attachEntity.getVector(this._attachPoint) || [0, 0];
 			var offsetZ = offsetData && offsetData.z || 0;
 			var origin = this.has("SpriteData") && this.getPoint("origin")
 				|| [0, 0];
