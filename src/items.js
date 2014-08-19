@@ -126,7 +126,11 @@ Crafty.c("HarpoonItem", {
 				if(data) {
 					var dir = data.orientation;
 					this.setSprite("harpoon_"
-						+ (_(dir).contains("w") || dir === "n" ? "l" : "r")
+						+ (_(dir).contains("w")
+						   ? "l"
+						   : _(dir).contains("e")
+						   ? "r"
+						   : this._owner.dxSelect("l", "r"))
 						+ "_" + dir);
 				}
 			});
