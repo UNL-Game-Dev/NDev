@@ -30,6 +30,8 @@ Crafty.c("ItemEquip", {
 			if(pickupData.count) {
 				this._addItem(pickupData.name);
 			}
+			
+			this.equipItem(pickupData.name);
 		});
 		
 		this.bind("EnterFrame", function() {
@@ -47,14 +49,41 @@ Crafty.c("ItemEquip", {
 	},
 	
 	/**
+	 * Equip an item, given the name or index of the item.
+	 */
+	equipItem:
+	function(itemId) {
+		if(_(itemId).isString()) {
+			var itemName = itemId;
+			itemId = -1;
+			for(var i = 0; i < this._itemsInfo.length; ++i) {
+				if(this._itemsInfo[i].name === itemName) {
+					itemId = i;
+					break;
+				}
+			}
+		}
+		if(itemId > this._itemsInfo.length) {
+			itemId = -1;
+		}
+		this._switchItemToIndex(itemId);
+	},
+	
+	/**
 	 * Switch to the next item and equip it.
 	 */
 	switchItem:
 	function() {
+		this._switchItemToIndex(
+			this._getNextItemIndex(this._equippedItemIndex));
+		
+		return this;
+	},
+	
+	_switchItemToIndex:
+	function(index) {
 		var oldItemInfo = this._itemsInfo[this._equippedItemIndex];
-		this._equippedItemIndex =
-			this._getNextItemIndex(this._equippedItemIndex);
-		var newItemInfo = this._itemsInfo[this._equippedItemIndex];
+		var newItemInfo = this._itemsInfo[index];
 		
 		if(oldItemInfo) {
 			var data = {
@@ -76,7 +105,7 @@ Crafty.c("ItemEquip", {
 			});
 		}
 		
-		return this;
+		this._equippedItemIndex = index;
 	},
 	
 	/**
