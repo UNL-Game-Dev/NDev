@@ -174,12 +174,11 @@ Crafty.c("SpriteLoader", {
 		
 		// Load extra data.
 		var spriteSheetData = {};
-		var dataElement = spriteSheetElement.children("data");
-		$(dataElement).children("set").each(function(index, setElement) {
-			setElement = $(setElement);
-			var dataSetName = setElement.attr("name");
+		spriteSheetElement.children("data").each(function(index, dataElement) {
+			dataElement = $(dataElement);
+			var dataSetName = dataElement.attr("name");
 			var dataSet = [];
-			$(setElement).children("row").each(function(index, rowElement) {
+			$(dataElement).children("row").each(function(index, rowElement) {
 				var rowData = [];
 				$(rowElement).children("point").each(function(index,
 				                                                 pointElement) {
@@ -385,7 +384,7 @@ Crafty.c("SpriteData", {
 			this._spriteTileCoords);
 	},
 	
-	getPoint:
+	getVector:
 	function(pointName) {
 		var data = this.getSpriteData(pointName);
 		return data && data.x !== undefined && data.y !== undefined

@@ -290,11 +290,11 @@ Crafty.c("Attachable", {
 			var offset = this._attachPoint
 				&& this._attachEntity.getVector(this._attachPoint) || [0, 0];
 			var offsetZ = offsetData && offsetData.z || 0;
-			var origin = this.has("SpriteData") && this.getPoint("origin")
+			var origin = this.has("SpriteData") && this.getVector("origin")
 				|| [0, 0];
 			var target = sub(
-					add([this._attachEntity.x, this._attachEntity.y], offset),
-					origin);
+				add([this._attachEntity.x, this._attachEntity.y], offset),
+				origin);
 			this.x = target[0];
 			this.y = target[1];
 			this.z = this._attachEntity.z + offsetZ;
