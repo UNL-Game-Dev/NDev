@@ -285,7 +285,7 @@ Crafty.c("Attachable", {
 			
 			var offsetData = this._attachEntity.getSpriteData(this._attachPoint);
 			var offset = this._attachPoint && this._attachEntity.getPoint(this._attachPoint) || [0, 0];
-			var offsetZ = offsetData.z || 0;
+			var offsetZ = offsetData && offsetData.z || 0;
 			if(this._attachCallback) {
 				this._attachCallback.call(this, offsetData);
 			}
@@ -303,6 +303,6 @@ Crafty.c("Attachable", {
 		this._attachPoint = point || null;
 		this._attachCallback = callback || null;
 		
-		return this;r
+		return this;
 	}
 });
