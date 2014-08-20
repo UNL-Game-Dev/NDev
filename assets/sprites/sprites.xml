@@ -247,7 +247,48 @@
 	</spriteSheet>
 	<spriteSheet src="test_enemy_2">
 		<tileSize>32</tileSize>
+		<data name="origin">
+			<row>
+				<point x="4" y="5" orientation="e"/>
+				<point x="4" y="5" orientation="ne"/>
+				<point x="5" y="5" orientation="n"/>
+				<point x="5" y="4" orientation="nw"/>
+				<point x="5" y="4" orientation="w"/>
+				<point x="5" y="4" orientation="sw"/>
+				<point x="5" y="4" orientation="s"/>
+				<point x="4" y="4" orientation="se"/>
+			</row>
+			<row>
+				<point x="4" y="4" orientation="e"/>
+				<point x="4" y="4" orientation="ne"/>
+				<point x="4" y="5" orientation="n"/>
+				<point x="5" y="5" orientation="nw"/>
+				<point x="5" y="5" orientation="w"/>
+				<point x="5" y="4" orientation="sw"/>
+				<point x="4" y="4" orientation="s"/>
+				<point x="4" y="4" orientation="se"/>
+			</row>
+		</data>
 		<sprite name="test_enemy_2"/>
+	</spriteSheet>
+	<spriteSheet src="pistol">
+		<tileSize>8</tileSize>
+		<sprite name="pistol_r_e" x="0" y="0"></sprite>
+		<sprite name="pistol_r_ne" x="1" y="0"></sprite>
+		<sprite name="pistol_r_n" x="2" y="0"></sprite>
+		<sprite name="pistol_r_nw" x="3" y="0"></sprite>
+		<sprite name="pistol_r_w" x="4" y="0"></sprite>
+		<sprite name="pistol_r_sw" x="5" y="0"></sprite>
+		<sprite name="pistol_r_s" x="6" y="0"></sprite>
+		<sprite name="pistol_r_se" x="7" y="0"></sprite>
+		<sprite name="pistol_l_e" x="0" y="1"></sprite>
+		<sprite name="pistol_l_ne" x="1" y="1"></sprite>
+		<sprite name="pistol_l_n" x="2" y="1"></sprite>
+		<sprite name="pistol_l_nw" x="3" y="1"></sprite>
+		<sprite name="pistol_l_w" x="4" y="1"></sprite>
+		<sprite name="pistol_l_sw" x="5" y="1"></sprite>
+		<sprite name="pistol_l_s" x="6" y="1"></sprite>
+		<sprite name="pistol_l_se" x="7" y="1"></sprite>
 	</spriteSheet>
 	<spriteSheet src="dynamite">
 		<tileSize>16</tileSize>
