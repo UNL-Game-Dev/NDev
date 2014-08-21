@@ -654,8 +654,8 @@
                  "type":"Pickup",
                  "visible":true,
                  "width":0,
-                 "x":1192,
-                 "y":472
+                 "x":1196,
+                 "y":468
                 }, 
                 {
                  "gid":54,
@@ -668,8 +668,8 @@
                  "type":"Pickup",
                  "visible":true,
                  "width":0,
-                 "x":1256,
-                 "y":472
+                 "x":1260,
+                 "y":468
                 }, 
                 {
                  "gid":54,
@@ -682,8 +682,8 @@
                  "type":"Pickup",
                  "visible":true,
                  "width":0,
-                 "x":1288,
-                 "y":472
+                 "x":1292,
+                 "y":468
                 }],
          "opacity":1,
          "properties":
@@ -826,7 +826,7 @@
          "firstgid":54,
          "image":"..\/sprites\/pistol.png",
          "imageheight":16,
-         "imagewidth":16,
+         "imagewidth":64,
          "margin":0,
          "name":"pistol",
          "properties":
@@ -834,8 +834,8 @@
 
             },
          "spacing":0,
-         "tileheight":16,
-         "tilewidth":16
+         "tileheight":8,
+         "tilewidth":8
         }],
  "tilewidth":32,
  "version":1,
