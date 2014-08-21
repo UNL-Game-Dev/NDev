@@ -247,32 +247,54 @@
 	</spriteSheet>
 	<spriteSheet src="test_enemy_2">
 		<tileSize>32</tileSize>
-		<data name="origin">
-			<row>
-				<point x="4" y="5" orientation="e"/>
-				<point x="4" y="5" orientation="ne"/>
-				<point x="5" y="5" orientation="n"/>
-				<point x="5" y="4" orientation="nw"/>
-				<point x="5" y="4" orientation="w"/>
-				<point x="5" y="4" orientation="sw"/>
-				<point x="5" y="4" orientation="s"/>
-				<point x="4" y="4" orientation="se"/>
-			</row>
-			<row>
-				<point x="4" y="4" orientation="e"/>
-				<point x="4" y="4" orientation="ne"/>
-				<point x="4" y="5" orientation="n"/>
-				<point x="5" y="5" orientation="nw"/>
-				<point x="5" y="5" orientation="w"/>
-				<point x="5" y="4" orientation="sw"/>
-				<point x="4" y="4" orientation="s"/>
-				<point x="4" y="4" orientation="se"/>
-			</row>
-		</data>
 		<sprite name="test_enemy_2"/>
 	</spriteSheet>
 	<spriteSheet src="pistol">
 		<tileSize>8</tileSize>
+		<data name="origin">
+			<row>
+				<point x="3" y="4" orientation="e"/>
+				<point x="3" y="4" orientation="ne"/>
+				<point x="4" y="4" orientation="n"/>
+				<point x="4" y="3" orientation="nw"/>
+				<point x="4" y="3" orientation="w"/>
+				<point x="4" y="3" orientation="sw"/>
+				<point x="4" y="3" orientation="s"/>
+				<point x="3" y="3" orientation="se"/>
+			</row>
+			<row>
+				<point x="3" y="3" orientation="e"/>
+				<point x="3" y="3" orientation="ne"/>
+				<point x="3" y="4" orientation="n"/>
+				<point x="4" y="4" orientation="nw"/>
+				<point x="4" y="4" orientation="w"/>
+				<point x="4" y="3" orientation="sw"/>
+				<point x="3" y="3" orientation="s"/>
+				<point x="3" y="3" orientation="se"/>
+			</row>
+		</data>
+		<data name="tip">
+			<row>
+				<point x="7" y="2"/>
+				<point x="6" y="0"/>
+				<point x="2" y="0"/>
+				<point x="0" y="1"/>
+				<point x="0" y="5"/>
+				<point x="1" y="7"/>
+				<point x="5" y="7"/>
+				<point x="7" y="6"/>
+			</row>
+			<row>
+				<point x="7" y="5"/>
+				<point x="7" y="1"/>
+				<point x="5" y="0"/>
+				<point x="1" y="0"/>
+				<point x="0" y="2"/>
+				<point x="0" y="6"/>
+				<point x="2" y="7"/>
+				<point x="6" y="7"/>
+			</row>
+		</data>
 		<sprite name="pistol_r_e" x="0" y="0"></sprite>
 		<sprite name="pistol_r_ne" x="1" y="0"></sprite>
 		<sprite name="pistol_r_n" x="2" y="0"></sprite>
