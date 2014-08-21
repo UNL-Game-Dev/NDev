@@ -54,7 +54,28 @@ Crafty.c("PistolItem", {
 	
 	init:
 	function() {
-		this.requires("2D");
+		this.requires("2D, Canvas, Sprite, Attachable, SpriteData").setSprite("pistol_l_w");
+		
+		this.bind("ItemAttach", function(data) {
+			var owner = data.owner;
+			this.attachTo(owner, "hand.R", function(data) {
+				this.visible = !!data;
+				if(data) {
+					this.setSprite("pistol_" + owner.dxSelect("l", "r") + "_"
+						+ data.orientation);
+				}
+			});
+			this.attached = false;
+		});
+		
+		this.bind("ItemEquip", function(data) {
+			this.attached = true;
+		});
+		
+		this.bind("ItemUnequip", function(data) {
+			this.attached = false;
+		});
+		
 		this.bind("ItemActivate", function(data) {
 			var bullet = Crafty.e("Projectile");
 			bullet.setPhysPos(
@@ -124,14 +145,8 @@ Crafty.c("HarpoonItem", {
 			this.attachTo(this._owner, "hand.R", function(data) {
 				this.visible = !!data;
 				if(data) {
-					var dir = data.orientation;
-					this.setSprite("harpoon_"
-						+ (_(dir).contains("w")
-						   ? "l"
-						   : _(dir).contains("e")
-						   ? "r"
-						   : this._owner.dxSelect("l", "r"))
-						+ "_" + dir);
+					this.setSprite("harpoon_" + this._owner.dxSelect("l", "r")
+						+ "_" + data.orientation);
 				}
 			});
 			this.attached = false;
@@ -281,6 +296,7 @@ Crafty.c("Attachable", {
 		this.attached = false;
 		
 		this.bind("EnterFrame", function() {
+			
 			if(!this.attached || !this._attachEntity) {
 				this.visible = false;
 				return;
@@ -288,6 +304,7 @@ Crafty.c("Attachable", {
 			
 			var offsetData = this._attachEntity.getSpriteData(
 				this._attachPoint);
+			
 			if(this._attachCallback) {
 				this._attachCallback.call(this, offsetData);
 			}

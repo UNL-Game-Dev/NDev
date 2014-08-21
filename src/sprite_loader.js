@@ -73,7 +73,15 @@ Crafty.c("SpriteLoader", {
 	
 	getSpriteTileCoords:
 	function(sprite) {
-		return this._spriteSheetDict[this._spriteToSpriteSheet[sprite]].spriteDict[sprite];
+		var spriteSheetName = this._spriteToSpriteSheet[sprite];
+		if(!spriteSheetName) {
+			return null;
+		}
+		var spriteSheet = this._spriteSheetDict[spriteSheetName];
+		if(!spriteSheet) {
+			return null;
+		}
+		return spriteSheet.spriteDict[sprite] || null;
 	},
 	
 	getSprite:
