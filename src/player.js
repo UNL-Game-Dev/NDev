@@ -160,6 +160,21 @@ Crafty.c("Player", {
 			}
 		});
 		
+		this.bind("ItemActivate", function(data) {
+			var oldReel = this.reel();
+			if(data.item === "harpoon" || data.item === "pistol") {
+				this.animate(this.dxSelect("PlayerShootLeft", "PlayerShootRight"), 0);
+			}
+			if(oldReel === "PlayerWalkLeft" || oldReel === "PlayerWalRight" || oldReel === "PlayerStandLeft" || oldReel === "PlayerStandRight") {
+				var animationEnd = function(reel) {
+					this.timeout(function() {
+						this.animate(oldReel, -1);
+					}, 0);
+				}
+				this.one("AnimationEnd", animationEnd);
+			}
+		});
+		
 		this.bind("Crush", this.die);
         
 		this.makeScrollTarget();

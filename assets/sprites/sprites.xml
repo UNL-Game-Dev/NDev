@@ -6,16 +6,19 @@
 		<tileSize>32</tileSize>
 		<data name="hand.R">
 			<row>
+				<!-- stand left -->
 				<point x="12" y="19" z="-1" orientation="sw"/>
 				<point x="11" y="19" z="-1" orientation="sw"/>
 				<point x="11" y="20" z="-1" orientation="sw"/>
 				<point x="11" y="20" z="-1" orientation="sw"/>
+				<!-- stand right -->
 				<point x="19" y="20" z="+1" orientation="se"/>
 				<point x="19" y="20" z="+1" orientation="se"/>
 				<point x="19" y="19" z="+1" orientation="se"/>
 				<point x="18" y="19" z="+1" orientation="se"/>
 			</row>
 			<row>
+				<!-- walk left -->
 				<point x="11" y="20" z="-1" orientation="sw"/>
 				<point x="10" y="20" z="-1" orientation="sw"/>
 				<point x="7" y="20" z="-1" orientation="sw"/>
@@ -26,6 +29,7 @@
 				<point x="15" y="21" z="-1" orientation="s"/>
 			</row>
 			<row>
+				<!-- walk right -->
 				<point x="19" y="20" z="+1" orientation="se"/>
 				<point x="16" y="20" z="+1" orientation="s"/>
 				<point x="11" y="21" z="+1" orientation="s"/>
@@ -36,48 +40,73 @@
 				<point x="22" y="21" z="+1" orientation="se"/>
 			</row>
 			<row>
+				<!-- jump left -->
 				<point x="11" y="18" z="-1" orientation="w"/>
 				<point x="11" y="16" z="-1" orientation="w"/>
 				<point x="8" y="8" z="-1" orientation="nw"/>
 				<point x="6" y="12" z="-1" orientation="nw"/>
+				<!-- jump right -->
 				<point x="19" y="19" z="+1" orientation="e"/>
 				<point x="20" y="17" z="+1" orientation="e"/>
 				<point x="23" y="7" z="+1" orientation="ne"/>
 				<point x="25" y="11" z="+1" orientation="ne"/>
 			</row>
 			<row>
+				<!-- fall left -->
 				<point x="5" y="10" z="-1" orientation="n"></point>
 				<point x="5" y="10" z="-1" orientation="n"></point>
 				<point x="5" y="10" z="-1" orientation="n"></point>
 				<point x="5" y="10" z="-1" orientation="n"></point>
+				<!-- fall right -->
 				<point x="27" y="10" z="+1" orientation="n"></point>
 				<point x="27" y="10" z="+1" orientation="n"></point>
 				<point x="27" y="10" z="+1" orientation="n"></point>
 				<point x="27" y="10" z="+1" orientation="n"></point>
 			</row>
 			<row>
+				<!-- land left -->
 				<point x="7" y="17" z="-1" orientation="w"></point>
 				<point x="9" y="23" z="-1" orientation="sw"></point>
 				<point x="19" y="23" z="-1" orientation="s"></point>
 				<point x="17" y="21" z="-1" orientation="sw"></point>
+				<!-- land right -->
 				<point x="25" y="17" z="+1" orientation="e"></point>
 				<point x="23" y="23" z="+1" orientation="se"></point>
 				<point x="13" y="23" z="+1" orientation="s"></point>
 				<point x="15" y="21" z="+1" orientation="se"></point>
 			</row>
+			<!-- can't hold anything while crouching/crawling -->
+			<row/>
+			<row/>
+			<row/>
+			<row>
+				<!-- shoot left -->
+				<point x="10" y="15" z="+1" orientation="w"/>
+				<point x="13" y="13" z="+1" orientation="w"/>
+				<point x="17" y="14" z="+1" orientation="w"/>
+				<point x="15" y="15" z="+1" orientation="w"/>
+				<!-- shoot right -->
+				<point x="21" y="15" z="-1" orientation="e"/>
+				<point x="18" y="13" z="-1" orientation="e"/>
+				<point x="14" y="14" z="-1" orientation="e"/>
+				<point x="16" y="15" z="-1" orientation="e"/>
+			</row>
 		</data>
 		<data name="hand.L">
 			<row>
+				<!-- stand left -->
 				<point x="14" y="19" z="+1" orientation="sw"/>
 				<point x="13" y="19" z="+1" orientation="sw"/>
 				<point x="13" y="20" z="+1" orientation="sw"/>
 				<point x="13" y="20" z="+1" orientation="sw"/>
+				<!-- stand right -->
 				<point x="19" y="20" z="-1" orientation="se"/>
 				<point x="19" y="20" z="-1" orientation="se"/>
 				<point x="19" y="19" z="-1" orientation="se"/>
 				<point x="18" y="19" z="-1" orientation="se"/>
 			</row>
 			<row>
+				<!-- walk left -->
 				<point x="13" y="20" z="+1" orientation="sw"/>
 				<point x="16" y="20" z="+1" orientation="s"/>
 				<point x="21" y="21" z="+1" orientation="s"/>
@@ -88,6 +117,7 @@
 				<point x="10" y="21" z="+1" orientation="sw"/>
 			</row>
 			<row>
+				<!-- walk right -->
 				<point x="19" y="20" z="-1" orientation="se"/>
 				<point x="16" y="20" z="-1" orientation="s"/>
 				<point x="11" y="21" z="-1" orientation="s"/>
@@ -98,34 +128,56 @@
 				<point x="22" y="21" z="-1" orientation="se"/>
 			</row>
 			<row>
+				<!-- jump left -->
 				<point x="13" y="19" z="+1" orientation="w"/>
 				<point x="12" y="17" z="+1" orientation="w"/>
 				<point x="9" y="7" z="+1" orientation="nw"/>
 				<point x="7" y="11" z="+1" orientation="nw"/>
+				<!-- jump right -->
 				<point x="19" y="19" z="-1" orientation="e"/>
 				<point x="20" y="17" z="-1" orientation="e"/>
 				<point x="23" y="7" z="-1" orientation="ne"/>
 				<point x="25" y="11" z="-1" orientation="ne"/>
 			</row>
 			<row>
+				<!-- fall left -->
 				<point x="5" y="10" z="+1" orientation="nw"></point>
 				<point x="5" y="10" z="+1" orientation="nw"></point>
 				<point x="5" y="10" z="+1" orientation="nw"></point>
 				<point x="5" y="10" z="+1" orientation="nw"></point>
+				<!-- fall right -->
 				<point x="27" y="10" z="-1" orientation="ne"></point>
 				<point x="27" y="10" z="-1" orientation="ne"></point>
 				<point x="27" y="10" z="-1" orientation="ne"></point>
 				<point x="27" y="10" z="-1" orientation="ne"></point>
 			</row>
 			<row>
+				<!-- land left -->
 				<point x="7" y="17" z="+1" orientation="w"></point>
 				<point x="9" y="23" z="+1" orientation="sw"></point>
 				<point x="19" y="23" z="+1" orientation="s"></point>
 				<point x="17" y="21" z="+1" orientation="sw"></point>
+				<!-- land right -->
 				<point x="25" y="17" z="-1" orientation="e"></point>
 				<point x="23" y="23" z="-1" orientation="se"></point>
 				<point x="13" y="23" z="-1" orientation="s"></point>
 				<point x="15" y="21" z="-1" orientation="se"></point>
+			</row>
+			<!-- can't hold anything while crouching/crawling -->
+			<row/>
+			<row/>
+			<row/>
+			<row>
+				<!-- shoot left -->
+				<point x="10" y="15" z="+1" orientation="w"/>
+				<point x="13" y="13" z="+1" orientation="w"/>
+				<point x="17" y="14" z="+1" orientation="w"/>
+				<point x="15" y="15" z="+1" orientation="w"/>
+				<!-- shoot right -->
+				<point x="21" y="15" z="-1" orientation="e"/>
+				<point x="18" y="13" z="-1" orientation="e"/>
+				<point x="14" y="14" z="-1" orientation="e"/>
+				<point x="16" y="15" z="-1" orientation="e"/>
 			</row>
 		</data>
 		<sprite name="player">
@@ -234,6 +286,16 @@
 				<duration>700</duration>
 				<from>0 8</from>
 				<frameCount>8</frameCount>
+			</reel>
+			<reel name="PlayerShootLeft">
+				<duration>250</duration>
+				<from>0 9</from>
+				<frameCount>4</frameCount>
+			</reel>
+			<reel name="PlayerShootRight">
+				<duration>250</duration>
+				<from>4 9</from>
+				<frameCount>4</frameCount>
 			</reel>
 		</sprite>
 	</spriteSheet>
