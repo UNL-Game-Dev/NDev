@@ -125,7 +125,7 @@ Crafty.c("Player", {
 				if(ev.control === "equip") {
 					this.switchItem();
 				} else if(ev.control === "action") {
-					this.activateItem({ direction: this._actionDirection() });
+					this._tryActivateItem();
 				}
 			})
 			.bind("ControlReleased", function(ev) {
@@ -165,19 +165,27 @@ Crafty.c("Player", {
 			if(data.item === "harpoon" || data.item === "pistol") {
 				this.animate(this.dxSelect("PlayerShootLeft", "PlayerShootRight"), 0);
 			}
-			if(oldReel === "PlayerWalkLeft" || oldReel === "PlayerWalRight" || oldReel === "PlayerStandLeft" || oldReel === "PlayerStandRight") {
-				var animationEnd = function(reel) {
+			if(oldReel === "PlayerWalkLeft" || oldReel === "PlayerWalRight"
+			|| oldReel === "PlayerStandLeft" || oldReel === "PlayerStandRight") {
+				this.one("AnimationEnd", function(reel) {
 					this.timeout(function() {
 						this.animate(oldReel, -1);
 					}, 0);
-				}
-				this.one("AnimationEnd", animationEnd);
+				});
 			}
 		});
 		
 		this.bind("Crush", this.die);
         
 		this.makeScrollTarget();
+		
+		// Try to activate an item, and limit rate at which it can be activated.
+		this._tryActivateItem = _(this._activateItem).throttle(300, { trailing: false })
+	},
+	
+	_activateItem:
+	function() {
+		this.activateItem({ direction: this._actionDirection() });
 	},
 	
 	die:
