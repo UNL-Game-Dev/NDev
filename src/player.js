@@ -183,11 +183,6 @@ Crafty.c("Player", {
 		this._tryActivateItem = _(this._activateItem).throttle(300, { trailing: false })
 	},
 	
-	_activateItem:
-	function() {
-		this.activateItem({ direction: this._actionDirection() });
-	},
-	
 	die:
 	function() {
 		console.log("You died!");
@@ -197,6 +192,9 @@ Crafty.c("Player", {
 		}, 0.5);
 	},
 	
+	/**
+	 * Get the direction of the anticipated action in the form [x,y].
+	 */
 	_actionDirection:
 	function() {
 		var dir = Crafty("Controls").getControl("Direction");
@@ -206,6 +204,9 @@ Crafty.c("Player", {
 		return dir;
 	},
 	
+	/**
+	 * Set the collision bounds to that of a standing position.
+	 */
 	_setCollisionNormal:
 	function() {
 		this.collision(new Crafty.polygon([[11,0], [21,0], [21,32], [11,32]]));
@@ -214,11 +215,22 @@ Crafty.c("Player", {
 		return true;
 	},
 	
+	/**
+	 * Set the collision bounds to that of crouching.
+	 */
 	_setCollisionCrouch:
 	function() {
 		this.collision(new Crafty.polygon([[11,16], [21,16], [21,32], [11,32]]));
 		if ( this.hitTile() )
 			return false;
 		return true;
+	},
+	
+	/**
+	 * Activate the currently equipped item.
+	 */
+	_activateItem:
+	function() {
+		this.activateItem({ direction: this._actionDirection() });
 	}
 });
