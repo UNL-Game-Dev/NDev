@@ -180,124 +180,123 @@
 				<point x="16" y="15" z="-1" orientation="e"/>
 			</row>
 		</data>
-		<sprite name="player">
-			<reel name="PlayerStandLeft">
-				<duration>1000</duration>
-				<frame>0 0</frame>
-				<frame>1 0</frame>
-				<frame>2 0</frame>
-				<frame>3 0</frame>
-				<frame>3 0</frame>
-				<frame>2 0</frame>
-				<frame>1 0</frame>
-				<frame>0 0</frame>
-			</reel>
-			<reel name="PlayerStandRight">
-				<duration>1000</duration>
-				<frame>4 0</frame>
-				<frame>5 0</frame>
-				<frame>6 0</frame>
-				<frame>7 0</frame>
-				<frame>7 0</frame>
-				<frame>6 0</frame>
-				<frame>5 0</frame>
-				<frame>4 0</frame>
-			</reel>
-			<reel name="PlayerWalkLeft">
-				<duration>650</duration>
-				<from>0 1</from>
-				<frameCount>8</frameCount>
-			</reel>
-			<reel name="PlayerWalkRight">
-				<duration>650</duration>
-				<from>0 2</from>
-				<frameCount>8</frameCount>
-			</reel>
-			<reel name="PlayerJumpLeft">
-				<duration>400</duration>
-				<from>0 3</from>
-				<frameCount>4</frameCount>
-			</reel>
-			<reel name="PlayerJumpRight">
-				<duration>400</duration>
-				<from>4 3</from>
-				<frameCount>4</frameCount>
-			</reel>
-			<reel name="PlayerFallLeft">
-				<duration>1000</duration>
-				<frame>0 4</frame>
-				<frame>1 4</frame>
-				<frame>2 4</frame>
-				<frame>3 4</frame>
-				<frame>3 4</frame>
-				<frame>2 4</frame>
-				<frame>1 4</frame>
-				<frame>0 4</frame>
-			</reel>
-			<reel name="PlayerFallRight">
-				<duration>1000</duration>
-				<frame>4 4</frame>
-				<frame>5 4</frame>
-				<frame>6 4</frame>
-				<frame>7 4</frame>
-				<frame>7 4</frame>
-				<frame>6 4</frame>
-				<frame>5 4</frame>
-				<frame>4 4</frame>
-			</reel>
-			<reel name="PlayerLandLeft">
-				<duration>350</duration>
-				<from>0 5</from>
-				<frameCount>4</frameCount>
-			</reel>
-			<reel name="PlayerLandRight">
-				<duration>350</duration>
-				<from>4 5</from>
-				<frameCount>4</frameCount>
-			</reel>
-			<reel name="PlayerCrouchLeft">
-				<duration>1000</duration>
-				<frame>0 6</frame>
-				<frame>1 6</frame>
-				<frame>2 6</frame>
-				<frame>3 6</frame>
-				<frame>3 6</frame>
-				<frame>2 6</frame>
-				<frame>1 6</frame>
-				<frame>0 6</frame>
-			</reel>
-			<reel name="PlayerCrouchRight">
-				<duration>1000</duration>
-				<frame>4 6</frame>
-				<frame>5 6</frame>
-				<frame>6 6</frame>
-				<frame>7 6</frame>
-				<frame>7 6</frame>
-				<frame>6 6</frame>
-				<frame>5 6</frame>
-				<frame>4 6</frame>
-			</reel>
-			<reel name="PlayerCrawlLeft">
-				<duration>700</duration>
-				<from>0 7</from>
-				<frameCount>8</frameCount>
-			</reel>
-			<reel name="PlayerCrawlRight">
-				<duration>700</duration>
-				<from>0 8</from>
-				<frameCount>8</frameCount>
-			</reel>
-			<reel name="PlayerShootLeft">
-				<duration>250</duration>
-				<from>0 9</from>
-				<frameCount>4</frameCount>
-			</reel>
-			<reel name="PlayerShootRight">
-				<duration>250</duration>
-				<from>4 9</from>
-				<frameCount>4</frameCount>
-			</reel>
-		</sprite>
+		<sprite name="player" />
+		<reel name="PlayerStandLeft">
+			<duration>1000</duration>
+			<frame>0 0</frame>
+			<frame>1 0</frame>
+			<frame>2 0</frame>
+			<frame>3 0</frame>
+			<frame>3 0</frame>
+			<frame>2 0</frame>
+			<frame>1 0</frame>
+			<frame>0 0</frame>
+		</reel>
+		<reel name="PlayerStandRight">
+			<duration>1000</duration>
+			<frame>4 0</frame>
+			<frame>5 0</frame>
+			<frame>6 0</frame>
+			<frame>7 0</frame>
+			<frame>7 0</frame>
+			<frame>6 0</frame>
+			<frame>5 0</frame>
+			<frame>4 0</frame>
+		</reel>
+		<reel name="PlayerWalkLeft">
+			<duration>650</duration>
+			<from>0 1</from>
+			<frameCount>8</frameCount>
+		</reel>
+		<reel name="PlayerWalkRight">
+			<duration>650</duration>
+			<from>0 2</from>
+			<frameCount>8</frameCount>
+		</reel>
+		<reel name="PlayerJumpLeft">
+			<duration>400</duration>
+			<from>0 3</from>
+			<frameCount>4</frameCount>
+		</reel>
+		<reel name="PlayerJumpRight">
+			<duration>400</duration>
+			<from>4 3</from>
+			<frameCount>4</frameCount>
+		</reel>
+		<reel name="PlayerFallLeft">
+			<duration>1000</duration>
+			<frame>0 4</frame>
+			<frame>1 4</frame>
+			<frame>2 4</frame>
+			<frame>3 4</frame>
+			<frame>3 4</frame>
+			<frame>2 4</frame>
+			<frame>1 4</frame>
+			<frame>0 4</frame>
+		</reel>
+		<reel name="PlayerFallRight">
+			<duration>1000</duration>
+			<frame>4 4</frame>
+			<frame>5 4</frame>
+			<frame>6 4</frame>
+			<frame>7 4</frame>
+			<frame>7 4</frame>
+			<frame>6 4</frame>
+			<frame>5 4</frame>
+			<frame>4 4</frame>
+		</reel>
+		<reel name="PlayerLandLeft">
+			<duration>350</duration>
+			<from>0 5</from>
+			<frameCount>4</frameCount>
+		</reel>
+		<reel name="PlayerLandRight">
+			<duration>350</duration>
+			<from>4 5</from>
+			<frameCount>4</frameCount>
+		</reel>
+		<reel name="PlayerCrouchLeft">
+			<duration>1000</duration>
+			<frame>0 6</frame>
+			<frame>1 6</frame>
+			<frame>2 6</frame>
+			<frame>3 6</frame>
+			<frame>3 6</frame>
+			<frame>2 6</frame>
+			<frame>1 6</frame>
+			<frame>0 6</frame>
+		</reel>
+		<reel name="PlayerCrouchRight">
+			<duration>1000</duration>
+			<frame>4 6</frame>
+			<frame>5 6</frame>
+			<frame>6 6</frame>
+			<frame>7 6</frame>
+			<frame>7 6</frame>
+			<frame>6 6</frame>
+			<frame>5 6</frame>
+			<frame>4 6</frame>
+		</reel>
+		<reel name="PlayerCrawlLeft">
+			<duration>700</duration>
+			<from>0 7</from>
+			<frameCount>8</frameCount>
+		</reel>
+		<reel name="PlayerCrawlRight">
+			<duration>700</duration>
+			<from>0 8</from>
+			<frameCount>8</frameCount>
+		</reel>
+		<reel name="PlayerShootLeft">
+			<duration>250</duration>
+			<from>0 9</from>
+			<frameCount>4</frameCount>
+		</reel>
+		<reel name="PlayerShootRight">
+			<duration>250</duration>
+			<from>4 9</from>
+			<frameCount>4</frameCount>
+		</reel>
 	</spriteSheet>
 	<spriteSheet src="projectile">
 		<tileSize>8</tileSize>
@@ -460,5 +459,9 @@
 		<sprite name="harpoon_out_l_w" x="2" y="3"/>
 		<sprite name="harpoon_out_l_sw" x="3" y="3"/>
 		<sprite name="harpoon_out_l_s" x="4" y="3"/>
+	</spriteSheet>
+	<spriteSheet src="waterfall">
+		<tileSize>32</tileSize>
+		<reel name="waterfall" duration="250"/>
 	</spriteSheet>
 </spritesData>
