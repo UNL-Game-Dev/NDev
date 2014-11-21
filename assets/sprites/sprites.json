@@ -180,9 +180,6 @@
 					]
 				]
 			},
-			sprites: {
-				player: [ 0, 0 ]
-			},
 			animations: {
 				PlayerStandLeft: {
 					duration: 1000,
