@@ -181,44 +181,36 @@
 			</row>
 		</data>
 		<sprite name="player" />
-		<reel name="PlayerStandLeft">
-			<duration>1000</duration>
-			<frame>0 0</frame>
-			<frame>1 0</frame>
-			<frame>2 0</frame>
-			<frame>3 0</frame>
-			<frame>3 0</frame>
-			<frame>2 0</frame>
-			<frame>1 0</frame>
-			<frame>0 0</frame>
+		<reel name="PlayerStandLeft" duration="1000">
+			<frame x="0" y="0"/>
+			<frame x="1" y="0"/>
+			<frame x="2" y="0"/>
+			<frame x="3" y="0"/>
+			<frame x="3" y="0"/>
+			<frame x="2" y="0"/>
+			<frame x="1" y="0"/>
+			<frame x="0" y="0"/>
 		</reel>
-		<reel name="PlayerStandRight">
-			<duration>1000</duration>
-			<frame>4 0</frame>
-			<frame>5 0</frame>
-			<frame>6 0</frame>
-			<frame>7 0</frame>
-			<frame>7 0</frame>
-			<frame>6 0</frame>
-			<frame>5 0</frame>
-			<frame>4 0</frame>
+		<reel name="PlayerStandRight" duration="1000">
+			<frame x="4" y="0"/>
+			<frame x="5" y="0"/>
+			<frame x="6" y="0"/>
+			<frame x="7" y="0"/>
+			<frame x="7" y="0"/>
+			<frame x="6" y="0"/>
+			<frame x="5" y="0"/>
+			<frame x="4" y="0"/>
 		</reel>
-		<reel name="PlayerWalkLeft">
-			<duration>650</duration>
-			<from>0 1</from>
-			<frameCount>8</frameCount>
+		<reel name="PlayerWalkLeft" duration="650">
+			<sequence x="0" y="1" count="8"/>
 		</reel>
-		<reel name="PlayerWalkRight">
-			<duration>650</duration>
-			<from>0 2</from>
-			<frameCount>8</frameCount>
+		<reel name="PlayerWalkRight" duration="650">
+			<sequence x="0" y="2" count="8"/>
 		</reel>
-		<reel name="PlayerJumpLeft">
-			<duration>400</duration>
-			<from>0 3</from>
-			<frameCount>4</frameCount>
+		<reel name="PlayerJumpLeft" duration="400">
+			<sequence x="0" y="3" count="4"/>
 		</reel>
-		<reel name="PlayerJumpRight">
+		<reel name="PlayerJumpRight" duration="400">
 			<duration>400</duration>
 			<from>4 3</from>
 			<frameCount>4</frameCount>
