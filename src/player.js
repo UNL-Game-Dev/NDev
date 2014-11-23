@@ -33,7 +33,7 @@ Crafty.c("Player", {
 			.collision([11, 0], [21, 0], [21, 32], [11, 32])
 			.attr({ sensorBounds: [11, 0, 21, 32] })
 		// Load controls
-			.loadKeyMapping("assets/controls/player_controls.xml")
+			.loadKeyMapping("assets/controls/player.json")
 		// Bind animations
 			.bind("Stand", function() {
 				if (!this._setCollisionNormal()) {
