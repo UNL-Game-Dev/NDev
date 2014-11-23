@@ -34,7 +34,10 @@ Crafty.c("PlatformControls", {
 		
 		this._isJumping = false;
 		this._forceRemaining = 0;
-		
+
+		// Track whether we have performed the double jump or not
+		this._secondJump = false;
+
 		this.invincible = false;
 		
 		this.stopInMidAir = true;
@@ -89,6 +92,9 @@ Crafty.c("PlatformControls", {
 					}
 				} else if(ev.control === "jump") {
 					if(this.isGrounded() && !this._isJumping) {
+						this.trigger("Jump");
+						this._jump();
+					} else if(!this.isGrounded() && !this._isJumping && !this._secondJump) {
 						this.trigger("Jump");
 						this._jump();
 					}
@@ -258,6 +264,7 @@ Crafty.c("PlatformControls", {
 			
 			GroundLand:
 			function() {
+				this._secondJump = false;
 				// Trigger jumping, landing, walking, or crouching.
 				if(this.keyDown("jump")) {
 					this.trigger("Jump");
@@ -306,6 +313,10 @@ Crafty.c("PlatformControls", {
 	
 	_jump:
 	function() {
+		if (!this.isGrounded()) {
+			this._secondJump = true;
+		}
+
 		this._isJumping = true;
 		this.timeout(function() {
 			this.unstickFromGround();
