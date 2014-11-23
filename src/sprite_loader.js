@@ -1,5 +1,5 @@
 /**
- * Component for loading sprite and animation data from an XML file.
+ * Component for loading sprite and animation data from a file.
  */
 
 Crafty.c("SpriteLoader", {
@@ -14,42 +14,26 @@ Crafty.c("SpriteLoader", {
 	 * Load sprite and animation data from a given file path.
 	 */
 	load:
-	function(filename) {
-		var that = this;
-		$.ajax({
-			type: "GET",
-			url: filename,
-			success: function (data) {
-				
-				data = $(data).children("spritesData");
-				
-				// Get the base URL and file extension for resolving sources.
-				that._baseUrl = data.children("baseUrl").text().trim();
-				that._fileExtension = data.children("fileExtension").text()
-					.trim();
-				that._currDirectory = getDirectory(filename);
-				
-				// Load each sprite sheet.
-				data.children("spriteSheet").each(function(index,
-														spriteSheetElement) {
-					that._loadSpriteSheet(spriteSheetElement);
-				});
-			}
-		});
+	function(param) {
+		var self = this;
 		
-		/**
-		 * When new sprite entities are created, load their respective
-		 * animations.
-		 */
-		Crafty.bind("NewEntity", function(data) {
-			var ent = Crafty(data.id);
-			if(!ent.has("Sprite")) {
-				return;
-			}
-			
-			// Define sprite animations, if definitions exist.
-			that._defineAnimations(ent);
-		});
+		if(_(param).isString()) {
+			$.getJSON(filename).success(function(data) {
+				self.load(data);
+			}).error(function(xhr, status, info) {
+				console.error(filename, ':', info.message);
+			});
+		} else if(_(param).isObject()) {
+			Crafty.bind('NewEntity', function(data) {
+				var ent = Crafty(data.id);
+				if(!ent.has('Sprite')) {
+					return;
+				}
+				
+				// Define sprite animations, if definitions exist.
+				self._defineAnimations(ent);
+			});
+		}
 	},
 	
 	getSpriteData:
@@ -142,7 +126,7 @@ Crafty.c("SpriteLoader", {
 	_loadSpriteSheet:
 	function(spriteSheetElement) {
 		
-		var that = this;
+		var self = this;
 		spriteSheetElement = $(spriteSheetElement);
 		var src = spriteSheetElement.attr("src");
 		var tileSize = spriteSheetElement.children("tileSize").text().trim();
@@ -202,7 +186,7 @@ Crafty.c("SpriteLoader", {
 		var spriteDict = {};
 		spriteSheetElement.children("sprite").each(function(index,
 		                                                       spriteElement) {
-			var sprite = that._createSprite(spriteElement, src);
+			var sprite = self._createSprite(spriteElement, src);
 
 			// Create the sprite dict entry.
 			spriteDict[sprite.name] = sprite.bounds;
@@ -211,13 +195,13 @@ Crafty.c("SpriteLoader", {
 		// Determine the URL to get the image from.
 		var url = src;
 		if(this._baseUrl) {
-			url = this._baseUrl + "/" + url;
+			url = this._baseUrl + '/' + url;
 		}
 		if(this._fileExtension) {
-			url += "." + this._fileExtension;
+			url += '.' + this._fileExtension;
 		}
 		if(this._currDirectory) {
-			url = this._currDirectory + "/" + url;
+			url = this._currDirectory + '/' + url;
 		}
 		
 		this._spriteSheetDict[src] = {
@@ -236,7 +220,7 @@ Crafty.c("SpriteLoader", {
 	 */
 	_createSprite:
 	function(spriteElement, spriteSheetName) {
-		var that = this;
+		var self = this;
 		spriteElement = $(spriteElement);
 		var name = spriteElement.attr("name");
 
@@ -266,14 +250,14 @@ Crafty.c("SpriteLoader", {
 		if(animElements.length) {
 			var animDict = {};
 			animElements.each(function(index, animElement) {
-				var anim = that._createAnimation(animElement);
+				var anim = self._createAnimation(animElement);
 				animDict[anim.name] = anim;
 			});
-			that._spriteAnimDict[name] = animDict;
+			self._spriteAnimDict[name] = animDict;
 		}
 		
 		// Map sprite name to sprite sheet name for future reference.
-		that._spriteToSpriteSheet[name] = spriteSheetName;
+		self._spriteToSpriteSheet[name] = spriteSheetName;
 		
 		return {
 			name: name,
