@@ -96,7 +96,7 @@ Crafty.c("Controls", {
 	},
 	
 	/**
-	 * Load key mapping from an XML file.
+	 * Load key mapping from a file.
 	 */
 	loadKeyMapping:
 	function(filename) {
