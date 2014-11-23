@@ -1,34 +1,32 @@
 {
-	left: [
-		'LEFT_ARROW',
-		'A'
+	"left": [
+		"LEFT_ARROW",
+		"A"
 	],
-	right: [
-		'RIGHT_ARROW',
-		'D'
+	"right": [
+		"RIGHT_ARROW",
+		"D"
 	],
-	up: [
-		'UP_ARROW',
-		'W'
+	"up": [
+		"UP_ARROW",
+		"W"
 	],
-	down: [
-		'DOWN_ARROW',
-		'S'
+	"down": [
+		"DOWN_ARROW",
+		"S"
 	],
-	jump: [
-		'UP_ARROW',
-		'W'
+	"jump": [
+		"UP_ARROW",
+		"W"
 	],
-	action: 'SPACE',
-	phase: {
-		double: [
-			'DOWN_ARROW',
-			'S'
-		]
-	},
-	equip: [
-		'CTRL',
-		'ALT',
-		'SHIFT'
+	"action": "SPACE",
+	"phase": [
+		{ "double": "DOWN_ARROW" },
+		{ "double": "S" }
+	],
+	"equip": [
+		"CTRL",
+		"ALT",
+		"SHIFT"
 	]
 }

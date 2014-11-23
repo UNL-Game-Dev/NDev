@@ -33,18 +33,19 @@ Crafty.c("Controls", {
 			}
 			
 			// Process controls.
-			var singlePressMappedControls = this._ctrlKeyMapping
-			                                    .getReverse(keyCode);
-			var mappedControls = singlePressMappedControls
-			                         .concat(doublePressMappedControls);
+			var singlePressMappedControls =
+				this._ctrlKeyMapping.getReverse(keyCode);
+			
+			var mappedControls =
+				singlePressMappedControls.concat(doublePressMappedControls);
 			
 			_(mappedControls).each(function(control) {
-				Crafty.trigger("ControlPressed", {
+				this.trigger("ControlPressed", {
 					control: control,
 					type: "controlpressed",
 					keyEvent: ev
 				});
-			});
+			}, this);
 		});
 		
 		// When key is released, trigger the corresponding control event(s).
@@ -81,18 +82,37 @@ Crafty.c("Controls", {
 	 */
 	mapKeys:
 	function(mappingDict) {
+		mappingDict = this._encodeKeyMappingDict(mappingDict);
+		this._ctrlKeyMapping = new Relation(mappingDict);
+		
+		return this;
+	},
+	
+	/**
+	 * Encode all keys in a key mapping dictionary.
+	 */
+	_encodeKeyMappingDict:
+	function(mappingDict) {
 		var newMapping = {};
 		_(mappingDict).each(function(keys, control) {
 			keys = _(keys).isArray() ? keys : [keys];
-			newMapping[control] = _(keys).map(function(key) {
-				return (_(key).isObject() && !_(key.double).isUndefined())
-						? this._encodeDoublePress(key.double)
-						: key;
-			}, this);
+			newMapping[control] = _(keys).map(this._encodeKey, this);
 		}, this);
-		this._ctrlKeyMapping.map(newMapping);
 		
-		return this;
+		return newMapping;
+	},
+	
+	/**
+	 * Convert key into its code.
+	 */
+	_encodeKey:
+	function(key) {
+		console.log(key, _(key).has('double')
+			? this._encodeDoublePress(Crafty.keys[key.double])
+			: Crafty.keys[key]);
+		return _(key).has('double')
+			? this._encodeDoublePress(Crafty.keys[key.double])
+			: Crafty.keys[key];
 	},
 	
 	/**
@@ -100,35 +120,11 @@ Crafty.c("Controls", {
 	 */
 	loadKeyMapping:
 	function(filename) {
-		$.ajax({
-			type: "GET",
-			url: filename,
-			context: this,
-			success: function (data) {
-				var keyMapping = {};
-				
-				data = $(data).children("controls");
-				
-				_(data.children("control")).each(function(controlElement) {
-					controlElement = $(controlElement);
-					var controlName = controlElement.attr("name");
-					var keyElements = controlElement.children("key");
-					var mappedKeys = _(keyElements).map(function(keyElement) {
-						keyElement = $(keyElement);
-						var double = (keyElement.attr("double") || "").trim()
-						                        .toLowerCase();
-						var keyName = keyElement.text().trim();
-						var keyCode = Crafty.keys[keyName];
-						if(double && double !== "false") {
-							return { double: keyCode };
-						} else {
-							return keyCode;
-						}
-					});
-					keyMapping[controlName] = mappedKeys;
-				});
-				this.mapKeys(keyMapping);
-			}
+		var self = this;
+		$.getJSON(filename).success(function(data) {
+			self.mapKeys(data);
+		}).error(function(xhr, status, info) {
+			console.log(filename, ':', info.message);
 		});
 		
 		return this;
@@ -278,48 +274,24 @@ function Relation(dict) {
 		dict = dict || {};
 		_(dict).each(function(values, key) {
 			// Make sure values is a list of values, not just a value.
-			if(!_(values).isArray()) {
-				values = [values];
-			}
+			values = _(values).isArray() ? values : [values];
 			_(values).each(function(value, index) {
 				this._addPair(key, value);
 			}, this);
 		}, this);
 	};
+	
+	this._map(dict);
 }
 
-Relation.prototype.add = function(key, value) {
-	this._addPair(key, value);
-};
-
-Relation.prototype.remove = function(key, value) {
-	this._removePair(key, value);
-};
-
-Relation.prototype.containsLeft = function(key) {
-	return this._forwardMapping[key] !== undefined;
-};
-
-Relation.prototype.containsRight = function(value) {
-	return this._reverseMapping[value] !== undefined;
-};
-
-Relation.prototype.map = function(dict) {
-	this._map(dict);
-};
-
-Relation.prototype.getForward = function(key) {
-	return this._forwardMapping[key] || [];
-};
-
-Relation.prototype.getReverse = function(value) {
-	return this._reverseMapping[value] || [];
-};
-
-Relation.prototype.leftValues = function() {
-	return _(this._forwardMapping).keys();
-};
-
-Relation.prototype.rightValues = function() {
-	return _(this._reverseMapping).keys();
+Relation.prototype = Relation.fn = {
+	add: function(key, value) { this._addPair(key, value); },
+	remove: function(key, value) { this._removePair(key, value); },
+	containsLeft: function(key) { return !_(this._forwardMapping[key]).isUndefined(); },
+	containsRight: function(value) { return !_(this._reverseMapping[value]).isUndefined(); },
+	map: function(dict) { this._map(dict); },
+	getForward: function(key) { return this._forwardMapping[key] || []; },
+	getReverse: function(value) { return this._reverseMapping[value] || []; },
+	leftValues: function() { return _(this._forwardMapping).keys(); },
+	rightValues: function() { return _(this.reverseMapping).keys(); }
 };
