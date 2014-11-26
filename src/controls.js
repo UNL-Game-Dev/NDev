@@ -107,9 +107,6 @@ Crafty.c("Controls", {
 	 */
 	_encodeKey:
 	function(key) {
-		console.log(key, _(key).has('double')
-			? this._encodeDoublePress(Crafty.keys[key.double])
-			: Crafty.keys[key]);
 		return _(key).has('double')
 			? this._encodeDoublePress(Crafty.keys[key.double])
 			: Crafty.keys[key];

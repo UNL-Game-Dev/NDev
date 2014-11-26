@@ -461,4 +461,14 @@
 		<sprite name="harpoon_out_l_sw" x="3" y="3"/>
 		<sprite name="harpoon_out_l_s" x="4" y="3"/>
 	</spriteSheet>
+	<spriteSheet src="waterfall">
+		<tileSize>32</tileSize>
+		<sprite name="waterfall" x="0" y="0">
+			<reel name="waterfall">
+				<duration>1000</duration>
+				<from>0 0</from>
+				<frameCount>8</frameCount>
+			</reel>
+		</sprite>
+	</spriteSheet>
 </spritesData>
