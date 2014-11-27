@@ -101,7 +101,6 @@ Crafty.c("MapDoor", {
 		this._targetDoor = object.properties.targetDoor;
 		// Set up the bounding box.
 		this.collision();
-		//console.log("Creating door from ", object, this);
 	},
 });
 

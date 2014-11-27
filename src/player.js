@@ -180,7 +180,7 @@ Crafty.c("Player", {
 		this.makeScrollTarget();
 		
 		// Try to activate an item, and limit rate at which it can be activated.
-		this._tryActivateItem = _(this._activateItem).throttle(300, { trailing: false })
+		this._tryActivateItem = _.throttle(this._activateItem, 300, { trailing: false })
 	},
 	
 	die:

@@ -96,7 +96,7 @@ Crafty.c("Controls", {
 		var newMapping = {};
 		_(mappingDict).each(function(keys, control) {
 			keys = _(keys).isArray() ? keys : [keys];
-			newMapping[control] = _(keys).map(this._encodeKey, this);
+			newMapping[control] = _(keys).map(this._encodeKey, this).value();
 		}, this);
 		
 		return newMapping;
@@ -107,9 +107,6 @@ Crafty.c("Controls", {
 	 */
 	_encodeKey:
 	function(key) {
-		console.log(key, _(key).has('double')
-			? this._encodeDoublePress(Crafty.keys[key.double])
-			: Crafty.keys[key]);
 		return _(key).has('double')
 			? this._encodeDoublePress(Crafty.keys[key.double])
 			: Crafty.keys[key];
@@ -124,7 +121,7 @@ Crafty.c("Controls", {
 		$.getJSON(filename).success(function(data) {
 			self.mapKeys(data);
 		}).error(function(xhr, status, info) {
-			console.log(filename, ':', info.message);
+			console.error(filename, ':', info);
 		});
 		
 		return this;
@@ -139,9 +136,9 @@ Crafty.c("Controls", {
 		// See if key given is a control name.
 		if(this._ctrlKeyMapping.containsLeft(key)) {
 			var mappedKeys = this._ctrlKeyMapping.getForward(key);
-			return _(mappedKeys).find(function(mappedKey) {
+			return _(mappedKeys).any(function(mappedKey) {
 				return this._keyIsDown(mappedKey);
-			}, this) !== undefined;
+			}, this);
 		}
 		
 		var mappedKey = Crafty.keys[key];
@@ -252,7 +249,7 @@ function Relation(dict) {
 		if(this._forwardMapping[key] !== undefined) {
 			var mappedRightValues = this._forwardMapping[key];
 			if(_(mappedRightValues).contains(value)) {
-				this._forwardMapping[key] = _(mappedRightValues).without(value);
+				this._forwardMapping[key] = _.without(mappedRightValues, value);
 				if(this._forwardMapping[key].length === 0) {
 					delete this._forwardMapping[key];
 				}
@@ -261,7 +258,7 @@ function Relation(dict) {
 		if(this._reverseMapping[value] !== undefined) {
 			if(_(this._reverseMapping[value]).contains(key)) {
 				this._reverseMapping[key] =
-					_(this._reverseMapping[value]).without(key);
+					_.without(this._reverseMapping[value], key);
 				if(this._reverseMapping[value].length === 0) {
 					delete this._reverseMapping[value];
 				}
@@ -287,11 +284,11 @@ function Relation(dict) {
 Relation.prototype = Relation.fn = {
 	add: function(key, value) { this._addPair(key, value); },
 	remove: function(key, value) { this._removePair(key, value); },
-	containsLeft: function(key) { return !_(this._forwardMapping[key]).isUndefined(); },
-	containsRight: function(value) { return !_(this._reverseMapping[value]).isUndefined(); },
+	containsLeft: function(key) { return _(this._forwardMapping).has(key); },
+	containsRight: function(value) { return _(this._reverseMapping).has(value); },
 	map: function(dict) { this._map(dict); },
 	getForward: function(key) { return this._forwardMapping[key] || []; },
 	getReverse: function(value) { return this._reverseMapping[value] || []; },
-	leftValues: function() { return _(this._forwardMapping).keys(); },
-	rightValues: function() { return _(this.reverseMapping).keys(); }
+	leftValues: function() { return _.keys(this._forwardMapping); },
+	rightValues: function() { return _.keys(this.reverseMapping); }
 };
