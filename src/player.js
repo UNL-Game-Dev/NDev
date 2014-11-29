@@ -60,7 +60,7 @@ Crafty.c("Player", {
 				}
 				this.isCrouching = false;
 			})
-			.bind("Walk", function(ev) {
+			.bind("Walk", function() {
 				if (!this._setCollisionNormal()) {
 					if (this._setCollisionCrouch()) {
 						this.trigger("Crawl");
@@ -146,7 +146,7 @@ Crafty.c("Player", {
 				recoveryTime: defaultRecoveryTime,
 
 				// Whether or not player can be hit.
-				invincible: false,
+				invincible: false
 			});
         
 		this.bind("Hurt", function(hit) {
@@ -180,7 +180,7 @@ Crafty.c("Player", {
 		this.makeScrollTarget();
 		
 		// Try to activate an item, and limit rate at which it can be activated.
-		this._tryActivateItem = _(this._activateItem).throttle(300, { trailing: false })
+		this._tryActivateItem = _.throttle(this._activateItem, 300, { trailing: false })
 	},
 	
 	die:

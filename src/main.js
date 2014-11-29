@@ -23,7 +23,7 @@ Crafty.scene("testMap", function() {
 			}
 		});
 	
-	Crafty.e("SpriteLoader").load("assets/sprites/sprites.xml");
+	Crafty.e("SpriteLoader").load("assets/sprites/sprites.json");
 	
 	// Create the clock.
 	var clock = Crafty.e("Clock, Persistent");
