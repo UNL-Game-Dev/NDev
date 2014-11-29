@@ -354,6 +354,18 @@
 					}
 				}
 			}
+		},
+	    "waterfall": {
+		    "tileSize": 32,
+		    "animations": {
+			    "waterfall": {
+				    "duration": 1000,
+				    "frames": {
+					    "start": [0, 0],
+					    "count": 8
+					}
+				}
+			}
 		}
 	}
 }
