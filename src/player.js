@@ -60,7 +60,7 @@ Crafty.c("Player", {
 				}
 				this.isCrouching = false;
 			})
-			.bind("Walk", function(ev) {
+			.bind("Walk", function() {
 				if (!this._setCollisionNormal()) {
 					if (this._setCollisionCrouch()) {
 						this.trigger("Crawl");
@@ -146,7 +146,7 @@ Crafty.c("Player", {
 				recoveryTime: defaultRecoveryTime,
 
 				// Whether or not player can be hit.
-				invincible: false,
+				invincible: false
 			});
         
 		this.bind("Hurt", function(hit) {

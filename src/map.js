@@ -204,8 +204,9 @@ Crafty.c("TiledMap", {
 	function(layers) {
 		this._layerInfo = {};
 		
-		// Find the first solid tile layer, and use that for the Z-index of 0.
+		// Find the first solid tile layer, and use that for the base Z-index.
 		var solidLayer = 0;
+
 		for(var layeri in layers) {
 			var layer = layers[layeri];
 			if(layer.properties && layer.type == "tilelayer" && layer.properties.solid) {

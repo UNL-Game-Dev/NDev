@@ -74,8 +74,7 @@ Crafty.c("ItemEquip", {
 	 */
 	switchItem:
 	function() {
-		this._switchItemToIndex(
-			this._getNextItemIndex(this._equippedItemIndex));
+		this._switchItemToIndex(this._getNextItemIndex(this._equippedItemIndex));
 		
 		return this;
 	},
@@ -90,9 +89,8 @@ Crafty.c("ItemEquip", {
 				item: oldItemInfo.name,
 				owner: this
 			};
-			_([oldItemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemUnequip", data);
-			});
+			oldItemInfo.item.trigger('ItemUnequip', data);
+			this.trigger('ItemUnequip', data);
 		}
 		
 		if(newItemInfo) {
@@ -100,9 +98,8 @@ Crafty.c("ItemEquip", {
 				item: newItemInfo.name,
 				owner: this
 			};
-			_([newItemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemEquip", data);
-			});
+			newItemInfo.item.trigger('ItemEquip', data);
+			this.trigger('ItemEquip', data);
 		}
 		
 		this._equippedItemIndex = index;
@@ -182,7 +179,7 @@ Crafty.c("ItemEquip", {
 				x: this.x + this.w / 2,
 				y: this.y + this.h / 2
 			});
-			this.attach(newItem);
+			//this.attach(newItem);
 			var itemInfo = {
 				name: pickupName,
 				item: newItem

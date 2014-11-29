@@ -138,7 +138,7 @@ Crafty.c('SpriteLoader', {
 		if(!spriteSheetName) {
 			return null;
 		}
-		var spriteSheet = this._spriteSheetDict[spriteSheetName];
+		var spriteSheet = this._spriteSheets[spriteSheetName];
 		if(!spriteSheet) {
 			return null;
 		}
@@ -164,6 +164,7 @@ Crafty.c('SpriteLoader', {
 		_(this._spriteToSpriteSheet).each(function(spriteSheetName, spriteName) {
 			if(ent.has(spriteName)) {
 				var animations = self._spriteAnimations[spriteSheetName];
+				ent.requires('SpriteAnimation');
 				_(animations).each(function(animation, animationName) {
 					var frames = animation.frames;
 					if(_(frames).isArray()) {
