@@ -8,6 +8,7 @@ Crafty.c('SpriteLoader', {
 		this._spriteSheets = {};
 		this._spriteAnimations = {};
 		this._spriteToSpriteSheet = {};
+		this._animationToSpriteSheet = {};
 	},
 	
 	/**
@@ -54,6 +55,9 @@ Crafty.c('SpriteLoader', {
 				_(spriteSheet.sprites).keys().each(function(key) {
 					self._spriteToSpriteSheet[key] = spriteSheetName;
 				});
+				_(spriteSheet.animations).keys().each(function(key) {
+					self._animationToSpriteSheet[key] = spriteSheetName;
+				});
 			});
 			
 			_(sprites.spriteSheets).each(function(spriteSheet) {
@@ -70,15 +74,15 @@ Crafty.c('SpriteLoader', {
 			Crafty.bind('NewEntity', function(data) {
 				var ent = Crafty(data.id);
 
+				if(!ent.has('Sprite')) {
+					return;
+				}
+
 				ent.bind('NewComponent', function(data) {
 					if(!(data.length === 1 && data[0] === 'SpriteAnimation')) {
 						self._defineAnimations(ent);
 					}
 				});
-
-				if(!ent.has('Sprite')) {
-					return;
-				}
 				
 				// Define sprite animations, if definitions exist.
 				self._defineAnimations(ent);
