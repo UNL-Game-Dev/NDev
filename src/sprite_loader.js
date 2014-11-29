@@ -69,6 +69,13 @@ Crafty.c('SpriteLoader', {
 			
 			Crafty.bind('NewEntity', function(data) {
 				var ent = Crafty(data.id);
+
+				ent.bind('NewComponent', function(data) {
+					if(!(data.length === 1 && data[0] === 'SpriteAnimation')) {
+						self._defineAnimations(ent);
+					}
+				});
+
 				if(!ent.has('Sprite')) {
 					return;
 				}

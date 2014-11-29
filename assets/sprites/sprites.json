@@ -359,7 +359,7 @@
 		    "tileSize": 32,
 		    "animations": {
 			    "waterfall": {
-				    "duration": 1000,
+				    "duration": 750,
 				    "frames": {
 					    "start": [0, 0],
 					    "count": 8

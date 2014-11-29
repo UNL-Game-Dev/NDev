@@ -70,6 +70,16 @@ Crafty.c("TiledMap", {
 					this._collisionizeEntity(ent);
 				}
 			}
+			// Animate the entities if needed.
+			var entities = this.getEntitiesInLayer(layerName);
+			for(var i = entities.length - 1; i >= 0; --i) {
+				var ent = entities[i];
+				var gid = ent.gid;
+				var tileInfo = this._tileInfo[gid];
+				if(tileInfo && tileInfo.animate) {
+					ent.requires('waterfall').animate(tileInfo.animate, -1);
+				}
+			}
 		}
 	},
 	
@@ -261,6 +271,13 @@ Crafty.c("TiledMap", {
 					// If layer is solid, collisionize the entity.
 					if(layerInfo.properties.solid) {
 						this._collisionizeEntity(craftyObject);
+					}
+					// Animate the entity if needed.
+					var gid = craftyObject.gid;
+					var tileInfo = this._tileInfo[gid];
+					if(tileInfo && tileInfo.animate) {
+						console.log(craftyObject[0]);
+						ent.animate(tileInfo.animate, -1);
 					}
 					// Set the entity's Z-index.
 					craftyObject.z = layerInfo.z;

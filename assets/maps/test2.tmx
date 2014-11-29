@@ -73,13 +73,21 @@
   </tile>
  </tileset>
  <tileset firstgid="33" name="harpoon" tilewidth="16" tileheight="16">
-  <image source="../sprites/harpoon.png" width="90" height="72"/>
+  <image source="../sprites/harpoon.png" width="72" height="18"/>
  </tileset>
- <tileset firstgid="53" name="dynamite" tilewidth="16" tileheight="16">
+ <tileset firstgid="37" name="dynamite" tilewidth="16" tileheight="16">
   <image source="../sprites/dynamite.png" width="16" height="16"/>
  </tileset>
- <tileset firstgid="54" name="pistol" tilewidth="8" tileheight="8">
-  <image source="../sprites/pistol.png" width="64" height="16"/>
+ <tileset firstgid="38" name="pistol" tilewidth="8" tileheight="8">
+  <image source="../sprites/pistol.png" width="8" height="8"/>
+ </tileset>
+ <tileset firstgid="39" name="waterfall" tilewidth="32" tileheight="32">
+  <image source="../sprites/waterfall.png" width="256" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="animate" value="waterfall"/>
+   </properties>
+  </tile>
  </tileset>
  <imagelayer name="bg_parallax" width="100" height="100">
   <image source="monoliths.png"/>
@@ -138,7 +146,7 @@
  </layer>
  <layer name="bg" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1ssKg0AMBVB/oe9CC+3/f2WzsINkI4U6GfAcuKi7kEWu0wQAACydIufqIWhukXv1EDSPyLN6CJpX5F09xE7lrtAdfeV9567QHX3lfeeuWH5fIofIcX5+36/bj7kbef+5K3RHX3nf+qOW/hjLL/3B9tb6w73qa62v3auxuFdj8b8LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAP30AuFsGpA==
+   eJzt1t0KwjAMBtC9gv+Cgt75/m9oGAoShCG4ptBzIKy9Cynk2zQBAMDYHum+i9pXNMIsv8cp6lzRCLP8Hpeoa0UjfHWLulc3MaicFbKjrTzvnBWyo60875wVn/dD1CZq+/q+z8f12xxGnn/OCtnRVp63/KglP/ryS36wvqX8sK/aWspr+6ov9lVf/O8CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwT09ehQcZ
   </data>
  </layer>
  <objectgroup name="entities_behind" width="100" height="100">
@@ -292,22 +300,22 @@
     <property name="pickup" value="harpoon"/>
    </properties>
   </object>
-  <object name="dynamitePickup" type="Pickup" gid="53" x="904" y="408">
+  <object name="dynamitePickup" type="Pickup" gid="37" x="904" y="408">
    <properties>
     <property name="pickup" value="dynamite"/>
    </properties>
   </object>
-  <object name="pistolPickup" type="Pickup" gid="54" x="1196" y="468">
+  <object name="pistolPickup" type="Pickup" gid="38" x="1196" y="468">
    <properties>
     <property name="pickup" value="pistol"/>
    </properties>
   </object>
-  <object name="pistolPickup2" type="Pickup" gid="54" x="1260" y="468">
+  <object name="pistolPickup2" type="Pickup" gid="38" x="1260" y="468">
    <properties>
     <property name="pickup" value="pistol"/>
    </properties>
   </object>
-  <object name="pistolPickup3" type="Pickup" gid="54" x="1292" y="468">
+  <object name="pistolPickup3" type="Pickup" gid="38" x="1292" y="468">
    <properties>
     <property name="pickup" value="pistol"/>
    </properties>
