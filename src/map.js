@@ -13,7 +13,7 @@ Crafty.c("TiledMap", {
 	
 	loadMap:
 	function(mapName, loaded) {
-		var that = this;
+		var self = this;
 		
 		this.mapName = mapName;
 		
@@ -35,20 +35,20 @@ Crafty.c("TiledMap", {
 					_mapFolder + json.tilesets[i].image;
 			}
 			// Extract tile bounds information.
-			that._initTileInfo(json.tilesets);
+			self._initTileInfo(json.tilesets);
 			
 			// Extract layer information.
-			that._initLayerInfo(json.layers);
+			self._initLayerInfo(json.layers);
 			
 			// Load it in.
-			that.setMapDataSource(json);
-			that.createWorld(function(map) {
-				that._arrangeTileLayers();
-				that.collisionize();
+			self.setMapDataSource(json);
+			self.createWorld(function(map) {
+				self._arrangeTileLayers();
+				self.activate();
 				// Spawn Tiled-made objects.
-				that._spawnMapObjects(json.layers);
+				self._spawnMapObjects(json.layers);
 
-				that._loaded = true;
+				self._loaded = true;
 				console.log("Done creating world.");
 
 				if(loaded)
@@ -57,8 +57,11 @@ Crafty.c("TiledMap", {
 		});
 		return this;
 	},
-	
-	collisionize:
+
+	/**
+	 * Activate the tilemap, collisionizing all solid entities, setting up animations/sprites, etc.
+	 */
+	activate:
 	function() {
 		// Add tile bounds information.
 		for(var layerName in this.getLayers()) {
