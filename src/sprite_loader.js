@@ -46,9 +46,7 @@ Crafty.c('SpriteLoader', {
 				spriteSheet.padding = self._vec2(spriteSheet.padding);
 				spriteSheet.paddingAroundBorder = !!spriteSheet.paddingAroundBorder;
 				spriteSheet.sprites = spriteSheet.sprites || _.object([spriteSheetName], [[0, 0]]);
-				spriteSheet.data = spriteSheet.data
-					? _.mapValues(spriteSheet.data, self._normalizeSpriteSheetData)
-					: {};
+				spriteSheet.data = spriteSheet.data || {};
 
 				self._spriteSheets[spriteSheetName] = spriteSheet;
 				self._spriteAnimations[spriteSheetName] = spriteSheet.animations || {};
@@ -88,16 +86,6 @@ Crafty.c('SpriteLoader', {
 		var spriteSheet = this._animationToSpriteSheet[animation];
 		ent.requires(spriteSheet, 'Sprite');
 		this._loadAnimationsForEntity(ent);
-	},
-	
-	_normalizeSpriteSheetData: function(data) {
-		if(!_(data).isArray()) {
-			return [[data]];
-		}
-		if(data.length > 0 && !_(data[0]).isArray()) {
-			return [data];
-		}
-		return data;
 	},
 
 	/**
