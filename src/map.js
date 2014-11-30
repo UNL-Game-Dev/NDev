@@ -63,21 +63,21 @@ Crafty.c("TiledMap", {
 		// Add tile bounds information.
 		for(var layerName in this.getLayers()) {
 			// If this layer isn't solid, don't bother.
-			if(this._layerInfo[layerName].properties.solid) {
-				var entities = this.getEntitiesInLayer(layerName);
-				for(var i = entities.length - 1; i >= 0; --i) {
-					var ent = entities[i];
-					this._collisionizeEntity(ent);
-				}
-			}
-			// Animate the entities if needed.
+			var layerProperties = this._layerInfo[layerName].properties;
 			var entities = this.getEntitiesInLayer(layerName);
 			for(var i = entities.length - 1; i >= 0; --i) {
 				var ent = entities[i];
 				var gid = ent.gid;
 				var tileInfo = this._tileInfo[gid];
-				if(tileInfo && tileInfo.animate) {
-					ent.requires('waterfall').animate(tileInfo.animate, -1);
+				if(layerProperties.solid) {
+					this._collisionizeEntity(ent);
+				}
+				if(tileInfo) {
+					var animate = tileInfo.animate;
+					if(animate) {
+						Crafty('SpriteLoader').loadAnimation(ent, animate);
+						ent.animate(animate, -1);
+					}
 				}
 			}
 		}

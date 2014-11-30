@@ -77,17 +77,17 @@ Crafty.c('SpriteLoader', {
 				if(!ent.has('Sprite')) {
 					return;
 				}
-
-				ent.bind('NewComponent', function(data) {
-					if(!(data.length === 1 && data[0] === 'SpriteAnimation')) {
-						self._defineAnimations(ent);
-					}
-				});
 				
 				// Define sprite animations, if definitions exist.
 				self._defineAnimations(ent);
 			});
 		}
+	},
+
+	loadAnimation: function(ent, animation) {
+		var spriteSheet = this._animationToSpriteSheet[animation];
+		ent.requires(spriteSheet, 'Sprite');
+		this._defineAnimations(ent);
 	},
 	
 	_normalizeSpriteSheetData: function(data) {
