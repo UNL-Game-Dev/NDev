@@ -13,7 +13,7 @@ Crafty.c("TiledMap", {
 	
 	loadMap:
 	function(mapName, loaded) {
-		var that = this;
+		var self = this;
 		
 		this.mapName = mapName;
 		
@@ -35,20 +35,20 @@ Crafty.c("TiledMap", {
 					_mapFolder + json.tilesets[i].image;
 			}
 			// Extract tile bounds information.
-			that._initTileInfo(json.tilesets);
+			self._initTileInfo(json.tilesets);
 			
 			// Extract layer information.
-			that._initLayerInfo(json.layers);
+			self._initLayerInfo(json.layers);
 			
 			// Load it in.
-			that.setMapDataSource(json);
-			that.createWorld(function(map) {
-				that._arrangeTileLayers();
-				that.collisionize();
+			self.setMapDataSource(json);
+			self.createWorld(function(map) {
+				self._arrangeTileLayers();
+				self.activate();
 				// Spawn Tiled-made objects.
-				that._spawnMapObjects(json.layers);
+				self._spawnMapObjects(json.layers);
 
-				that._loaded = true;
+				self._loaded = true;
 				console.log("Done creating world.");
 
 				if(loaded)
@@ -57,24 +57,38 @@ Crafty.c("TiledMap", {
 		});
 		return this;
 	},
-	
-	collisionize:
+
+	/**
+	 * Activate the tilemap, collisionizing all solid entities, setting up animations/sprites, etc.
+	 */
+	activate:
 	function() {
-		// Add tile bounds information.
-		for(var layerName in this.getLayers()) {
-			// If this layer isn't solid, don't bother.
-			if(this._layerInfo[layerName].properties.solid) {
-				var entities = this.getEntitiesInLayer(layerName);
-				for(var i = entities.length - 1; i >= 0; --i) {
-					var ent = entities[i];
-					this._collisionizeEntity(ent);
+		var self = this;
+
+		var layers = this.getLayers();
+		_(layers).each(function(layer, layerName) {
+			var layerProperties = self._layerInfo[layerName].properties;
+			var entities = self.getEntitiesInLayer(layerName);
+			_(entities).each(function(ent) {
+				var gid = ent.gid;
+				var tileInfo = self._tileInfo[gid];
+				if(layerProperties.solid) {
+					self._collisionizeEntity(ent);
 				}
-			}
-		}
+				if(tileInfo) {
+					var animate = tileInfo.animate;
+					if(animate) {
+						Crafty('SpriteLoader').loadAnimation(ent, animate);
+						ent.animate(animate, -1);
+					}
+				}
+			});
+		});
 	},
 	
 	_collisionizeEntity:
 	function(ent) {
+		var self = this;
 		// Can only collisionize an entity if it has a gid.
 		if(ent.gid) {
 			ent.addComponent("Collision");
@@ -84,7 +98,7 @@ Crafty.c("TiledMap", {
 			var gid = ent.gid;
 			var tileInfo = this._tileInfo[gid];
 			if(tileInfo) {
-				var tilesetInfo = this._tilesetInfo[tileInfo.tileseti];
+				var tilesetInfo = self._tilesetInfo[tileInfo.tileseti];
 				var bounds = tileInfo.pts;
 				
 				// Make entity collidable with custom bounds.
@@ -244,27 +258,40 @@ Crafty.c("TiledMap", {
 	 */
 	_spawnMapObjects:
 	function() {
-		for(var layerName in this.getLayers()) {
-			var layerInfo = this._layerInfo[layerName];
+		var self = this;
+		var layers = self.getLayers();
+		_(layers).each(function(layer, layerName) {
+			var layerInfo = self._layerInfo[layerName];
 			if(layerInfo.type === "objectgroup") {
 				var objects = layerInfo.objects;
-				for(var objecti in objects) {
-					var object = objects[objecti];
+				_(objects).each(function(object) {
 					// Create a crafty entity with the given map component,
 					// or the default if none given.
-					var craftyObject = Crafty.e(object.type || "DefaultMapObject");
-					if(craftyObject.mapObjectInit) {
-						craftyObject.mapObjectInit(object);
+					var ent = Crafty.e(object.type || "DefaultMapObject");
+					if(ent.mapObjectInit) {
+						ent.mapObjectInit(object);
 					} else {
 						console.error("Invalid object type: " + object.type);
 					}
 					// If layer is solid, collisionize the entity.
 					if(layerInfo.properties.solid) {
-						this._collisionizeEntity(craftyObject);
+						self._collisionizeEntity(ent);
+					}
+
+					// Get info about the entity's tile, if it is associated with one.
+					var gid = ent.gid;
+					var tileInfo = self._tileInfo[gid];
+					if(tileInfo) {
+						// Animate the entity if needed.
+						var animate = tileInfo.animate;
+						if(animate) {
+							Crafty('SpriteLoader').loadAnimation(ent, animate);
+							ent.animate(animate, -1);
+						}
 					}
 					// Set the entity's Z-index.
-					craftyObject.z = layerInfo.z;
-				}
+					ent.z = layerInfo.z;
+				});
 			} else if(layerInfo.type === "imagelayer") {
 				// This is probably a parallax layer.
 				var parallaxFactor = layerInfo.properties.parallaxFactor;
@@ -278,6 +305,6 @@ Crafty.c("TiledMap", {
 						});
 				}
 			}
-		}
+		});
 	}
 });
