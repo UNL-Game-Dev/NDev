@@ -64,12 +64,11 @@ Crafty.c("TiledMap", {
 	activate:
 	function() {
 		// Add tile bounds information.
-		for(var layerName in this.getLayers()) {
-			// If this layer isn't solid, don't bother.
+		var layers = this.getLayers();
+		_(layers).each(function(layer, layerName) {
 			var layerProperties = this._layerInfo[layerName].properties;
 			var entities = this.getEntitiesInLayer(layerName);
-			for(var i = entities.length - 1; i >= 0; --i) {
-				var ent = entities[i];
+			_(entities).each(function(ent) {
 				var gid = ent.gid;
 				var tileInfo = this._tileInfo[gid];
 				if(layerProperties.solid) {
@@ -82,8 +81,8 @@ Crafty.c("TiledMap", {
 						ent.animate(animate, -1);
 					}
 				}
-			}
-		}
+			});
+		});
 	},
 	
 	_collisionizeEntity:
