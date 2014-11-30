@@ -79,7 +79,7 @@ Crafty.c('SpriteLoader', {
 				}
 				
 				// Define sprite animations, if definitions exist.
-				self._defineAnimations(ent);
+				self._loadAnimationsForEntity(ent);
 			});
 		}
 	},
@@ -87,7 +87,7 @@ Crafty.c('SpriteLoader', {
 	loadAnimation: function(ent, animation) {
 		var spriteSheet = this._animationToSpriteSheet[animation];
 		ent.requires(spriteSheet, 'Sprite');
-		this._defineAnimations(ent);
+		this._loadAnimationsForEntity(ent);
 	},
 	
 	_normalizeSpriteSheetData: function(data) {
@@ -99,7 +99,14 @@ Crafty.c('SpriteLoader', {
 		}
 		return data;
 	},
-	
+
+	/**
+	 * Convert a variable representing a 2D vector in a variety of forms into the form [x, y].
+	 * @param param The 2D vector, in the form [x, y], {x: x, y: y}, or x.
+	 * If just a single number x is given, then the resulting vector will be [x, x].
+	 * @returns The vector in list format, i.e. [x, y].
+	 * @private
+	 */
 	_vec2: function(param) {
 		var _param = _(param);
 		if(_param.isArray()) {
@@ -123,7 +130,14 @@ Crafty.c('SpriteLoader', {
 			];
 		}
 	},
-	
+
+	/**
+	 * Get a sprite's data for a particular data set name.
+	 * @param sprite The name of the sprite to get data from.
+	 * @param dataSetName The name of the data set, e.g. 'hand.R'.
+	 * @param spriteTileCoords The coordinates of the cell to get data from, e.g. [2, 4].
+	 * @returns The data point corresponding to the given sprite tile coordinates.
+	 */
 	getSpriteData:
 	function(sprite, dataSetName, spriteTileCoords) {
 		var spriteSheetName = this._spriteToSpriteSheet[sprite];
@@ -142,7 +156,12 @@ Crafty.c('SpriteLoader', {
 		var dataPoint = data[spriteTileCoords[1]][spriteTileCoords[0]];
 		return dataPoint;
 	},
-	
+
+	/**
+	 * Get the tile coordinates of a sprite on its sprite sheet.
+	 * @param sprite The name of the sprite.
+	 * @returns The sprite's coordinates on its sheet.
+	 */
 	getSpriteTileCoords:
 	function(sprite) {
 		var spriteSheetName = this._spriteToSpriteSheet[sprite];
@@ -155,7 +174,12 @@ Crafty.c('SpriteLoader', {
 		}
 		return spriteSheet.sprites[sprite] || null;
 	},
-	
+
+	/**
+	 * Get the sprite of a given entity.
+	 * @param ent The entity.
+	 * @returns The entity's current sprite name.
+	 */
 	getSprite:
 	function(ent) {
 		for(var sprite in this._spriteToSpriteSheet) {
@@ -165,11 +189,13 @@ Crafty.c('SpriteLoader', {
 			return null;
 		}
 	},
-	
+
 	/**
-	 * Define the associated animations for a given entity.
+	 * Load the associated animations for a given entity.
+	 * @param ent The entity to load animations for.
+	 * @private
 	 */
-	_defineAnimations:
+	_loadAnimationsForEntity:
 	function(ent) {
 		var self = this;
 		_(this._spriteToSpriteSheet).each(function(spriteSheetName, spriteName) {
