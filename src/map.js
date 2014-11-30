@@ -258,34 +258,40 @@ Crafty.c("TiledMap", {
 	 */
 	_spawnMapObjects:
 	function() {
-		for(var layerName in this.getLayers()) {
-			var layerInfo = this._layerInfo[layerName];
+		var self = this;
+		var layers = self.getLayers();
+		_(layers).each(function(layer, layerName) {
+			var layerInfo = self._layerInfo[layerName];
 			if(layerInfo.type === "objectgroup") {
 				var objects = layerInfo.objects;
-				for(var objecti in objects) {
-					var object = objects[objecti];
+				_(objects).each(function(object) {
 					// Create a crafty entity with the given map component,
 					// or the default if none given.
-					var craftyObject = Crafty.e(object.type || "DefaultMapObject");
-					if(craftyObject.mapObjectInit) {
-						craftyObject.mapObjectInit(object);
+					var ent = Crafty.e(object.type || "DefaultMapObject");
+					if(ent.mapObjectInit) {
+						ent.mapObjectInit(object);
 					} else {
 						console.error("Invalid object type: " + object.type);
 					}
 					// If layer is solid, collisionize the entity.
 					if(layerInfo.properties.solid) {
-						this._collisionizeEntity(craftyObject);
+						self._collisionizeEntity(ent);
 					}
-					// Animate the entity if needed.
-					var gid = craftyObject.gid;
-					var tileInfo = this._tileInfo[gid];
-					if(tileInfo && tileInfo.animate) {
-						console.log(craftyObject[0]);
-						ent.animate(tileInfo.animate, -1);
+
+					// Get info about the entity's tile, if it is associated with one.
+					var gid = ent.gid;
+					var tileInfo = self._tileInfo[gid];
+					if(tileInfo) {
+						// Animate the entity if needed.
+						var animate = tileInfo.animate;
+						if(animate) {
+							Crafty('SpriteLoader').loadAnimation(ent, animate);
+							ent.animate(animate, -1);
+						}
 					}
 					// Set the entity's Z-index.
-					craftyObject.z = layerInfo.z;
-				}
+					ent.z = layerInfo.z;
+				});
 			} else if(layerInfo.type === "imagelayer") {
 				// This is probably a parallax layer.
 				var parallaxFactor = layerInfo.properties.parallaxFactor;
@@ -299,6 +305,6 @@ Crafty.c("TiledMap", {
 						});
 				}
 			}
-		}
+		});
 	}
 });

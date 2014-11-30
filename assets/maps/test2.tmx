@@ -411,5 +411,27 @@
     <property name="pickup" value="pistol"/>
    </properties>
   </object>
+  <object gid="39" x="266" y="205"/>
+  <object gid="47" x="266" y="173"/>
+  <object gid="39" x="266" y="237"/>
+  <object gid="39" x="266" y="269"/>
+  <object gid="39" x="266" y="301"/>
+  <object gid="39" x="266" y="333"/>
+  <object gid="39" x="266" y="365"/>
+  <object gid="39" x="266" y="397"/>
+  <object gid="39" x="266" y="429"/>
+  <object gid="39" x="266" y="461"/>
+  <object gid="39" x="266" y="493"/>
+  <object gid="39" x="266" y="525"/>
+  <object gid="39" x="266" y="557"/>
+  <object gid="39" x="266" y="589"/>
+  <object gid="39" x="266" y="621"/>
+  <object gid="39" x="266" y="653"/>
+  <object gid="39" x="266" y="685"/>
+  <object gid="39" x="266" y="717"/>
+  <object gid="39" x="266" y="749"/>
+  <object gid="39" x="266" y="781"/>
+  <object gid="39" x="266" y="813"/>
+  <object gid="39" x="266" y="845"/>
  </objectgroup>
 </map>
