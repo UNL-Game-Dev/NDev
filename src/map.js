@@ -63,16 +63,17 @@ Crafty.c("TiledMap", {
 	 */
 	activate:
 	function() {
-		// Add tile bounds information.
+		var self = this;
+
 		var layers = this.getLayers();
 		_(layers).each(function(layer, layerName) {
-			var layerProperties = this._layerInfo[layerName].properties;
-			var entities = this.getEntitiesInLayer(layerName);
+			var layerProperties = self._layerInfo[layerName].properties;
+			var entities = self.getEntitiesInLayer(layerName);
 			_(entities).each(function(ent) {
 				var gid = ent.gid;
-				var tileInfo = this._tileInfo[gid];
+				var tileInfo = self._tileInfo[gid];
 				if(layerProperties.solid) {
-					this._collisionizeEntity(ent);
+					self._collisionizeEntity(ent);
 				}
 				if(tileInfo) {
 					var animate = tileInfo.animate;
@@ -87,6 +88,7 @@ Crafty.c("TiledMap", {
 	
 	_collisionizeEntity:
 	function(ent) {
+		var self = this;
 		// Can only collisionize an entity if it has a gid.
 		if(ent.gid) {
 			ent.addComponent("Collision");
@@ -96,7 +98,7 @@ Crafty.c("TiledMap", {
 			var gid = ent.gid;
 			var tileInfo = this._tileInfo[gid];
 			if(tileInfo) {
-				var tilesetInfo = this._tilesetInfo[tileInfo.tileseti];
+				var tilesetInfo = self._tilesetInfo[tileInfo.tileseti];
 				var bounds = tileInfo.pts;
 				
 				// Make entity collidable with custom bounds.
