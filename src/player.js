@@ -28,11 +28,12 @@ Crafty.c("Player", {
 			.requires("Controls")
 			.requires("PlatformControls")
 			.requires("ClimbingControls")
+			.requires("SpriteData")
 		// Collision bounds
 			.collision([11, 0], [21, 0], [21, 32], [11, 32])
 			.attr({ sensorBounds: [11, 0, 21, 32] })
 		// Load controls
-			.loadKeyMapping("assets/controls/player_controls.xml")
+			.loadKeyMapping("assets/controls/player.json")
 		// Bind animations
 			.bind("Stand", function() {
 				if (!this._setCollisionNormal()) {
@@ -59,7 +60,7 @@ Crafty.c("Player", {
 				}
 				this.isCrouching = false;
 			})
-			.bind("Walk", function(ev) {
+			.bind("Walk", function() {
 				if (!this._setCollisionNormal()) {
 					if (this._setCollisionCrouch()) {
 						this.trigger("Crawl");
@@ -124,7 +125,7 @@ Crafty.c("Player", {
 				if(ev.control === "equip") {
 					this.switchItem();
 				} else if(ev.control === "action") {
-					this.activateItem({ direction: this._actionDirection() });
+					this._tryActivateItem();
 				}
 			})
 			.bind("ControlReleased", function(ev) {
@@ -145,7 +146,7 @@ Crafty.c("Player", {
 				recoveryTime: defaultRecoveryTime,
 
 				// Whether or not player can be hit.
-				invincible: false,
+				invincible: false
 			});
         
 		this.bind("Hurt", function(hit) {
@@ -159,9 +160,27 @@ Crafty.c("Player", {
 			}
 		});
 		
+		this.bind("ItemActivate", function(data) {
+			var oldReel = this.reel();
+			if(data.item === "harpoon" || data.item === "pistol") {
+				this.animate(this.dxSelect("PlayerShootLeft", "PlayerShootRight"), 0);
+			}
+			if(oldReel === "PlayerWalkLeft" || oldReel === "PlayerWalRight"
+			|| oldReel === "PlayerStandLeft" || oldReel === "PlayerStandRight") {
+				this.one("AnimationEnd", function(reel) {
+					this.timeout(function() {
+						this.animate(oldReel, -1);
+					}, 0);
+				});
+			}
+		});
+		
 		this.bind("Crush", this.die);
         
 		this.makeScrollTarget();
+		
+		// Try to activate an item, and limit rate at which it can be activated.
+		this._tryActivateItem = _.throttle(this._activateItem, 300, { trailing: false })
 	},
 	
 	die:
@@ -173,6 +192,9 @@ Crafty.c("Player", {
 		}, 0.5);
 	},
 	
+	/**
+	 * Get the direction of the anticipated action in the form [x,y].
+	 */
 	_actionDirection:
 	function() {
 		var dir = Crafty("Controls").getControl("Direction");
@@ -182,6 +204,9 @@ Crafty.c("Player", {
 		return dir;
 	},
 	
+	/**
+	 * Set the collision bounds to that of a standing position.
+	 */
 	_setCollisionNormal:
 	function() {
 		this.collision(new Crafty.polygon([[11,0], [21,0], [21,32], [11,32]]));
@@ -190,11 +215,22 @@ Crafty.c("Player", {
 		return true;
 	},
 	
+	/**
+	 * Set the collision bounds to that of crouching.
+	 */
 	_setCollisionCrouch:
 	function() {
 		this.collision(new Crafty.polygon([[11,16], [21,16], [21,32], [11,32]]));
 		if ( this.hitTile() )
 			return false;
 		return true;
+	},
+	
+	/**
+	 * Activate the currently equipped item.
+	 */
+	_activateItem:
+	function() {
+		this.activateItem({ direction: this._actionDirection() });
 	}
 });

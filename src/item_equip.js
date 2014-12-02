@@ -27,8 +27,46 @@ Crafty.c("ItemEquip", {
 		this._loadItems();
 		this.bind("GameStateLoaded", this._loadItems);
 		this.bind("PickupAdded", function(pickupData) {
-			this._addItem(pickupData.name);
+			if(pickupData.count) {
+				this._addItem(pickupData.name);
+			}
+			
+			this.equipItem(pickupData.name);
 		});
+		
+		this.bind("EnterFrame", function() {
+			var itemInfo = this._itemsInfo[this._equippedItemIndex];
+			if(itemInfo) {
+				var data = {
+					item: itemInfo.name,
+					owner: this
+				};
+				_([itemInfo.item, this]).each(function(ent) {
+					ent.trigger("ItemEquipped", data);
+				});
+			}
+		});
+	},
+	
+	/**
+	 * Equip an item, given the name or index of the item.
+	 */
+	equipItem:
+	function(itemId) {
+		if(_(itemId).isString()) {
+			var itemName = itemId;
+			itemId = -1;
+			for(var i = 0; i < this._itemsInfo.length; ++i) {
+				if(this._itemsInfo[i].name === itemName) {
+					itemId = i;
+					break;
+				}
+			}
+		}
+		if(itemId > this._itemsInfo.length) {
+			itemId = -1;
+		}
+		this._switchItemToIndex(itemId);
 	},
 	
 	/**
@@ -36,30 +74,35 @@ Crafty.c("ItemEquip", {
 	 */
 	switchItem:
 	function() {
+		this._switchItemToIndex(this._getNextItemIndex(this._equippedItemIndex));
+		
+		return this;
+	},
+	
+	_switchItemToIndex:
+	function(index) {
 		var oldItemInfo = this._itemsInfo[this._equippedItemIndex];
-		this._equippedItemIndex =
-			this._getNextItemIndex(this._equippedItemIndex);
-		var newItemInfo = this._itemsInfo[this._equippedItemIndex];
+		var newItemInfo = this._itemsInfo[index];
 		
 		if(oldItemInfo) {
 			var data = {
-				item: oldItemInfo.name
+				item: oldItemInfo.name,
+				owner: this
 			};
-			_([oldItemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemUnequip", data);
-			});
+			oldItemInfo.item.trigger('ItemUnequip', data);
+			this.trigger('ItemUnequip', data);
 		}
 		
 		if(newItemInfo) {
 			var data = {
-				item: newItemInfo.name
+				item: newItemInfo.name,
+				owner: this
 			};
-			_([newItemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemEquip", data);
-			});
+			newItemInfo.item.trigger('ItemEquip', data);
+			this.trigger('ItemEquip', data);
 		}
 		
-		return this;
+		this._equippedItemIndex = index;
 	},
 	
 	/**
@@ -79,13 +122,13 @@ Crafty.c("ItemEquip", {
 		var itemInfo = this._itemsInfo[this._equippedItemIndex];
 		if(itemInfo) {
 			// Trigger the activate signal for both the item and the holder.
-			var itemActivateData = {
+			var data = {
 				item: itemInfo.name,
 				owner: this,
 				params: params
 			};
 			_([itemInfo.item, this]).each(function(ent) {
-				ent.trigger("ItemActivate", itemActivateData);
+				ent.trigger("ItemActivate", data);
 			});
 		}
 		
@@ -136,7 +179,7 @@ Crafty.c("ItemEquip", {
 				x: this.x + this.w / 2,
 				y: this.y + this.h / 2
 			});
-			this.attach(newItem);
+			//this.attach(newItem);
 			var itemInfo = {
 				name: pickupName,
 				item: newItem

@@ -26,7 +26,7 @@ Crafty.c("Sensor", {
 		
 		var hits = this._sensor.hit(component || "Collision");
 		return hits && _(hits).any(function(hit) {
-		                               return hit.obj.getId() !== this.getId();
-		                           }, this);
+			return hit.obj.getId() !== this.getId();
+		}, this);
 	}
 });

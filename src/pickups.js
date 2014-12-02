@@ -4,11 +4,6 @@ function PickupEntry(name, max) {
 	this.max = max || 1;
 }
 
-function addPickup(pickup) {
-	Crafty("PickupState").addPickup(pickup);
-	throw "Debug function!";
-}
-
 /**
  * Keeps track of pickups that the player encounters and uses.
  */
@@ -66,7 +61,7 @@ Crafty.c("PickupState", {
 		pickups[pickupName] = current;
 		
 		// Trigger pickup add event, signaling any interested components.
-		Crafty.trigger("PickupAdded", { name: pickupName, count: count });
+		Crafty.trigger("PickupAdded", { name: pickupName, count: current - old });
 		
 		// Return actual applied difference for potential gameplay usage.
 		 return current - old;

@@ -39,6 +39,9 @@ Crafty.c("PlatformControls", {
 		
 		this.stopInMidAir = true;
 		
+		// X position at which to pivot when turning left/right, relative to the player's center.
+		this._turnPivot = 0;
+		
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
