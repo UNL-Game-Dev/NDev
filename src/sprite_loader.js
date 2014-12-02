@@ -42,8 +42,8 @@ Crafty.c('SpriteLoader', {
 			
 			_(sprites.spriteSheets).each(function(spriteSheet, spriteSheetName) {
 				spriteSheet.url = getImageUrl(spriteSheetName);
-				spriteSheet.tileSize = self._vec2(spriteSheet.tileSize);
-				spriteSheet.padding = self._vec2(spriteSheet.padding);
+				spriteSheet.tileSize = vec2(spriteSheet.tileSize);
+				spriteSheet.padding = vec2(spriteSheet.padding);
 				spriteSheet.paddingAroundBorder = !!spriteSheet.paddingAroundBorder;
 				spriteSheet.sprites = spriteSheet.sprites || _.object([spriteSheetName], [[0, 0]]);
 				spriteSheet.data = spriteSheet.data || {};
@@ -89,57 +89,31 @@ Crafty.c('SpriteLoader', {
 	},
 
 	/**
-	 * Convert a variable representing a 2D vector in a variety of forms into the form [x, y].
-	 * @param param The 2D vector, in the form [x, y], {x: x, y: y}, or x.
-	 * If just a single number x is given, then the resulting vector will be [x, x].
-	 * @returns The vector in list format, i.e. [x, y].
-	 * @private
-	 */
-	_vec2: function(param) {
-		var _param = _(param);
-		if(_param.isArray()) {
-			param = _param.map(parseFloat);
-			if(param.length === 1) {
-				return param.concat(param);
-			}
-			if(param.length === 0) {
-				return [0, 0];
-			}
-			return param.slice(0, 2);
-		} else if(_param.isObject()) {
-			return [
-				parseFloat(param.x || 0),
-				parseFloat(param.y || 0)
-			];
-		} else {
-			return [
-				parseFloat(param || 0),
-				parseFloat(param || 0)
-			];
-		}
-	},
-
-	/**
 	 * Get a sprite's data for a particular data set name.
 	 * @param sprite The name of the sprite to get data from.
 	 * @param dataSetName The name of the data set, e.g. 'hand.R'.
 	 * @param spriteTileCoords The coordinates of the cell to get data from, e.g. [2, 4].
-	 * @returns The data point corresponding to the given sprite tile coordinates.
+	 * @returns dataPoint The data point corresponding to the given sprite tile coordinates.
 	 */
 	getSpriteData:
 	function(sprite, dataSetName, spriteTileCoords) {
 		var spriteSheetName = this._spriteToSpriteSheet[sprite];
 		if(!spriteSheetName) {
-			return;
+			return null;
 		}
 		var spriteSheet = this._spriteSheets[spriteSheetName];
 		var data = spriteSheet.data[dataSetName];
 		if(!data) {
-			return;
+			return null;
+		}
+		spriteTileCoords = vec2(spriteTileCoords);
+		if(!data[spriteTileCoords[1]]) {
+			console.log(spriteTileCoords);
+			console.log(data, dataSetName, sprite);
 		}
 		if(spriteTileCoords[1] >= data.length
 		|| spriteTileCoords[0] >= data[spriteTileCoords[1]].length) {
-			return;
+			return null;
 		}
 		var dataPoint = data[spriteTileCoords[1]][spriteTileCoords[0]];
 		return dataPoint;
@@ -148,7 +122,7 @@ Crafty.c('SpriteLoader', {
 	/**
 	 * Get the tile coordinates of a sprite on its sprite sheet.
 	 * @param sprite The name of the sprite.
-	 * @returns The sprite's coordinates on its sheet.
+	 * @returns coords The sprite's coordinates on its sheet.
 	 */
 	getSpriteTileCoords:
 	function(sprite) {
@@ -160,13 +134,14 @@ Crafty.c('SpriteLoader', {
 		if(!spriteSheet) {
 			return null;
 		}
-		return spriteSheet.sprites[sprite] || null;
+		var coords = spriteSheet.sprites[sprite] || null;
+		return coords;
 	},
 
 	/**
 	 * Get the sprite of a given entity.
 	 * @param ent The entity.
-	 * @returns The entity's current sprite name.
+	 * @returns sprite The entity's current sprite name.
 	 */
 	getSprite:
 	function(ent) {
@@ -257,6 +232,37 @@ Crafty.c('SpriteData', {
 			: null;
 	}
 });
+
+/**
+ * Convert a variable representing a 2D vector in a variety of forms into the form [x, y].
+ * @param param The 2D vector, in the form [x, y], {x: x, y: y}, or x.
+ * If just a single number x is given, then the resulting vector will be [x, x].
+ * @returns vector The vector in list format, i.e. [x, y].
+ * @private
+ */
+function vec2(param) {
+	var _param = _(param);
+	if(_param.isArray()) {
+		param = _.map(param, parseFloat);
+		if(param.length === 1) {
+			return param.concat(param);
+		}
+		if(param.length === 0) {
+			return [0, 0];
+		}
+		return param.slice(0, 2);
+	} else if(_param.isObject()) {
+		return [
+			parseFloat(param.x || 0),
+			parseFloat(param.y || 0)
+		];
+	} else {
+		return [
+			parseFloat(param || 0),
+			parseFloat(param || 0)
+		];
+	}
+}
 
 /**
  * Get the directory of a file path.

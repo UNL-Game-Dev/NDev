@@ -313,8 +313,16 @@
 		"pistol": {
 			"tileSize": 8,
 			"data": {
-				"origin": { "x": 3, "y": 4 },
-				"tip": { "x": 7, "y": 2 }
+				"origin": [
+				    [
+					    { "x": 3, "y": 4 }
+					]
+				],
+				"tip": [
+				    [
+					    { "x": 7, "y": 2 }
+					]
+				]
 			}
 		},
 		"dynamite": { "tileSize": 16 },
