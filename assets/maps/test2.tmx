@@ -180,6 +180,21 @@
    </image>
   </tile>
  </tileset>
+ <tileset firstgid="56" name="lava" tilewidth="32" tileheight="32">
+  <image source="../sprites/lava.png" width="256" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="animate" value="lavafall"/>
+    <property name="lavafall" value="true"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="animate" value="lavafall_top"/>
+    <property name="lavafall" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
  <imagelayer name="bg_parallax" width="100" height="100">
   <image source="monoliths.png"/>
   <properties>
@@ -237,7 +252,7 @@
  </layer>
  <layer name="bg" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1k0KwkAMBtBewX9BQXfe/4ZmUaFkUwQ7GZz3ILTdhQTydZoA/sdrUdSzj77YR1/soy95H4eoY107w8v7uERd69oZXt7HLepe1w7JI+pZ3cSgclbIjrbyvHNWyI628rxzViy/T1G7qP38/Lyft29zGHn+OStkR1t53vKjlvzoyzf5wfbW8sO9amstr92rvrhXffG/CwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwC+9ATaNCdc=
+   eJzt1ksKwkAMBuBewbegoDuv4f1P1SwUSjal4Dxwvg9C211ImPk7TQD/47Uo2tuyj3fZVpicj97YR1/yPg5Rx3btDC/v4xJ1bdfO8PI+blH3du2QPKKerZsYVM4K2VFXnnfOCtlRV553zorl9ylqF7X/PL/v5/JtDiPPP2eF7Kgrz1t+tCU/+rIlPyhvLT/cV3Wt5bX7qi/uq7743wUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOCXZqS4Chc=
   </data>
  </layer>
  <objectgroup name="entities_behind" width="100" height="100">
