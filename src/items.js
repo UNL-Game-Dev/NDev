@@ -7,7 +7,7 @@
  * Example item.
  */
 Crafty.c('ExampleItem', {
-	
+
 	init:
 	function() {
 		this.requires('2D');
@@ -30,17 +30,21 @@ Crafty.c('ExampleItem', {
  * Dynamite item.
  */
 Crafty.c('DynamiteItem', {
-	
+
 	init:
 	function() {
-		this.requires('2D');
+		this.requires('2D, Attachable');
+		this.bind('ItemAttach', function(data) {
+			var owner = data.owner;
+			this.attachTo(owner, 'hand.R');
+		});
 		this.bind('ItemActivate', function(data) {
 			var dynamite = Crafty.e('Dynamite');
 			dynamite.setPhysPos(
 				this.x - dynamite.w / 2,
 				this.y - dynamite.h / 2);
 			dynamite.ignite();
-			
+
 			dynamite._phX = dynamite._phPX + data.params.direction[0] * 3;
 			dynamite._phY = dynamite._phPY + data.params.direction[1] * 3;
 		});
@@ -51,11 +55,11 @@ Crafty.c('DynamiteItem', {
  * Pistol item.
  */
 Crafty.c('PistolItem', {
-	
+
 	init:
 	function() {
 		this.requires('2D, Canvas, Sprite, Attachable, SpriteData').setSprite('pistol');
-		
+
 		this.bind('ItemAttach', function(data) {
 			var owner = data.owner;
 			this.attachTo(owner, 'hand.R', {
@@ -65,15 +69,15 @@ Crafty.c('PistolItem', {
 			});
 			this.attached = false;
 		});
-		
+
 		this.bind('ItemEquip', function() {
 			this.attached = true;
 		});
-		
+
 		this.bind('ItemUnequip', function() {
 			this.attached = false;
 		});
-		
+
 		this.bind('ItemActivate', function(data) {
 			var bullet = Crafty.e('Projectile');
 			bullet.setPhysPos(this.x - bullet.w / 2, this.y - bullet.h / 2);
@@ -90,37 +94,37 @@ Crafty.c('HarpoonItem', {
 	init:
 	function() {
 		this.requires('2D, Canvas, Sprite, Tween, SpriteData, Attachable').setSprite('harpoon');
-		
+
 		this.visible = false;
-		
+
 		// The maximum length of the harpoon line.
 		this._maxLength = 128;
 		this._minLength = 24;
 		this._thresholdLength = 32;
-		
+
 		// The firing direction.
 		this._direction = [1, 0];
-		
+
 		// The current line length.
 		this._length = 0;
-		
+
 		// The shooting speed of the line, in pixels/sec.
 		this._speed = 512;
-		
+
 		// The entity using the harpoon.
 		this._owner = null;
-		
+
 		// Whether or not the harpoon is being fired or attached to something.
 		this._active = false;
-		
+
 		// Whether or not the harpoon is attached to something.
 		this._attached = false;
-		
+
 		// Time for the harpoon to reel in.
 		this._reelTime = 0.3;
-		
+
 		var thickness = 2;
-		
+
 		// The line entity.
 		this._line = Crafty.e('2D, Canvas, Color, Collision, Attachable')
 			.attr({
@@ -133,7 +137,7 @@ Crafty.c('HarpoonItem', {
 			.color('#000000')
 			.origin(0, thickness / 2)
 			.attachTo(this, 'tip');
-		
+
 		this.bind('ItemAttach', function(data) {
 			this._owner = data.owner.addComponent('DistanceConstraint');
 			var owner = this._owner;
@@ -199,7 +203,7 @@ Crafty.c('HarpoonItem', {
 							this._line.w--;
 						}
 						this._length = this._line.w;
-						
+
 
 						// Attach owner to object when object is hit.
 						var target = hits[0].obj;
@@ -231,13 +235,13 @@ Crafty.c('HarpoonItem', {
 			}
 		});
 	},
-	
+
 	/**
 	 * Fire the harpoon gun.
 	 */
 	fire:
 	function(dir) {
-		
+
 		var time = this._maxLength / this._speed * 1000;
 
 		this._direction = dir || this._direction;
@@ -253,10 +257,10 @@ Crafty.c('HarpoonItem', {
 				this.animate('idle');
 			}
 		});
-		
+
 		return this;
 	},
-	
+
 	/**
 	 * Reel in the harpoon, drawing the owner towards the target entity.
 	 */
@@ -265,10 +269,10 @@ Crafty.c('HarpoonItem', {
 		this.attr({ _reeling: true });
 		this.tween({ _length: this._minLength }, this._reelTime * 1000);
 		this.timeout(function() { this._reeling = false; }, this._reelTime * 1000);
-		
+
 		return this;
 	},
-	
+
 	/**
 	 * Deactivate the harpoon and unattach it from everything.
 	 */
@@ -283,7 +287,7 @@ Crafty.c('HarpoonItem', {
 			_attached: false,
 			_reeling: false
 		});
-		
+
 		return this;
 	}
 });
@@ -298,12 +302,12 @@ Crafty.c('Attachable', {
 		self.attached = false;
 
 		self.bind('EnterFrame', function() {
-			
+
 			if(!self.attached || !self._attachEntity) {
 				self.visible = false;
 				return;
 			}
-			
+
 			var spriteData = self._attachEntity.getSpriteData(self._attachPoint);
 			_(self._attachProperties).each(function(propertyFn, property) {
 				self[property] = propertyFn(spriteData);
@@ -324,7 +328,7 @@ Crafty.c('Attachable', {
 			self.z = self._attachEntity.z + Math.abs(offsetZ);
 		});
 	},
-	
+
 	/**
 	 * Attach the entity to a certain point on another entity.
 	 */
@@ -334,7 +338,7 @@ Crafty.c('Attachable', {
 		this._attachPoint = point || null;
 		this._attachProperties = attachProperties || {};
 		this.attached = true;
-		
+
 		return this;
 	},
 
