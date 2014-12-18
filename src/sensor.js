@@ -3,7 +3,7 @@
  */
 
 Crafty.c("Sensor", {
-	
+
 	init:
 	function() {
 		// A sensor that is exactly the same as the current entity.
@@ -13,20 +13,28 @@ Crafty.c("Sensor", {
 		this._sensor.addComponent("Collision");
 		this.sensorBounds = [0, 0, this.w, this.h];
 	},
-	
+
 	sense:
-	function(component, x, y, margin) {
+	function(component, x, y, margin, local) {
 		margin = margin || 0;
-		
+		if(local === undefined) {
+			local = true;
+		}
+
+		if(this.__c['PlatformControls'] && local) {
+			console.log(arguments.callee.caller);
+		}
+
 		var bounds = this.sensorBounds;
-		this._sensor.x = x + bounds[0] - margin;
-		this._sensor.y = y - bounds[1] - margin;
+		this._sensor.x = (local ? this.x : 0) + x + bounds[0] - margin;
+		this._sensor.y = (local ? this.y : 0) + y - bounds[1] - margin;
 		this._sensor.w = bounds[2] - bounds[0] + 2 * margin;
 		this._sensor.h = bounds[3] - bounds[1] + 2 * margin;
-		
+
 		var hits = this._sensor.hit(component || "Collision");
-		return hits && _(hits).any(function(hit) {
-			return hit.obj.getId() !== this.getId();
-		}, this);
+		var id = this.getId();
+		return hits && _(hits).filter(function(hit) {
+			return hit.obj.getId() !== id;
+		}).value() || false;
 	}
 });

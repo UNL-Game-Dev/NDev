@@ -386,14 +386,14 @@
 		  	"tileSize": 32,
 			"animations": {
 		  		"lavafall": {
-					"duration": 500,
+					"duration": 1000,
 					"frames": {
 					  	"start": [0, 0],
 					  	"count": 8
 					}
 				},
 				"lavafall_top": {
-					"duration": 500,
+					"duration": 1000,
 				  	"frames": {
 			  			"start": [0, 1],
 			  			"count": 8

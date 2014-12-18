@@ -7,7 +7,7 @@
 var defaultRecoveryTime = 1.0;
 
 Crafty.c("Player", {
-    
+
 	init:
 	function() {
 		var controls = Crafty("Controls");
@@ -43,7 +43,7 @@ Crafty.c("Player", {
 					}
 					this._setCollisionNormal();
 				}
-				
+
 				// Play stand animation.
 				// If landing animation is playing, wait until done.
 				var reel = this.reel();
@@ -82,7 +82,7 @@ Crafty.c("Player", {
 			})
 			.bind("Fall", function() {
 				this._setCollisionNormal();
-				
+
 				// Play fall animation.
 				// If jumping animation is playing, wait until done.
 				var reel = this.reel();
@@ -97,7 +97,7 @@ Crafty.c("Player", {
 						}
 					});
 				}
-				
+
 				this.isCrouching = false;
 			})
 			.bind("Land", function() {
@@ -148,7 +148,7 @@ Crafty.c("Player", {
 				// Whether or not player can be hit.
 				invincible: false
 			});
-        
+
 		this.bind("Hurt", function(hit) {
 			if(!this.invincible) {
 				this.invincible = true;
@@ -159,7 +159,7 @@ Crafty.c("Player", {
 				}, this.recoveryTime * 1000);
 			}
 		});
-		
+
 		this.bind("ItemActivate", function(data) {
 			var oldReel = this.reel();
 			if(data.item === "harpoon" || data.item === "pistol") {
@@ -174,15 +174,15 @@ Crafty.c("Player", {
 				});
 			}
 		});
-		
+
 		this.bind("Crush", this.die);
-        
+
 		this.makeScrollTarget();
-		
+
 		// Try to activate an item, and limit rate at which it can be activated.
 		this._tryActivateItem = _.throttle(this._activateItem, 300, { trailing: false })
 	},
-	
+
 	die:
 	function() {
 		console.log("You died!");
@@ -191,7 +191,7 @@ Crafty.c("Player", {
 			Crafty.trigger("SpawnPlayer");
 		}, 0.5);
 	},
-	
+
 	/**
 	 * Get the direction of the anticipated action in the form [x,y].
 	 */
@@ -203,7 +203,7 @@ Crafty.c("Player", {
 		}
 		return dir;
 	},
-	
+
 	/**
 	 * Set the collision bounds to that of a standing position.
 	 */
@@ -214,7 +214,7 @@ Crafty.c("Player", {
 			return false;
 		return true;
 	},
-	
+
 	/**
 	 * Set the collision bounds to that of crouching.
 	 */
@@ -225,7 +225,7 @@ Crafty.c("Player", {
 			return false;
 		return true;
 	},
-	
+
 	/**
 	 * Activate the currently equipped item.
 	 */

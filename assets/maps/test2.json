@@ -1159,7 +1159,8 @@
             {
              "0":
                 {
-                 "animate":"waterfall"
+                 "animate":"waterfall",
+                 "waterfall":"waterfall"
                 },
              "16":
                 {
@@ -1170,7 +1171,8 @@
                 {
                  "animate":"waterfall_top",
                  "oneway":"true",
-                 "phaseable":"true"
+                 "phaseable":"true",
+                 "waterfall":"waterfall"
                 }
             },
          "tilewidth":32
@@ -1193,12 +1195,12 @@
              "0":
                 {
                  "animate":"lavafall",
-                 "lavafall":"true"
+                 "waterfall":"lavafall"
                 },
              "8":
                 {
                  "animate":"lavafall_top",
-                 "lavafall":"true"
+                 "waterfall":"lavafall"
                 }
             },
          "tilewidth":32

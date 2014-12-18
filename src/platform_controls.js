@@ -6,10 +6,10 @@
  * landing.
  */
 Crafty.c("PlatformControls", {
-	
+
 	// What factor of normal control the player retains in the air.
 	airControlFactor: 0.6,
-	
+
 	// The differences in velocity to apply in certain situations:
 	// Accelerating up to max speed.
 	accelerateDV: 0.2,
@@ -17,38 +17,38 @@ Crafty.c("PlatformControls", {
 	slowToStopDV: 0.3,
 	// Actively slowing down when turning around.
 	activeBrakeDV: 0.5,
-	
+
 	// Time to recover after being hit.
 	recoveryTime: 1.0,
 
 	// Object crouch-state
 	isCrouching: false,
-	
+
 	init:
 	function() {
-		
+
 		this.requires("TileConstraint, Sensor, Groundable, Controls");
-		
+
 		// Direction that we are facing in the x-direction.
 		this.dx = +1;
-		
+
 		this._isJumping = false;
 		this._forceRemaining = 0;
-		
+
 		this.invincible = false;
-		
+
 		this.stopInMidAir = true;
-		
+
 		// X position at which to pivot when turning left/right, relative to the player's center.
 		this._turnPivot = 0;
-		
+
 		// A strange, non-physical x velocity. (Does not get affected as player
 		// goes up and down slopes, like it normally would if phAX/phX used!)
 		this._vx = 0;
-		
+
 		// Bind event handlers.
 		this.requires("StateMachine").state("Platform", {
-			
+
 			EnterState:
 			function() {
 				// Ensure walking in the correct direction upon entering this
@@ -62,7 +62,7 @@ Crafty.c("PlatformControls", {
 					this.trigger("Walk");
 				}
 			},
-			
+
 			ControlPressed:
 			function(ev) {
 				if(ev.control === "left" || ev.control === "right") {
@@ -72,7 +72,7 @@ Crafty.c("PlatformControls", {
 					} else if (ev.control === "right") {
 						this.dx = +1;
 					}
-					
+
 					if(this.keyDown("down") && this.isGrounded()) {
 						this.trigger("Crawl");
 					} else {
@@ -96,7 +96,7 @@ Crafty.c("PlatformControls", {
 					this.attemptPhase = true;
 				}
 			},
-			
+
 			ControlReleased:
 			function(ev) {
 				if(ev.control === "left" || ev.control === "right") {
@@ -135,19 +135,19 @@ Crafty.c("PlatformControls", {
 					this._isJumping = false;
 				}
 			},
-			
+
 			PrePhysicsTick:
 			function() {
-				
+
 				// See if touching ladder. If so, switch to ladder state.
 				if((this.dx > 0
-				&& this.sense("ClimbableLeft", this._phX + 5, this._phY, 0))
+				&& this.sense("ClimbableLeft", this._phX + 5, 0, 0, false))
 				|| (this.dx < 0
-				&& this.sense("ClimbableRight", this._phX - 5, this._phY, 0))) {
+				&& this.sense("ClimbableRight", this._phX - 5, this._phY, 0, false))) {
 					this.setState("Climb");
 					return;
 				}
-				
+
 				// The key "x" target difference.
 				var kx = this.getControl("Horizontal");
 
@@ -160,13 +160,13 @@ Crafty.c("PlatformControls", {
 				if(pushableLeft) {
 					pushableLeft.push([-1,0]);
 				}
-				
+
 				// The longer you hold the jump key, the higher you will go.
 				if(this._forceRemaining > 0) {
 					this._forceRemaining -= this.keyDown("jump") ? 0.08 : 0.25;
 					this._phY = this._phPY - this._forceRemaining - 2;
 				}
-				
+
 				var targetSpeed = this.isCrouching ? 0.9 : 2.8;
 
 				// The desired x vel.
@@ -177,7 +177,7 @@ Crafty.c("PlatformControls", {
 					// If not, lose a lot of control.
 					desvx *= this.airControlFactor;
 				}
-				
+
 				var vx = this._vx;
 
 				var avx = Math.abs(vx);
@@ -207,11 +207,11 @@ Crafty.c("PlatformControls", {
 					// direction, so do it a little quicker.
 					vx = approach(vx, desvx, this.activeBrakeDV);
 				}
-				
+
 				this._phX = this._phPX + vx;
-				
+
 				this._vx = vx;
-				
+
 				// Check if we should stand up
 				// This is needed for when the down arrow was released with an obstacle overhead
 				if(!this.keyDown("down") && this.isCrouching) {
@@ -222,7 +222,7 @@ Crafty.c("PlatformControls", {
 					}
 				}
 			},
-			
+
 			EvaluateInertia:
 			function() {
 				if(this.isGrounded()) {
@@ -251,11 +251,11 @@ Crafty.c("PlatformControls", {
 					this._phPY = this._phY;
 					this._phX += this._phX - px;
 					this._phY += this._phY - py;
-					
+
 					this._phAY += 580;
 				}
 			},
-			
+
 			GroundLand:
 			function() {
 				// Trigger jumping, landing, walking, or crouching.
@@ -279,22 +279,22 @@ Crafty.c("PlatformControls", {
 					}
 				}
 			},
-			
+
 			GroundLeave:
 			function() {
 				// Trigger falling.
 				this.trigger("Fall");
 			},
-			
+
 			Impulse:
 			function(impulse) {
 				this._vx += impulse[0];
 			}
 		});
-		
+
 		this.setState("Platform");
 	},
-	
+
 	/**
 	 * Select a value based on which direction we are facing, given a left and
 	 * right value.
@@ -303,7 +303,7 @@ Crafty.c("PlatformControls", {
 	function(leftValue, rightValue) {
 		return this.dx < 0 ? leftValue : rightValue;
 	},
-	
+
 	_jump:
 	function() {
 		this._isJumping = true;

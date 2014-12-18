@@ -85,6 +85,7 @@
   <tile id="0">
    <properties>
     <property name="animate" value="waterfall"/>
+    <property name="waterfall" value="waterfall"/>
    </properties>
    <image format="png">
     <data encoding="base64">iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAeVJREFUWIWtV0FywjAMVBh+ABf+wvCD9LHwgpb+hQPJG9RLFeT1ypZpdyYzgBVpY2tXYVJVnaSECsdtXejv8+EY3FHD11IRmVRVcaFHZAQsr8+9x4XT95eIiDzOl+pmRqgV0ysuIrLDxcf5UhDBYni1YlgefIjtCJA1I+AJZuB3M00AibCEljQi6dEqvhGYokXhZ8oKt3ammVt/sX3oQNx1un8W34XEeVyXZ7VWydDYoua91kfUoZDrw+UJfSAi4Ylk4plBpY3oP0yoV1zE+UAljz8WwN+jtcoJWUKmhMjxvHJQNUwpXSMaMR6GnhlRI2J6Z0QyRtQqXhC4rQvt8JFCrCACCRQ9YCTwDH3CUTJRYeuV4ghMx2g6UVMxRNvtPWI+HEsCvggGImtDbx608nkl7exDRvf+ifCc2bm3ir+SBsPIBkdmKLGBdF2eVY5oaIXTa2QNY3DyRXGVE6LTRS5n26tk4ERvzwyFCrL+H3W3h3W6AR2xGkbvIvOfoPViuseFSUq2zI4nF6tJEhEqK86YjSdjxKvEJM/jfOGzwJ7kti7FK1OPCGrfNy7e15yGngA2T4YIFommKCpoPhxfBCwA50FLGSPH5PMXswYJeIYbyySB3hj2O7wdlzUhe9Xq4Z1/1FjnB/T2gzEmnYgsAAAAAElFTkSuQmCC</data>
@@ -130,6 +131,7 @@
     <property name="animate" value="waterfall_top"/>
     <property name="oneway" value="true"/>
     <property name="phaseable" value="true"/>
+    <property name="waterfall" value="waterfall"/>
    </properties>
    <image format="png">
     <data encoding="base64">iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAa5JREFUWIXNVluOgzAMTFBvAD/0LIgb9LLLCfZxFz4WzpD9qVN3MjaBlWgtIUEyTMaO4zikuwVl/fdnCjAWQgiJmIfBOUYSLWAkY/3PV36fh/Hp27J5GB9re4Koe8xj9eRIqQdx2j6W32IuRwA95vH7n+k1hP+CAwK63sOrQ3jEesKjncsRmNYl3NquUKpJas0TjZGNKaUU1cS0LnlSBGXwhijmJeOLGuMlzZ45xGDCWbinY8iOHjMdRu2htlvb0YhJlIoknNYlJPWTt+9XRRTajp4YxjMPo50Doko8shJS21ZyYjIKv86tog7sOf9M3Nb/uM7FAtSQ1YjdyqtCgE6WmuroYazFNabBSdk3tr+RPB6G8dAkZCrPug2LSogiWEi3qiCay60rWo2dch2zOi7G6oOFx7uE/ffyfqDBAQY+sgCOm3N4CjDRTmtIPBGWkNpGxTuK79ERyQfehCIG+0VPkOUtdkbC+/KWrJGXmqzXHmGYWdi9xR+kTuXaM3e0JzT7Adx3ecfQJlLtrD6R2fs0pTIYAcxqQVRYFgE0ryco6kDNUdNikDATEx7WFf8BtvETfqYFqjIAAAAASUVORK5CYII=</data>
@@ -185,13 +187,13 @@
   <tile id="0">
    <properties>
     <property name="animate" value="lavafall"/>
-    <property name="lavafall" value="true"/>
+    <property name="waterfall" value="lavafall"/>
    </properties>
   </tile>
   <tile id="8">
    <properties>
     <property name="animate" value="lavafall_top"/>
-    <property name="lavafall" value="true"/>
+    <property name="waterfall" value="lavafall"/>
    </properties>
   </tile>
  </tileset>
