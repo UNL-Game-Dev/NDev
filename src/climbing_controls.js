@@ -21,15 +21,15 @@ Crafty.c("ClimbingControls", {
 				
 				// Check if not on ladder anymore, and if so, switch to platform
 				// state.
-				if(!this.sense("ClimbableRight", this._phX - 5, this._phY, 4)
-				&& !this.sense("ClimbableLeft", this._phX + 5, this._phY, 4)) {
+				if(!this.sense("ClimbableRight", -5, 0, 4)
+				&& !this.sense("ClimbableLeft", 5, 0, 4)) {
 					this.setState("Platform");
 					return;
 				}
 				
 				// Check if reaching top of ladder leading to level surface, and
 				// if so, climb up onto it.
-				if(!this.sense("Tile", this._phX + this._ladderSide * 16, this._phY - 24) && !this._ledgeClimb) {
+				if(!this.sense("Tile", this._ladderSide * 16, -24) && !this._ledgeClimb) {
 					this._ledgeClimb = true;
 					this.tween({
 						_phY: this._phY - 24,
@@ -40,6 +40,7 @@ Crafty.c("ClimbingControls", {
 							_phPX: this._phPX + this._ladderSide * 16
 						}, 200).timeout(function() {
 							this._ledgeClimb = false;
+							this.setState("Platform");
 						}, 200);
 					}, 200);
 					return;

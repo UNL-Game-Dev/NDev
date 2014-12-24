@@ -6,7 +6,7 @@ Crafty.c("Sensor", {
 
 	init:
 	function() {
-		// A sensor that is exactly the same as the current entity.
+		// A sensor that coincides with the current entity.
 		this._sensor = Crafty.e("2D");
 		this._sensor.w = this.w;
 		this._sensor.h = this.h;
@@ -19,10 +19,6 @@ Crafty.c("Sensor", {
 		margin = margin || 0;
 		if(local === undefined) {
 			local = true;
-		}
-
-		if(this.__c['PlatformControls'] && local) {
-			console.log(arguments.callee.caller);
 		}
 
 		var bounds = this.sensorBounds;
