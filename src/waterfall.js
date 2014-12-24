@@ -59,18 +59,13 @@ Crafty.c('Waterfall', {
         var self = this;
         var hits = self.hit('Tile') || [];
 
-        //if(hits.length > 0) {
-        //    console.log(hits);
-        //}
-
-        return hits.length > 0 ? true : false;
-        /*_(hits).each(function(hit) {
+        var blocked = _(hits).each(function(hit) {
             return hit.obj.z === self.z
             && hit.obj.x <= self.x
             && hit.obj.x + hit.obj.w >= self.x + self.w;
         }).any();
 
-        return blocked;*/
+        return blocked;
     },
 
     _senseChild:

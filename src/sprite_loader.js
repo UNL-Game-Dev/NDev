@@ -10,7 +10,7 @@ Crafty.c('SpriteLoader', {
 		this._spriteToSpriteSheet = {};
 		this._animationToSpriteSheet = {};
 	},
-	
+
 	/**
 	 * Load sprite and animation data from an object or JSON file.
 	 */
@@ -29,17 +29,17 @@ Crafty.c('SpriteLoader', {
 			});
 		} else if(_param.isObject()) {
 			var sprites = param;
-			
+
 			sprites.root = sprites.root || '';
 			if(sprites.root.length > 0 && sprites.root[sprites.root.length - 1] !== '/') {
 				sprites.root += '/';
 			}
 			sprites.fileExtension = sprites.fileExtension || 'png';
-			
+
 			function getImageUrl(spriteSheetName) {
 				return sprites.root + spriteSheetName + '.' + sprites.fileExtension;
 			}
-			
+
 			_(sprites.spriteSheets).each(function(spriteSheet, spriteSheetName) {
 				spriteSheet.url = getImageUrl(spriteSheetName);
 				spriteSheet.tileSize = vec2(spriteSheet.tileSize);
@@ -57,7 +57,7 @@ Crafty.c('SpriteLoader', {
 					self._animationToSpriteSheet[key] = spriteSheetName;
 				});
 			});
-			
+
 			_(sprites.spriteSheets).each(function(spriteSheet) {
 				Crafty.sprite(
 					spriteSheet.tileSize[0],
@@ -68,14 +68,14 @@ Crafty.c('SpriteLoader', {
 					spriteSheet.padding[1],
 					spriteSheet.paddingAroundBorder);
 			});
-			
+
 			Crafty.bind('NewEntity', function(data) {
 				var ent = Crafty(data.id);
 
 				if(!ent.has('Sprite')) {
 					return;
 				}
-				
+
 				// Define sprite animations, if definitions exist.
 				self._loadAnimationsForEntity(ent);
 			});
@@ -196,12 +196,12 @@ Crafty.c('SpriteData', {
 			this._spriteTileCoords = data.frames[data.currentFrame];
 		});
 	},
-	
+
 	getSprite:
 	function() {
 		return this._currentSprite;
 	},
-	
+
 	setSprite:
 	function(sprite) {
 		if(sprite !== this._currentSprite) {
@@ -212,10 +212,10 @@ Crafty.c('SpriteData', {
 			this._spriteTileCoords =
 				this._spriteLoader.getSpriteTileCoords(sprite);
 		}
-		
+
 		return this;
 	},
-	
+
 	getSpriteData:
 	function(dataSetName) {
 		return this._spriteLoader.getSpriteData(
@@ -223,7 +223,7 @@ Crafty.c('SpriteData', {
 			dataSetName,
 			this._spriteTileCoords);
 	},
-	
+
 	getVector:
 	function(pointName) {
 		var data = this.getSpriteData(pointName);
