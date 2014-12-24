@@ -5,18 +5,18 @@ var _mapFolder = "assets/maps/";
  * Crafty component for loading a tiled map.
  */
 Crafty.c("TiledMap", {
-	
+
 	init:
 	function() {
 		this.requires("TiledMapBuilder");
 	},
-	
+
 	loadMap:
 	function(mapName, loaded) {
 		var self = this;
-		
+
 		this.mapName = mapName;
-		
+
 		// Remove all entities that have 2D but don't have Persistent.
 		var old2D = Crafty("2D");
 		var i = old2D.length - 1;
@@ -36,10 +36,10 @@ Crafty.c("TiledMap", {
 			}
 			// Extract tile bounds information.
 			self._initTileInfo(json.tilesets);
-			
+
 			// Extract layer information.
 			self._initLayerInfo(json.layers);
-			
+
 			// Load it in.
 			self.setMapDataSource(json);
 			self.createWorld(function(map) {
@@ -77,15 +77,21 @@ Crafty.c("TiledMap", {
 				}
 				if(tileInfo) {
 					var animate = tileInfo.animate;
+					var waterfall = tileInfo.waterfall;
+
 					if(animate) {
 						Crafty('SpriteLoader').loadAnimation(ent, animate);
 						ent.animate(animate, -1);
+					}
+
+					if(waterfall) {
+						ent.addComponent('Waterfall').waterfall(waterfall);
 					}
 				}
 			});
 		});
 	},
-	
+
 	_collisionizeEntity:
 	function(ent) {
 		var self = this;
@@ -94,13 +100,13 @@ Crafty.c("TiledMap", {
 			ent.addComponent("Collision");
 			// Mark for collision.
 			ent.addComponent("Tile");
-			
+
 			var gid = ent.gid;
 			var tileInfo = this._tileInfo[gid];
 			if(tileInfo) {
 				var tilesetInfo = self._tilesetInfo[tileInfo.tileseti];
 				var bounds = tileInfo.pts;
-				
+
 				// Make entity collidable with custom bounds.
 				if(bounds) {
 					var boundsdup = [];
@@ -113,7 +119,7 @@ Crafty.c("TiledMap", {
 					var poly = new Crafty.polygon(boundsdup);
 					ent.collision(poly);
 				}
-				
+
 				// Set whether the entity is one-way collidable.
 				if(tileInfo.oneway) {
 					ent.addComponent("OneWay");
@@ -123,12 +129,12 @@ Crafty.c("TiledMap", {
 				if(tileInfo.phaseable) {
 					ent.addComponent("Phaseable");
 				}
-				
+
 				// Set whether the entity is unstable.
 				if(tileInfo.unstable) {
 					ent.addComponent("Unstable");
 				}
-				
+
 				// Set whether the tile is climbable
 				if(tileInfo.climbable) {
 					if(tileInfo.climbable.indexOf('l') >= 0) {
@@ -142,7 +148,7 @@ Crafty.c("TiledMap", {
 				if(tileInfo.destructible) {
 					ent.addComponent("Destructible");
 				}
-				
+
 				// Set whether the entity is pushable.
 				if(tileInfo.pushable) {
 					ent.addComponent("Pushable");
@@ -150,7 +156,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-	
+
 	/**
 	 * Initializes two dictionaries: tile info and tileset info.
 	 *
@@ -178,24 +184,24 @@ Crafty.c("TiledMap", {
 	function(tilesets) {
 		this._tileInfo = {};
 		this._tilesetInfo = {};
-		
+
 		for(var tileseti in tilesets) {
 			var tileset = tilesets[tileseti];
-			
+
 			this._tilesetInfo[tileseti] = {
 				width: tileset.tilewidth,
 				height: tileset.tileheight
 			};
 			this._tilesetInfo[tileseti].width = tileset.tilewidth;
 			this._tilesetInfo[tileseti].height = tileset.tileheight;
-			
+
 			for(var tilei in tileset.tileproperties) {
 				var gid = parseInt(tilei) + parseInt(tileset.firstgid);
 				var properties = tileset.tileproperties[tilei];
 				var pts = properties.bounds
 					? $.parseJSON(properties.bounds)
 					: undefined;
-				
+
 				// Store the bounds points and the tileset index of each tile.
 				var tileInfo = properties;
 				tileInfo.oneway = !!tileInfo.oneway;
@@ -209,7 +215,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-	
+
 	/**
 	 * Initializes _layerInfo, which lists layers' property dicts, types,
 	 * z-indices, and object info by the layer's name.
@@ -217,7 +223,7 @@ Crafty.c("TiledMap", {
 	_initLayerInfo:
 	function(layers) {
 		this._layerInfo = {};
-		
+
 		// Find the first solid tile layer, and use that for the base Z-index.
 		var solidLayer = 0;
 
@@ -228,7 +234,7 @@ Crafty.c("TiledMap", {
 				break;
 			}
 		}
-		
+
 		for(var layeri in layers) {
 			var layer = layers[layeri];
 			layer.properties = layer.properties || {};
@@ -236,7 +242,7 @@ Crafty.c("TiledMap", {
 			this._layerInfo[layer.name] = layer;
 		}
 	},
-	
+
 	/**
 	 * Initializes tiles' z-indices based on the layers' z-indices.
 	 */
@@ -252,7 +258,7 @@ Crafty.c("TiledMap", {
 			}
 		}
 	},
-	
+
 	/**
 	 * Spawns map objects. See map_objects.js for more on what it does.
 	 */
