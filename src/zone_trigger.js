@@ -4,7 +4,7 @@
 Crafty.c("ZoneEnterTrigger", {
 	init:
 	function() {
-		this.onHit("PlatformControls", function(hit) {
+		this.onHit("Platformer", function(hit) {
 			// Only activate if the player wasn't colliding last frame.
 			if(!this._triggerCollidingLast) {
 				// A change in state to "inside" indicates entered.

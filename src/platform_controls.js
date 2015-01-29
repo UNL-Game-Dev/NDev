@@ -1,11 +1,10 @@
 /**
- * Component that controls a physical object in a platformer style. Uses arrow
- * keys for movement at the moment.
+ * Component that controls a physical object in a platformer style.
  *
  * Also fires events indicating standing still, walking, jumping, falling, and
  * landing.
  */
-Crafty.c("PlatformControls", {
+Crafty.c("PlatformState", {
 
 	// What factor of normal control the player retains in the air.
 	airControlFactor: 0.6,

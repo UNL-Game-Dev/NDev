@@ -26,8 +26,9 @@ Crafty.c("Player", {
 			.requires("ScrollTarget")
 			.requires("ItemEquip")
 			.requires("Controls")
-			.requires("PlatformControls")
-			.requires("ClimbingControls")
+			.requires("Platformer")
+			.requires("PlatformState")
+			.requires("ClimbingState")
 			.requires("SpriteData")
 		// Collision bounds
 			.collision([11, 0], [21, 0], [21, 32], [11, 32])

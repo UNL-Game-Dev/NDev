@@ -1,7 +1,7 @@
 /**
- * Controls for climbing vertically, such as on a ladder.
+ * State for climbing vertically, such as on a ladder.
  */
-Crafty.c("ClimbingControls", {
+Crafty.c("ClimbingState", {
 	
 	init:
 	function() {
@@ -14,6 +14,40 @@ Crafty.c("ClimbingControls", {
 			EnterState:
 			function() {
 				this._ladderSide = this.dx;
+                var side = this.dxSelect('Left', 'Right');
+                if (this.keyDown('down') && !this.keyDown('up')) {
+                    this.animate('PlayerClimbDown' + side, -1);
+                } else if (this.keyDown('up') && !this.keyDown('down')) {
+                    this.animate('PlayerClimbUp' + side, -1);
+                } else {
+                    this.animate('PlayerLadder' + this.dxSelect('Left', 'Right'), -1);
+                }
+			},
+
+			ControlPressed:
+			function(data) {
+                var side = this.dxSelect('Left', 'Right');
+				if ((data.control === 'up' && this.keyDown('down'))
+				|| (data.control === 'down' && this.keyDown('up'))) {
+					this.animate('PlayerLadder' + side, -1);
+				} else if (data.control === 'up') {
+                    this.animate('PlayerClimbUp' + side, -1);
+                } else if (data.control === 'down') {
+					this.animate('PlayerClimbDown' + side, -1);
+				}
+			},
+
+			ControlReleased:
+			function(data) {
+                var side = this.dxSelect('Left', 'Right');
+				if ((data.control === 'up' && !this.keyDown('down'))
+				|| (data.control === 'down' && !this.keyDown('up'))) {
+					this.animate('PlayerLadder' + side, -1);
+				} else if (data.control === 'up') {
+                    this.animate('PlayerClimbDown' + side, -1);
+                } else if (data.control === 'down') {
+					this.animate('PlayerClimbUp' + side, -1);
+				}
 			},
 			
 			PrePhysicsTick:

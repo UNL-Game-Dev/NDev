@@ -1,5 +1,5 @@
 /**
- * Based on PlatformControls.
+ * Based on PlatformState.
  * Controls basic walking enemies.
  */
 Crafty.c("EnemyGroundControls", {

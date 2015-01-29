@@ -107,10 +107,6 @@ Crafty.c('SpriteLoader', {
 			return null;
 		}
 		spriteTileCoords = vec2(spriteTileCoords);
-		if(!data[spriteTileCoords[1]]) {
-			console.log(spriteTileCoords);
-			console.log(data, dataSetName, sprite);
-		}
 		if(spriteTileCoords[1] >= data.length
 		|| spriteTileCoords[0] >= data[spriteTileCoords[1]].length) {
 			return null;
