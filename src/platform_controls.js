@@ -13,8 +13,10 @@ Crafty.c("PlatformControls", {
 	// The differences in velocity to apply in certain situations:
 	// Accelerating up to max speed.
 	accelerateDV: 0.2,
+	
 	// Passively slowing down to a stop on the ground.
 	slowToStopDV: 0.3,
+	
 	// Actively slowing down when turning around.
 	activeBrakeDV: 0.5,
 
@@ -29,6 +31,12 @@ Crafty.c("PlatformControls", {
 
 		this.requires("TileConstraint, Sensor, Groundable, Controls");
 
+		this.slip = 1.0;
+		// Triggered when the player walks on ice.
+		this.bind("Slide", function(slip) {
+			this.slip = 0.15;
+		});
+		
 		// Direction that we are facing in the x-direction.
 		this.dx = +1;
 
@@ -188,25 +196,27 @@ Crafty.c("PlatformControls", {
 					if(adesvx > avx) {
 						// If their velocity's greater than the current, let them
 						// increase the velocity by a little.
-						vx = approach(vx, desvx, this.accelerateDV);
+						vx = approach(vx, desvx, this.accelerateDV * this.slip);
 					} else {
 						// Don't make them slow down when they're attempting to keep
 						// going! (Unless they're crawling).
 						if(this.isCrouching) {
-							vx = approach(vx, desvx, this.accelerateDV);
+							vx = approach(vx, desvx, this.accelerateDV * this.slip);
 						}
 					}
 				} else if(desvx == 0.0) {
 					if(this.stopInMidAir || this.isGrounded()) {
 						// Player might want to stop.
-						vx = approach(vx, desvx, this.slowToStopDV);
+						vx = approach(vx, desvx, this.slowToStopDV * this.slip);
 					}
 				} else {
 					// The player is trying to turn around.
 					// This is like "braking" in preparation to accelerate the other
 					// direction, so do it a little quicker.
-					vx = approach(vx, desvx, this.activeBrakeDV);
+					vx = approach(vx, desvx, this.activeBrakeDV * this.slip);
 				}
+				
+				this.slip = 1.0;
 
 				this._phX = this._phPX + vx;
 

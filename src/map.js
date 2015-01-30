@@ -153,6 +153,11 @@ Crafty.c("TiledMap", {
 				if(tileInfo.pushable) {
 					ent.addComponent("Pushable");
 				}
+				
+				// Set whether the entity is slippery.
+				if(tileInfo.slippery) {
+					ent.addComponent("Slippery");
+				}
 			}
 		}
 	},
@@ -209,6 +214,7 @@ Crafty.c("TiledMap", {
 				tileInfo.unstable = !!tileInfo.unstable;
 				tileInfo.destructible = !!tileInfo.destructible;
 				tileInfo.pushable = !!tileInfo.pushable;
+				tileInfo.slippery = !!tileInfo.slippery;
 				tileInfo.pts = pts;
 				tileInfo.tileseti = tileseti;
 				this._tileInfo[gid] = tileInfo;
