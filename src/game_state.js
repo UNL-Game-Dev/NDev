@@ -3,7 +3,7 @@
  * Saves various state variables when requested.
  */
 Crafty.c("GameState", {
-
+	
 	/**
 	 * Initializes the saving system, creating a blank save state object if
 	 * there isn't already save info.
@@ -14,13 +14,13 @@ Crafty.c("GameState", {
 			localStorage["saveData"] = "{}";
 		}
 	},
-
+	
 	/**
 	 * All sorts of data can be saved here.
 	 * Make sure do to undefined checks in case stuff hasn't been saved yet.
 	 */
 	data: {},
-
+	
 	/**
 	 * Sets the default save slot to the name given.
 	 */
@@ -28,7 +28,7 @@ Crafty.c("GameState", {
 	function(slotName) {
 		this._defaultSaveSlot = slotName;
 	},
-
+	
 	/**
 	 * Saves to a given slotname.
 	 * If no slot name passed, uses the default.
@@ -41,9 +41,10 @@ Crafty.c("GameState", {
 			allData[slot] = this.data;
 			localStorage["saveData"] = JSON.stringify(allData);
 		}
+		Crafty.trigger("GameStateSaved");
 		return slot;
 	},
-
+	
 	/**
 	 * Loads from a given slotname.
 	 * If no slot name passed, uses the default.
@@ -53,11 +54,13 @@ Crafty.c("GameState", {
 		var slot = this._getSlotByUndefineableName(slotName);
 		if(slot) {
 			var allData = JSON.parse(localStorage["saveData"]);
-			this.data = allData[slot];
+			this.data = allData[slot] || {};
+			console.log("Got slot ", slot, allData, this.data);
 		}
+		Crafty.trigger("GameStateLoaded");
 		return slot;
 	},
-
+	
 	/**
 	 * true if slot exists, false if not.
 	 */
@@ -65,7 +68,7 @@ Crafty.c("GameState", {
 	function(slotName) {
 		return !!(JSON.parse(localStorage["saveData"])[slotName]);
 	},
-
+	
 	/**
 	 * Returns a list of slots available to load. Returns 'undefined' if the
 	 * save structure hasn't been set up. (This should be detected and remedied
@@ -83,7 +86,7 @@ Crafty.c("GameState", {
 		}
 		return undefined;
 	},
-
+	
 	_getSlotByUndefineableName:
 	function(slotName) {
 		var slot = slotName;
@@ -97,4 +100,3 @@ Crafty.c("GameState", {
 		return slot;
 	}
 });
-

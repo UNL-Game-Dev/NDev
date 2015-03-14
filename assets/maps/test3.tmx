@@ -21,6 +21,7 @@
     <property name="targetMap" value="test2"/>
    </properties>
   </object>
+  <object name="SaveZone" type="MapSaveZone" x="222" y="73" width="95" height="101"/>
  </objectgroup>
  <layer name="Tile Layer 2" width="100" height="100">
   <data encoding="base64" compression="zlib">

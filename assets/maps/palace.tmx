@@ -2,6 +2,34 @@
 <map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="64" tileheight="64">
  <tileset firstgid="1" name="palace" tilewidth="64" tileheight="64">
   <image source="palace.png" width="512" height="512"/>
+  <tile id="10">
+   <properties>
+    <property name="bounds" value="[[0,0],[1,0],[0.84,0.33],[0.16,0.33]]"/>
+    <property name="oneway" value="true"/>
+    <property name="phaseable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="oneway" value="true"/>
+    <property name="phaseable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="oneway" value="true"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="oneway" value="true"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="oneway" value="true"/>
+   </properties>
+  </tile>
   <tile id="20">
    <properties>
     <property name="bounds" value="[[0,0],[1,1],[0.67,1],[0,0.33]]"/>
@@ -15,7 +43,15 @@
  </tileset>
  <layer name="bg" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJxjYKAtYMTBphcYtZ9y+1WAWBWJprf9OkCsi0STAphxsOkFkP3MNAD2cyKxsYW/AZk0sYBQ/FuQSRMDeICYl4AaQvY4UGA/MYBUf8PcQy3ATSY9CkbBKBgFo2AUjIJRMAqGJgAASq8Hwg==
+   eJxjYKAtYMTBphcYtZ9y+1WAWBWJprf9OkCsi0STAphxsOkFkP3MNAD2cyKxsYW/AZk0sYBQ/FuQSVMLELLHYYDtx+UeagFuMulRMApGwSgYBaNgFIyCUTA0AQA0UAep
+  </data>
+ </layer>
+ <layer name="main2" width="32" height="32">
+  <properties>
+   <property name="solid" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzsEJADAIBEELSEz/3canHQgyA8t9LwJgn1PdKtu+0UcAADDrA5NFAFI=
   </data>
  </layer>
  <layer name="main" width="32" height="32">
@@ -23,7 +59,7 @@
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztltkKwjAQRfMBLg9axfZNXBA3sC649v//ygmNEoekySSWEemBy007UyaTlKZChDMDzSOeDyVTvgFtGeqPlB9BJzXOLLl1kCp/gAo0JypT0MThGN88H9aglcMxvnktUAfU1ryLcg6gPdF969eFbV6xUN7hnmUcQ+pOebO0jDED8fkO4P3XGVvum9Yl96gvaw8r6mF2lnoLQ65eMzfEKbWvyi/o+sW54hlTPqX2HXT7slPWXILPMf27HhKnon/HJfhco8apcPcf22/sf0BsvzhO5Rf3v3DE/2n/G/hIRHlecHlflOcFl3P2njD3Lr2BlydATy/r
+   eJztltkKwjAQRfMBLg9axfZNXBA3sC649v//ygmNEobEZDqWEemBy43O1NtpS6NS1ZmB5ozjq5IZ34C2Avkj40fQyawzT28dpMYfoAKdE5UpaBJwTGxfDGvQKuCY2L4WqANqW95FPQfQnuix+XXhOy8ulGe451lzSMMtb5aeNWZA+M2x53vXdckj8nX2kJC/8+QtHL12Zu6oU7Kvxi/o84vzh2Nc/ZTsO+j2Zadccw3ex+z3epU6Ffs9rsH7GrVORXp+7rzc/wHceXGdyi/e/yJQ/6f73yBHosr9Qsr7qtwvpFxy9kR4du0NsjwB01ovsw==
   </data>
  </layer>
  <layer name="fg" width="32" height="32">
@@ -31,11 +67,22 @@
    eJzt0bEJAAAIBLFv3H9lJ7AUBBO4CS6BHTXED/4DAMAtDQRFAD0=
   </data>
  </layer>
- <objectgroup name="Object Layer 1" width="32" height="32">
+ <objectgroup name="not solid objects" width="32" height="32">
   <object name="SpawnPoint" type="PlayerSpawn" x="1234" y="771"/>
-  <object name="EntitySpawn1" type="EntitySpawn" x="1670" y="450"/>
   <object name="window" gid="48" x="1753" y="477"/>
-  <object name="Crystal1" type="LightCrystal" gid="73" x="1146" y="833"/>
+ </objectgroup>
+ <objectgroup name="solid objects" width="32" height="32">
+  <properties>
+   <property name="solid" value="true"/>
+  </properties>
+  <object name="lift1" type="MovingPlatform" gid="11" x="1408" y="640">
+   <properties>
+    <property name="path" value="path1"/>
+   </properties>
+  </object>
+  <object name="path1" type="MapPath" x="1408" y="579">
+   <polygon points="0,0 -129,0 -129,-259 0,-259"/>
+  </object>
  </objectgroup>
  <layer name="Tile Layer 3" width="32" height="32">
   <data encoding="base64" compression="zlib">

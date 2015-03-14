@@ -1,0 +1,36 @@
+body
+{
+	font-family: Arial,sans-serif;
+	font-size: 16px;
+}
+
+
+.screen-overlay
+{
+	position: absolute;
+	width: 800px;
+	height: 600px;
+}
+
+
+.dialog
+{
+	background-color: rgba(0, 0, 0, 0.6);
+	border: 2px solid #000;
+	padding: 5px;
+	color: #fff;
+	position: absolute;
+}
+
+.save-screen
+{
+	bottom: 0px;
+	left: 350px;
+	width: 100px;
+}
+
+h2
+{
+	text-align: center;
+	margin: 0px;
+}

@@ -1,0 +1,10 @@
+# Fdb version 3
+["pdflatex"] 1418801264 "waterfall.js" "waterfall.pdf" "waterfall" 1418801265
+  "/usr/local/texlive/2012/texmf-var/web2c/pdftex/pdflatex.fmt" 1341108725 3691572 80746d7cec090b0770bc87079bef471d ""
+  "/usr/local/texlive/2012/texmf.cnf" 1341108668 572 7ea7194897937febeb63145e1c3a1f03 ""
+  "/usr/local/texlive/2012/texmf/web2c/texmf.cnf" 1336865692 31299 729e216d9b945005c0d4b079c0500bc9 ""
+  "waterfall.aux" 1418801264 8 a94a2480d3289e625eea47cd1b285758 ""
+  "waterfall.js" 1418801233 1607 cc2d6cca56ee2f74dec0ce7054e25e8c ""
+  (generated)
+  "waterfall.log"
+  "waterfall.pdf"
