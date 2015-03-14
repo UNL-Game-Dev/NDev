@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="64" tileheight="64">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="64" tileheight="64" nextobjectid="7">
  <tileset firstgid="1" name="palace" tilewidth="64" tileheight="64">
   <image source="palace.png" width="512" height="512"/>
   <tile id="10">
@@ -41,6 +41,9 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="65" name="crystals" tilewidth="64" tileheight="64">
+  <image source="../sprites/crystals.png" width="512" height="512"/>
+ </tileset>
  <layer name="bg" width="32" height="32">
   <data encoding="base64" compression="zlib">
    eJxjYKAtYMTBphcYtZ9y+1WAWBWJprf9OkCsi0STAphxsOkFkP3MNAD2cyKxsYW/AZk0sYBQ/FuQSVMLELLHYYDtx+UeagFuMulRMApGwSgYBaNgFIyCUTA0AQA0UAep
@@ -67,22 +70,23 @@
    eJzt0bEJAAAIBLFv3H9lJ7AUBBO4CS6BHTXED/4DAMAtDQRFAD0=
   </data>
  </layer>
- <objectgroup name="not solid objects" width="32" height="32">
-  <object name="SpawnPoint" type="PlayerSpawn" x="1234" y="771"/>
-  <object name="window" gid="48" x="1753" y="477"/>
+ <objectgroup name="not solid objects">
+  <object id="1" name="SpawnPoint" type="PlayerSpawn" x="1234" y="771"/>
+  <object id="2" name="window" gid="48" x="1753" y="477"/>
  </objectgroup>
- <objectgroup name="solid objects" width="32" height="32">
+ <objectgroup name="solid objects">
   <properties>
    <property name="solid" value="true"/>
   </properties>
-  <object name="lift1" type="MovingPlatform" gid="11" x="1408" y="640">
+  <object id="3" name="lift1" type="MovingPlatform" gid="11" x="1408" y="640">
    <properties>
     <property name="path" value="path1"/>
    </properties>
   </object>
-  <object name="path1" type="MapPath" x="1408" y="579">
+  <object id="4" name="path1" type="MapPath" x="1408" y="579">
    <polygon points="0,0 -129,0 -129,-259 0,-259"/>
   </object>
+  <object id="6" type="LightCrystal" gid="65" x="1163" y="832"/>
  </objectgroup>
  <layer name="Tile Layer 3" width="32" height="32">
   <data encoding="base64" compression="zlib">
