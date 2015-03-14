@@ -10,7 +10,11 @@ Crafty.c("LightCrystal", {
                 [this.w * 0.625, this.h * 1.000],
                 [this.w * 0.375, this.h * 1.000]
             ]));
-        this.attr({
+        this.origin(this.w / 2, this.h)
+            .attr({
+                x: object.x,
+                y: object.y - this.h,
+                z: 100,
                 _outgoingBeam: Crafty.e("LightBeam").attr({
                     x: object.x,
                     y: object.y - this.h,

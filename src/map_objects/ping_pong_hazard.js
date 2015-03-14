@@ -12,13 +12,6 @@ Crafty.c("PingPongHazard", {
 
     mapObjectInit:
         function(object) {
-            this
-                .origin(this.w / 2, this.h)
-                .attr({
-                    x: object.x,
-                    y: object.y - this.h,
-                    z: 100
-                });
             if(object.gid) {
                 this.addComponent("Tile" + object.gid);
             }
