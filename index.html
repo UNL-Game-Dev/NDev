@@ -11,37 +11,58 @@
 	<script type="text/javascript" src="src/player.js"></script>
 	<script type="text/javascript" src="src/map.js"></script>
 	<script type="text/javascript" src="src/game_state.js"></script>
-	<script type="text/javascript" src="src/map_objects.js"></script>
-	<script type="text/javascript" src="src/zone_trigger.js"></script>
-	<script type="text/javascript" src="src/save_zone.js"></script>
-	<script type="text/javascript" src="src/door.js"></script>
-	<script type="text/javascript" src="src/tile_image.js"></script>
-	<script type="text/javascript" src="src/pingpong.js"></script>
-	<script type="text/javascript" src="src/unstable.js"></script>
+    <script type="text/javascript" src="src/2d/player_spawn.js"></script>
+	<script type="text/javascript" src="src/2d/zone_trigger.js"></script>
+    <script type="text/javascript" src="src/2d/door.js"></script>
+    <script type="text/javascript" src="src/2d/unstable.js"></script>
+    <script type="text/javascript" src="src/2d/destructible.js"></script>
+	<script type="text/javascript" src="src/2d/save_zone.js"></script>
+	<script type="text/javascript" src="src/2d/tile_image.js"></script>
+    <script type="text/javascript" src="src/2d/attachable.js"></script>
+    <script type="text/javascript" src="src/2d/pushable.js"></script>
+    <script type="text/javascript" src="src/2d/scroll_target.js"></script>
+	<script type="text/javascript" src="src/2d/pingpong.js"></script>
+    <script type="text/javascript" src="src/2d/projectile.js"></script>
+    <script type="text/javascript" src="src/2d/dynamite.js"></script>
+    <script type="text/javascript" src="src/2d/explosion.js"></script>
+    <script type="text/javascript" src="src/2d/sensor.js"></script>
+    <script type="text/javascript" src="src/2d/groundable.js"></script>
+    <script type="text/javascript" src="src/2d/waterfall.js"></script>
+    <script type="text/javascript" src="src/map_objects/default_map_object.js"></script>
+    <script type="text/javascript" src="src/map_objects/enemy_spawn.js"></script>
+    <script type="text/javascript" src="src/map_objects/light_crystal.js"></script>
+    <script type="text/javascript" src="src/map_objects/map_door.js"></script>
+    <script type="text/javascript" src="src/map_objects/map_path.js"></script>
+    <script type="text/javascript" src="src/map_objects/map_save_zone.js"></script>
+    <script type="text/javascript" src="src/map_objects/moving_platform.js"></script>
+    <script type="text/javascript" src="src/map_objects/pickup.js"></script>
+    <script type="text/javascript" src="src/map_objects/ping_pong_hazard.js"></script>
+    <script type="text/javascript" src="src/map_objects/sliding_block.js"></script>
+    <script type="text/javascript" src="src/map_objects/light_beam.js"></script>
 	<script type="text/javascript" src="src/state_machine.js"></script>
-	<script type="text/javascript" src="src/destructible.js"></script>
-	<script type="text/javascript" src="src/pushable.js"></script>
+    <script type="text/javascript" src="src/player_states/platform_controls.js"></script>
+    <script type="text/javascript" src="src/player_states/climbing_controls.js"></script>
 	<script type="text/javascript" src="src/parallax.js"></script>
-	<script type="text/javascript" src="src/scroll_target.js"></script>
-	<script type="text/javascript" src="src/physical.js"></script>
-	<script type="text/javascript" src="src/platform_controls.js"></script>
-	<script type="text/javascript" src="src/persistence.js"></script>
-	<script type="text/javascript" src="src/light_beam.js"></script>
-	<script type="text/javascript" src="src/climbing_controls.js"></script>
-	<script type="text/javascript" src="src/projectile.js"></script>
+    <script type="text/javascript" src="src/physics/vector_utilities.js"></script>
+    <script type="text/javascript" src="src/physics/physics_ticker.js"></script>
+    <script type="text/javascript" src="src/physics/default_physics_draw.js"></script>
+    <script type="text/javascript" src="src/physics/distance_constraint.js"></script>
+    <script type="text/javascript" src="src/physics/hazard_response.js"></script>
+    <script type="text/javascript" src="src/physics/physical.js"></script>
+    <script type="text/javascript" src="src/physics/physics_gravity.js"></script>
+    <script type="text/javascript" src="src/physics/constraints/tile_constraint.js"></script>
+    <script type="text/javascript" src="src/physics/constraints/platform_constraint.js"></script>
+    <script type="text/javascript" src="src/items/example.js"></script>
+    <script type="text/javascript" src="src/items/dynamite.js"></script>
+    <script type="text/javascript" src="src/items/pistol.js"></script>
+    <script type="text/javascript" src="src/items/harpoon.js"></script>
 	<script type="text/javascript" src="src/pickups.js"></script>
 	<script type="text/javascript" src="src/enemy.js"></script>
 	<script type="text/javascript" src="src/enemy_controls.js"></script>
-	<script type="text/javascript" src="src/dynamite.js"></script>
-	<script type="text/javascript" src="src/explosion.js"></script>
-	<script type="text/javascript" src="src/sensor.js"></script>
 	<script type="text/javascript" src="src/clock.js"></script>
 	<script type="text/javascript" src="src/controls.js"></script>
 	<script type="text/javascript" src="src/sprite_loader.js"></script>
-	<script type="text/javascript" src="src/groundable.js"></script>
 	<script type="text/javascript" src="src/item_equip.js"></script>
-	<script type="text/javascript" src="src/items.js"></script>
-	<script type="text/javascript" src="src/waterfall.js"></script>
 
 	<link rel="stylesheet" href="gui.css" type="text/css" />
 	<title>Bridger</title>

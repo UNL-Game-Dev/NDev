@@ -50,7 +50,7 @@ Crafty.c("Door", {
 
 		// Disable physics until the other side.
 		Crafty("PhysicsTicker").enabled = false;
-	},
+	}
 });
 
 var screenOverlay = null;
