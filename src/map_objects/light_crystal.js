@@ -13,12 +13,12 @@ Crafty.c("LightCrystal", {
     },
 
     turnOn:
-        function() {
-            this._outgoingBeam.turnOn();
-        },
+    function() {
+        this._outgoingBeam.turnOn();
+    },git comm
 
     turnOff:
-        function() {
-            this._outgoingBeam.turnOff();
-        }
+    function() {
+        this._outgoingBeam.turnOff();
+    }
 });
