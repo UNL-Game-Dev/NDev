@@ -1,7 +1,7 @@
 /**
- * Controls for climbing vertically, such as on a ladder.
+ * State for climbing vertically, such as on a ladder.
  */
-Crafty.c("ClimbingControls", {
+Crafty.c("ClimbingState", {
 	
 	init:
 	function() {
@@ -14,6 +14,40 @@ Crafty.c("ClimbingControls", {
 			EnterState:
 			function() {
 				this._ladderSide = this.dx;
+                var side = this.dxSelect('Left', 'Right');
+                if (this.keyDown('down') && !this.keyDown('up')) {
+                    this.animate('PlayerClimbDown' + side, -1);
+                } else if (this.keyDown('up') && !this.keyDown('down')) {
+                    this.animate('PlayerClimbUp' + side, -1);
+                } else {
+                    this.animate('PlayerLadder' + this.dxSelect('Left', 'Right'), -1);
+                }
+			},
+
+			ControlPressed:
+			function(data) {
+                var side = this.dxSelect('Left', 'Right');
+				if ((data.control === 'up' && this.keyDown('down'))
+				|| (data.control === 'down' && this.keyDown('up'))) {
+					this.animate('PlayerLadder' + side, -1);
+				} else if (data.control === 'up') {
+                    this.animate('PlayerClimbUp' + side, -1);
+                } else if (data.control === 'down') {
+					this.animate('PlayerClimbDown' + side, -1);
+				}
+			},
+
+			ControlReleased:
+			function(data) {
+                var side = this.dxSelect('Left', 'Right');
+				if ((data.control === 'up' && !this.keyDown('down'))
+				|| (data.control === 'down' && !this.keyDown('up'))) {
+					this.animate('PlayerLadder' + side, -1);
+				} else if (data.control === 'up') {
+                    this.animate('PlayerClimbDown' + side, -1);
+                } else if (data.control === 'down') {
+					this.animate('PlayerClimbUp' + side, -1);
+				}
 			},
 			
 			PrePhysicsTick:
@@ -21,15 +55,15 @@ Crafty.c("ClimbingControls", {
 				
 				// Check if not on ladder anymore, and if so, switch to platform
 				// state.
-				if(!this.sense("ClimbableRight", this._phX - 5, this._phY, 4)
-				&& !this.sense("ClimbableLeft", this._phX + 5, this._phY, 4)) {
+				if(!this.sense("ClimbableRight", -5, 0, 4)
+				&& !this.sense("ClimbableLeft", 5, 0, 4)) {
 					this.setState("Platform");
 					return;
 				}
 				
 				// Check if reaching top of ladder leading to level surface, and
 				// if so, climb up onto it.
-				if(!this.sense("Tile", this._phX + this._ladderSide * 16, this._phY - 24) && !this._ledgeClimb) {
+				if(!this.sense("Tile", this._ladderSide * 16, -24) && !this._ledgeClimb) {
 					this._ledgeClimb = true;
 					this.tween({
 						_phY: this._phY - 24,
@@ -40,6 +74,7 @@ Crafty.c("ClimbingControls", {
 							_phPX: this._phPX + this._ladderSide * 16
 						}, 200).timeout(function() {
 							this._ledgeClimb = false;
+							this.setState("Platform");
 						}, 200);
 					}, 200);
 					return;

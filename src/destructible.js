@@ -10,7 +10,7 @@ Crafty.c("Destructible", {
 		this._destructed = false;
 		this.requires("Collision").onHit("Destructive", this._destruct);
 	},
-	
+
 	/**
 	 * Execute a given function before destruction, waiting for a delay before
 	 * destroying the entity (delay defaults to 0).
@@ -20,7 +20,7 @@ Crafty.c("Destructible", {
 		this._onDestruct = destructCallback;
 		this._destructDelay = delay || 0;
 	},
-	
+
 	/**
 	 * Destroy the entity, after executing any other given behavior.
 	 */
@@ -30,7 +30,7 @@ Crafty.c("Destructible", {
 		if(this._destructed) {
 			return;
 		}
-		
+
 		this._destructed = true;
 		if(this._onDestruct) {
 			this._onDestruct.call(this);

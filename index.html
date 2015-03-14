@@ -2,7 +2,7 @@
 <head>
 	<!-- Libraries -->
 	<script type="text/javascript" src="lib/jquery.min.js"></script>
-	<script type="text/javascript" src="lib/underscore.min.js"></script>
+	<script type="text/javascript" src="lib/lodash.min.js"></script>
 	<script type="text/javascript" src="lib/crafty.js"></script>
 	<script type="text/javascript" src="lib/modules/create_mocks_module.js"></script>
 	<script type="text/javascript" src="lib/tiledmapbuilder.js"></script>
@@ -39,13 +39,17 @@
 	<script type="text/javascript" src="src/groundable.js"></script>
 	<script type="text/javascript" src="src/item_equip.js"></script>
 	<script type="text/javascript" src="src/items.js"></script>
+	<script type="text/javascript" src="src/waterfall.js"></script>
 
 	<link rel="stylesheet" href="gui.css" type="text/css" />
+	<title>Bridger</title>
 </head>
 <body>
 	<script type="text/javascript">
 		Crafty.init(800, 600);
 		Crafty.scene("testMap");
+		//Crafty.background('#99BBFF');
+		Crafty.background('#6e3c20');
 		$(function() {
 			$(".screen-overlay").appendTo("#cr-stage");
 		})
