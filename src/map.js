@@ -303,7 +303,6 @@ Crafty.c("TiledMap", {
 				var parallaxFactor = layerInfo.properties.parallaxFactor;
 				if(parallaxFactor) {
 					// Create the image and entity.
-                    console.log(_mapFolder + layerInfo.image);
 					var parallaxImg = Crafty.e("2D, Canvas, Image, Parallax")
 						.image(_mapFolder + layerInfo.image)
 						.scrollFactor(parallaxFactor)
