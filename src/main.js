@@ -28,9 +28,6 @@ Crafty.scene("testMap", function() {
 	// Create the clock.
 	var clock = Crafty.e("Clock, Persistent");
 
-	var bg = Crafty.e("2D, DOM, Image, Parallax, Persistent")
-		.scrollFactor(0.2);
-
 	Crafty.sprite(32, "assets/sprites/player.png", {
 		player: [0, 0]
 	}, 0);
