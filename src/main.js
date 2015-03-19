@@ -18,7 +18,9 @@ Crafty.scene("testMap", function() {
 				this.loadMap("test2");
 			} else if(e.key === Crafty.keys["3"]) {
 				this.loadMap("palace");
-			} else if(e.key === Crafty.keys["0"]) {
+			} else if (e.key === Crafty.keys['4']) {
+                this.loadMap('intro');
+            } else if(e.key === Crafty.keys["0"]) {
 				Crafty.trigger("SpawnPlayer");
 			}
 		});
