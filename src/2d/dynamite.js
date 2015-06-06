@@ -7,13 +7,10 @@ Crafty.c("Dynamite", {
 	init:
 	function() {
 		
-		// Time, in seconds, before dynamte explodes.
+		// Time, in seconds, before dynamite explodes.
 		this.fuseDelay = 1.0;
 		
-		this
-		// Base components
-			.requires("2D, Canvas, Physical, Inertia, PhysicsGravity, dynamite,"
-					  + "TileConstraint, Delay");
+		this.requires("2D, Canvas, Physical, Inertia, PhysicsGravity, dynamite, TileConstraint, Delay");
 	},
 	
 	/**
