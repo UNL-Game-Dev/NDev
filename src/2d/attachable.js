@@ -19,7 +19,7 @@ Crafty.c('Attachable', {
 
                 var spriteData = self._attachEntity.getSpriteData(self._attachPoint);
                 _(self._attachProperties).each(function(propertyFn, property) {
-                    self[property] = propertyFn(spriteData);
+                    self[property] = propertyFn(spriteData, self._attachEntity);
                 });
                 if(self.flipped) {
                     this.flip('X');
