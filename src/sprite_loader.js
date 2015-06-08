@@ -145,8 +145,8 @@ Crafty.c('SpriteLoader', {
 			if(ent.has(sprite)) {
 				return sprite;
 			}
-			return null;
 		}
+        return null;
 	},
 
 	/**
@@ -223,9 +223,17 @@ Crafty.c('SpriteData', {
 	getVector:
 	function(pointName) {
 		var data = this.getSpriteData(pointName);
-		return data && data.x !== undefined && data.y !== undefined
-			? [data.x, data.y]
-			: [0, 0];
+		if (data && data.x !== undefined && data.y !== undefined) {
+            var vec = [data.x, data.y];
+            if (this.flipped) {
+                vec[0] = this.w - vec[0];
+            }
+            if (this.rotation) {
+                vec = rotate(vec, this.rotation);
+            }
+            return vec;
+        }
+		return [0, 0];
 	}
 });
 

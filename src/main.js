@@ -28,7 +28,7 @@ Crafty.scene("testMap", function() {
 	Crafty.e("SpriteLoader").load("assets/sprites/sprites.json");
 	
 	// Create the clock.
-	var clock = Crafty.e("Clock, Persistent");
+	Crafty.e("Clock, Persistent");
 
 	Crafty.sprite(32, "assets/sprites/player.png", {
 		player: [0, 0]
@@ -40,12 +40,12 @@ Crafty.scene("testMap", function() {
 	});
 
 	// Create the general quake viewport effect handler
-	var quake = Crafty.e("EarthquakeViewport, Persistent");
+	Crafty.e("EarthquakeViewport, Persistent");
 
 	// Create the physics ticker.
 	// This triggers physics ticks, which are used to more precisely control
 	// when entities are updated.
-	var ticker = Crafty.e("PhysicsTicker, Persistent");
+	Crafty.e("PhysicsTicker, Persistent");
 	
 	// Create the global game state object, which saves and loads data.
 	var gs = Crafty.e("GameState, PickupState, Persistent");
@@ -66,4 +66,5 @@ Crafty.scene("testMap", function() {
 			restoredPlayer.setPhysPos(savedLocation.x, savedLocation.y);
 		});
 	}
+	Crafty.timer.FPS(60);
 });

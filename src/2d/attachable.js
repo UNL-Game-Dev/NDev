@@ -53,14 +53,7 @@ Crafty.c('Attachable', {
 
     _getOrigin:
         function() {
-            var origin = this.has('SpriteData') && this.getVector('origin');
-            if (this.has('flashes')) {
-                console.log(this.getVector('origin'));
-            }
-            if(this.flipped) {
-                origin[0] = this.w - origin[0];
-            }
-            origin = rotate(origin, this.rotation);
+            var origin = this.has('SpriteData') && this.getVector('origin') || [0, 0];
             return origin;
         }
 });

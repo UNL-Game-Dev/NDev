@@ -28,7 +28,7 @@ Crafty.c('PistolItem', {
             bullet.setPhysPos(this.x - bullet.w / 2, this.y - bullet.h / 2);
             bullet._phX = bullet._phPX + data.params.direction[0] * 10;
             bullet._phY = bullet._phPY + data.params.direction[1] * 10;
-            var muzzleFlash = Crafty.e('2D, Canvas, Sprite, Attachable, SpriteAnimation, SpriteData, flashes, Delay');
+            var muzzleFlash = Crafty.e('2D, Canvas, Sprite, Attachable, flashes, SpriteAnimation, SpriteData, Delay');
             muzzleFlash.attachTo(this, 'tip', {
                 flipped: function (data, parent) { return parent.flipped; },
                 rotation: function (data, parent) { return parent.rotation; }
