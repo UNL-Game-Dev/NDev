@@ -26,7 +26,7 @@ Crafty.c('Attachable', {
                 } else {
                     this.unflip('X');
                 }
-                var offset = self._attachPoint && self._attachEntity.getVector(self._attachPoint) || [0, 0];
+                var offset = self._attachEntity.getVector(self._attachPoint);
                 var offsetZ = spriteData && spriteData.z || 0;
                 var origin = self._getOrigin();
                 var target = sub(add([self._attachEntity.x, self._attachEntity.y], offset), origin);
@@ -53,7 +53,10 @@ Crafty.c('Attachable', {
 
     _getOrigin:
         function() {
-            var origin = this.has('SpriteData') && this.getVector('origin') || [0, 0];
+            var origin = this.has('SpriteData') && this.getVector('origin');
+            if (this.has('flashes')) {
+                console.log(this.getVector('origin'));
+            }
             if(this.flipped) {
                 origin[0] = this.w - origin[0];
             }

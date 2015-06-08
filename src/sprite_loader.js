@@ -130,18 +130,18 @@ Crafty.c('SpriteLoader', {
 		if(!spriteSheet) {
 			return null;
 		}
-		var coords = spriteSheet.sprites[sprite] || null;
-		return coords;
+		return spriteSheet.sprites[sprite] || null;
 	},
 
 	/**
 	 * Get the sprite of a given entity.
 	 * @param ent The entity.
-	 * @returns sprite The entity's current sprite name.
+	 * @returns string The entity's current sprite name.
 	 */
 	getSprite:
 	function(ent) {
 		for(var sprite in this._spriteToSpriteSheet) {
+			if (!this._spriteToSpriteSheet.hasOwnProperty(sprite)) continue;
 			if(ent.has(sprite)) {
 				return sprite;
 			}
@@ -225,7 +225,7 @@ Crafty.c('SpriteData', {
 		var data = this.getSpriteData(pointName);
 		return data && data.x !== undefined && data.y !== undefined
 			? [data.x, data.y]
-			: null;
+			: [0, 0];
 	}
 });
 
@@ -233,7 +233,7 @@ Crafty.c('SpriteData', {
  * Convert a variable representing a 2D vector in a variety of forms into the form [x, y].
  * @param param The 2D vector, in the form [x, y], {x: x, y: y}, or x.
  * If just a single number x is given, then the resulting vector will be [x, x].
- * @returns vector The vector in list format, i.e. [x, y].
+ * @returns *[] The vector in list format, i.e. [x, y].
  * @private
  */
 function vec2(param) {
